@@ -1,0 +1,8 @@
+dist: trusty
+language: java
+jdk: oraclejdk8
+services:
+  - mysql
+before_install:
+  - mysql -e 'CREATE DATABASE petclinic;'
+script: mvn test -Dspring-boot.run.profiles=mysql-travis

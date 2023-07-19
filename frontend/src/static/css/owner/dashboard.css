@@ -1,0 +1,14 @@
+.owner-dashboard-page-container{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-title{
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin: 2rem 0;
+}

@@ -1,0 +1,15 @@
+.edit-pet-page-container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-pet-form-container{
+    max-width: 600px;
+    height: 800px;
+    width: 90%;
+    height: 90%;
+    margin-top: 10%;
+}

@@ -1,0 +1,35 @@
+<diagram program="umletino" version="14.3.0"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>60</x><y>180</y><w>210</w><h>70</h></coordinates><panel_attributes>Owner
+--
+address
+city
+telephone
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>470</x><y>190</y><w>210</w><h>70</h></coordinates><panel_attributes>Vet
+--
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>50</x><y>350</y><w>210</w><h>70</h></coordinates><panel_attributes>Pet
+--
+name
+birthDate</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>310</x><y>520</y><w>210</w><h>70</h></coordinates><panel_attributes>Visit
+--
+date
+description</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>60</x><y>520</y><w>210</w><h>70</h></coordinates><panel_attributes>PetType
+--
+name</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>470</x><y>350</y><w>210</w><h>70</h></coordinates><panel_attributes>Specialty
+--
+name</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>210</x><y>20</y><w>210</w><h>70</h></coordinates><panel_attributes>Person
+--
+firstName
+lastName</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>560</x><y>250</y><w>110</w><h>120</h></coordinates><panel_attributes>lt=-&gt;&gt;&gt;&gt;
+m1=0..n
+m2=0..n
+specializes in &gt;</panel_attributes><additional_attributes>10;10;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>140</x><y>410</y><w>90</w><h>130</h></coordinates><panel_attributes>lt=-&gt;&gt;&gt;&gt;
+m1=0..n
+m2=1
+is of type &gt;</panel_attributes><additional_attributes>10;10;10;110</additional_attributes></element><element><id>Relation</id><coordinates><x>250</x><y>380</y><w>190</w><h>160</h></coordinates><panel_attributes>lt=-
+m1=1
+m2=0..n
+m2pos=-5,-10
+has visits &gt;
+</panel_attributes><additional_attributes>10;10;170;140</additional_attributes></element><element><id>Relation</id><coordinates><x>150</x><y>240</y><w>70</w><h>130</h></coordinates><panel_attributes>lt=-
+m1=1
+m2=0..n
+owns &gt;</panel_attributes><additional_attributes>10;10;10;110</additional_attributes></element><element><id>Relation</id><coordinates><x>150</x><y>80</y><w>180</w><h>120</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>160;10;160;60;10;60;10;100</additional_attributes></element><element><id>Relation</id><coordinates><x>300</x><y>80</y><w>290</w><h>130</h></coordinates><panel_attributes>lt=&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;60;270;60;270;110</additional_attributes></element></diagram>
