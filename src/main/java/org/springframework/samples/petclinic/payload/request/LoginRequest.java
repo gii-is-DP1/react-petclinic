@@ -1,6 +1,6 @@
-package petclinic.payload.request;
+package org.springframework.samples.petclinic.payload.request;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 
 import lombok.Getter;
 import lombok.Setter;

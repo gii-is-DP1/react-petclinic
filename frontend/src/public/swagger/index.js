@@ -11,7 +11,7 @@ class SwaggerDocs extends Component {
     }
 
     async componentDidMount() {
-        const docs = await (await fetch(`/v2/api-docs`, {
+        const docs = await (await fetch(`/v3/api-docs`, {
             headers: {
                 "Content-Type": "application/json",
             },

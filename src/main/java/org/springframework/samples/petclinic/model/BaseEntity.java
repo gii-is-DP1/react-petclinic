@@ -15,10 +15,11 @@
  */
 package org.springframework.samples.petclinic.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.SequenceGenerator;
 
 /**
  * Simple JavaBean domain object with an id property. Used as a base class for objects
@@ -31,7 +32,10 @@ import javax.persistence.MappedSuperclass;
 public class BaseEntity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@SequenceGenerator(name = "entity_seq", 
+        sequenceName = "entity_sequence", 
+        initialValue = 100)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE	, generator = "entity_seq")
 	protected Integer id;
 
 	public Integer getId() {

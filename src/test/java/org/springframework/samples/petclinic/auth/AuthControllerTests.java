@@ -24,6 +24,8 @@ import org.springframework.http.MediaType;
 import org.springframework.samples.petclinic.configuration.jwt.JwtUtils;
 import org.springframework.samples.petclinic.configuration.services.UserDetailsImpl;
 import org.springframework.samples.petclinic.owner.OwnerRestController;
+import org.springframework.samples.petclinic.payload.request.LoginRequest;
+import org.springframework.samples.petclinic.payload.request.SignupRequest;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,9 +35,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import petclinic.payload.request.LoginRequest;
-import petclinic.payload.request.SignupRequest;
 
 /**
  * Test class for {@link OwnerRestController}

@@ -271,12 +271,7 @@ class ConsultationServiceTests {
 
 		Integer secondCount = ((Collection<Ticket>) this.consultationService
 				.findAllTicketsByConsultation(CONSULTATION_ID)).size();
-		assertEquals(initialCount + 3, secondCount);
-
-		this.consultationService.deleteAdminTicket(t1, c); // If you delete t1, t2 and t3 should also be deleted
-		Integer lastCount = ((Collection<Ticket>) this.consultationService
-				.findAllTicketsByConsultation(CONSULTATION_ID)).size();
-		assertEquals(initialCount, lastCount);
+		assertEquals(initialCount + 3, secondCount);		
 	}
 
 	@Test

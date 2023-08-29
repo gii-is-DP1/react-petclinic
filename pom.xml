@@ -8,22 +8,21 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.4.RELEASE</version>
+		<version>3.1.1</version>
 	</parent>
-	<name>PetClinic - TFG - Rafael Sanabria Espárrago</name>
+	<name>PetClinic React</name>
 
 	<properties>
 
 		<!-- Generic properties -->
-		<java.version>11</java.version>
+		<java.version>17</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+    	<maven.compiler.target>${java.version}</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-		<!-- Web dependencies -->
-		<webjars-bootstrap.version>3.3.6</webjars-bootstrap.version>
-		<webjars-jquery-ui.version>1.11.4</webjars-jquery-ui.version>
-		<webjars-jquery.version>2.2.4</webjars-jquery.version>
-		<wro4j.version>1.8.0</wro4j.version>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>				
+    
+		<lombok.version>1.18.28</lombok.version>
+		<mapstruct.version>1.5.5.Final</mapstruct.version>
 
 		<jacoco.version>0.8.8</jacoco.version>
 		<spring-format.version>0.0.19</spring-format.version>
@@ -32,11 +31,7 @@
 		<node.version>v18.12.1</node.version>
 		<npm.version>8.19.2</npm.version>
 		<frontend-src-dir>${project.basedir}/frontend</frontend-src-dir>
-		
-  		<sonar.organization>rafasana14</sonar.organization>
-  		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
-  		<sonar.projectName>PetClinic - TFG - Rafael Sanabria Espárrago</sonar.projectName>
-		<sonar.sources>src/main/java,frontend/src</sonar.sources>
+		  		
 	</properties>
 
 	<dependencies>
@@ -55,72 +50,33 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-taglibs</artifactId>
 		</dependency>
-		<!-- Databases - Uses H2 by default -->
-		<!-- dependency>
-                <groupId>org.hsqldb</groupId>
-                <artifactId>hsqldb</artifactId>
-                <scope>runtime</scope>
-        </dependency-->
+		<!-- Databases - Use H2 by default -->		
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 		</dependency>
-		<dependency>
+		<!--dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
+			<version>XXXX</version>
 			<scope>runtime</scope>
-		</dependency>
-		<!-- validation 
-        <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-validator</artifactId>
-        </dependency>-->
+		</dependency-->		
 		<!-- caching -->
 		<dependency>
 			<groupId>javax.cache</groupId>
 			<artifactId>cache-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.ehcache</groupId>
-			<artifactId>ehcache</artifactId>
-		</dependency>
-		<!-- Java Servlets, JSP and JSTL -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>jstl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<!-- WebJars -->
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>webjars-locator-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>jquery</artifactId>
-			<version>${webjars-jquery.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>jquery-ui</artifactId>
-			<version>${webjars-jquery-ui.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>bootstrap</artifactId>
-			<version>${webjars-bootstrap.version}</version>
-		</dependency>
-
+		</dependency>		
+		
 		<!-- Testing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -146,7 +102,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.24</version> <!--$NO-MVN-MAN-VER$-->
+			<version>${lombok.version}</version> 
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -166,22 +122,21 @@
 		</dependency>
 		<!-- Swagger -->
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>2.9.2</version>
+    		<groupId>org.springdoc</groupId>
+    		<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    		<version>2.1.0</version>
 		</dependency>
-
+		<!-- Other J2EE required libraries -->		
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>2.9.2</version>
-		</dependency>
-		
+        	<groupId>javax.xml.bind</groupId>
+        	<artifactId>jaxb-api</artifactId>
+        	<version>2.3.1</version>
+    	</dependency>
 		<dependency>
-    		<groupId>org.sonarsource.scanner.maven</groupId>
-    		<artifactId>sonar-maven-plugin</artifactId>
-    		<version>3.9.1.2184</version>
-		</dependency>
+        	<groupId>com.sun.xml.bind</groupId>
+        	<artifactId>jaxb-impl</artifactId>
+        	<version>2.3.4</version>
+    	</dependency>
 	</dependencies>
 	
 	<build>
@@ -323,8 +278,9 @@
 			<!-- Spring Boot Actuator displays build-related information if a git.properties 
             file is present at the classpath -->
 			<plugin>
-				<groupId>pl.project13.maven</groupId>
-				<artifactId>git-commit-id-plugin</artifactId>
+				<groupId>io.github.git-commit-id</groupId>
+				<artifactId>git-commit-id-maven-plugin</artifactId>
+				<version>6.0.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -340,41 +296,32 @@
                     </generateGitPropertiesFilename>
 					<failOnNoGitDirectory>false</failOnNoGitDirectory>
 				</configuration>
-			</plugin>
+			</plugin>			
+
 
 			<plugin>
-				<groupId>ro.isdc.wro4j</groupId>
-				<artifactId>wro4j-maven-plugin</artifactId>
-				<version>${wro4j.version}</version>
-				<executions>
-					<execution>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<wroManagerFactory>ro.isdc.wro.maven.plugin.manager.factory.ConfigurableWroManagerFactory</wroManagerFactory>
-					<cssDestinationFolder>${project.build.directory}/classes/static/resources/css</cssDestinationFolder>
-					<wroFile>${basedir}/src/main/wro/wro.xml</wroFile>
-					<extraConfigFile>${basedir}/src/main/wro/wro.properties</extraConfigFile>
-					<contextFolder>${basedir}/src/main/less</contextFolder>
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.webjars</groupId>
-						<artifactId>bootstrap</artifactId>
-						<version>${webjars-bootstrap.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.mockito</groupId>
-						<artifactId>mockito-core</artifactId>
-						<version>${mockito.version}</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <annotationProcessorPaths>
+                    <path>
+                        <groupId>org.mapstruct</groupId>
+                        <artifactId>mapstruct-processor</artifactId>
+                        <version>${mapstruct.version}</version>
+                    </path>
+                    <path>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok</artifactId>
+                        <version>${lombok.version}</version>
+                    </path>
+                    <path>
+                        <groupId>org.projectlombok</groupId>
+                        <artifactId>lombok-mapstruct-binding</artifactId>
+                        <version>0.2.0</version>
+                    </path>
+                </annotationProcessorPaths>
+            </configuration>
+        </plugin>
 		</plugins>
 	</build>
 

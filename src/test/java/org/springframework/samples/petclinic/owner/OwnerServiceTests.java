@@ -46,11 +46,12 @@ import org.springframework.transaction.annotation.Transactional;
 //@DataJpaTest(includeFilters = {@ComponentScan.Filter(Service.class),@ComponentScan.Filter(PasswordEncoder.class)})
 @SpringBootTest
 @AutoConfigureTestDatabase
-class OwnerServiceTests {
+public class OwnerServiceTests {
 
 	private OwnerService ownerService;
 	private PetService petService;
 	private AuthoritiesService authService;
+	
 
 	@Autowired
 	public OwnerServiceTests(OwnerService ownerService, PetService petService, AuthoritiesService authService) {

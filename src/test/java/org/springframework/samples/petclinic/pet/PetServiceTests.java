@@ -27,9 +27,8 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
-import org.ehcache.shadow.org.terracotta.offheapstore.storage.portability.Portability;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

@@ -2,15 +2,16 @@ package org.springframework.samples.petclinic.auth;
 
 import java.util.ArrayList;
 
-import javax.transaction.Transactional;
-import javax.validation.Valid;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.clinic.ClinicService;
-import org.springframework.samples.petclinic.clinic_owner.ClinicOwner;
-import org.springframework.samples.petclinic.clinic_owner.ClinicOwnerService;
+import org.springframework.samples.petclinic.clinicowner.ClinicOwner;
+import org.springframework.samples.petclinic.clinicowner.ClinicOwnerService;
 import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerService;
+import org.springframework.samples.petclinic.payload.request.SignupRequest;
 import org.springframework.samples.petclinic.user.Authorities;
 import org.springframework.samples.petclinic.user.AuthoritiesService;
 import org.springframework.samples.petclinic.user.User;
@@ -20,8 +21,6 @@ import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import petclinic.payload.request.SignupRequest;
 
 @Service
 public class AuthService {

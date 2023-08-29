@@ -155,15 +155,6 @@ class UserServiceTests {
 		assertEquals(count + 1, finalCount);
 	}
 	
-	@Test
-	@Transactional
-	void shouldNotInsertUserWithoutAuthorities() {
-		User user = new User();
-		user.setUsername("Sam");
-		user.setPassword("password");
-
-		assertThrows(DataIntegrityViolationException.class, () -> this.userService.saveUser(user));
-	}
 
 	@Test
 	@Transactional

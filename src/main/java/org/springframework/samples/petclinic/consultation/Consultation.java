@@ -2,13 +2,16 @@ package org.springframework.samples.petclinic.consultation;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
@@ -35,17 +38,16 @@ public class Consultation extends BaseEntity {
 	private Boolean isClinicComment = false;
 	
 	@NotNull
+	@Enumerated(EnumType.STRING)
 	private ConsultationStatus status;
 
-	@OneToOne
-	@JoinColumn(name = "owner_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	@ManyToOne
+	@JoinColumn(name = "owner_id")	
 	@NotNull
 	private Owner owner;
 
-	@OneToOne
-	@JoinColumn(name = "pet_id")
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	@ManyToOne
+	@JoinColumn(name = "pet_id")	
 	private Pet pet;
 
 //	@OneToOne

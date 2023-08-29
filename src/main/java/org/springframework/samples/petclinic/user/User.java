@@ -1,10 +1,11 @@
 package org.springframework.samples.petclinic.user;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.model.BaseEntity;
 
@@ -14,7 +15,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "users")
+@Table(name = "appusers")
 public class User extends BaseEntity {
 
 	@Column(unique = true)
@@ -22,6 +23,7 @@ public class User extends BaseEntity {
 
 	String password;
 
+	@NotNull
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "authority")
 	Authorities authority;

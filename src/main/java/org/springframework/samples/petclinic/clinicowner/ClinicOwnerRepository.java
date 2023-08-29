@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.clinic_owner;
+package org.springframework.samples.petclinic.clinicowner;
 
 import java.util.List;
 import java.util.Map;

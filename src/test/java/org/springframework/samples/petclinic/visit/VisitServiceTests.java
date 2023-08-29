@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

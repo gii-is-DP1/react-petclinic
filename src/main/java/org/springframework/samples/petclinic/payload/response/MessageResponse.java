@@ -1,4 +1,4 @@
-package petclinic.payload.response;
+package org.springframework.samples.petclinic.payload.response;
 
 import lombok.Getter;
 import lombok.Setter;
