@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.payload.request;
+package org.springframework.samples.petclinic.auth.payload.request;
 
 import jakarta.validation.constraints.NotBlank;
 

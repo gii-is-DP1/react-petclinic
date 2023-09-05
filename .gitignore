@@ -69,3 +69,5 @@ _site/
 
 .vscode/
 /.apt_generated/
+coverage/jacoco.xml
+.gitignore

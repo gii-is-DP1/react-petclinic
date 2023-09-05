@@ -7,12 +7,12 @@ import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.samples.petclinic.auth.payload.request.LoginRequest;
+import org.springframework.samples.petclinic.auth.payload.request.SignupRequest;
+import org.springframework.samples.petclinic.auth.payload.response.JwtResponse;
+import org.springframework.samples.petclinic.auth.payload.response.MessageResponse;
 import org.springframework.samples.petclinic.configuration.jwt.JwtUtils;
 import org.springframework.samples.petclinic.configuration.services.UserDetailsImpl;
-import org.springframework.samples.petclinic.payload.request.LoginRequest;
-import org.springframework.samples.petclinic.payload.request.SignupRequest;
-import org.springframework.samples.petclinic.payload.response.JwtResponse;
-import org.springframework.samples.petclinic.payload.response.MessageResponse;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,11 +24,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.security.authentication.BadCredentialsException;
 
 //@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/v1/auth")
+@Tag(name = "Authentication", description = "The Authentication API based on JWT")
 public class AuthController {
 
 	private final AuthenticationManager authenticationManager;
@@ -70,7 +74,8 @@ public class AuthController {
 		return ResponseEntity.ok(isValid);
 	}
 
-	@PostMapping("/signup")
+	
+	@PostMapping("/signup")	
 	public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
 		if (userService.existsUser(signUpRequest.getUsername()).equals(true)) {
 			return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));

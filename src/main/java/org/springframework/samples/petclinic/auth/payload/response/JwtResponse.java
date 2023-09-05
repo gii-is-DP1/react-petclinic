@@ -1,4 +1,4 @@
-package org.springframework.samples.petclinic.payload.response;
+package org.springframework.samples.petclinic.auth.payload.response;
 
 import java.util.List;
 
