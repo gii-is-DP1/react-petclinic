@@ -69,7 +69,7 @@ public class SecurityConfiguration {
 				.requestMatchers(HttpMethod.DELETE, "/api/v1/consultations/{consultationId:[0-9]\\d+}").hasAuthority(ADMIN)
 				.requestMatchers("/api/v1/owners/*/pets/**").authenticated()
 				.requestMatchers("/api/v1/owners/**").hasAuthority(ADMIN)
-				.requestMatchers("/api/v1/visits/**").hasAuthority(ADMIN)
+				.requestMatchers("/api/v1/visits/","/api/v1/visits/**").hasAnyAuthority(CLINIC_OWNER, ADMIN) 
 				.requestMatchers(HttpMethod.GET, "/api/v1/pets/stats").hasAuthority(ADMIN)
 				.requestMatchers("/api/v1/clinics/**").hasAnyAuthority(CLINIC_OWNER, ADMIN)
 				.requestMatchers(HttpMethod.GET, "/api/v1/vets/stats").hasAuthority(ADMIN)

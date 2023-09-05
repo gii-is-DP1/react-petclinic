@@ -169,6 +169,11 @@ public class VisitRestController {
 		}
 	}
 
+	@GetMapping("/api/v1/visits/")
+	public ResponseEntity<List<Visit>> findAllByOwnerTrail(@RequestParam(required = false) Integer ownerId) {
+		return  findAllByOwner(ownerId); 
+	}
+
 	@GetMapping("/api/v1/visits")
 	public ResponseEntity<List<Visit>> findAllByOwner(@RequestParam(required = false) Integer ownerId) {
 		User user = userService.findCurrentUser();
