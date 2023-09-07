@@ -15,6 +15,8 @@
  */
 package org.springframework.samples.petclinic.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -46,6 +48,7 @@ public class BaseEntity {
 		this.id = id;
 	}
 
+	@JsonIgnore
 	public boolean isNew() {
 		return this.id == null;
 	}
