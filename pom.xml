@@ -34,6 +34,24 @@
 		  		
 	</properties>
 
+	<developers>
+		<developer>
+		<id>us-invest-personal</id>
+		<name>Bedilia</name>
+		<email>us.invest.personal.2020@gmail.com</email>
+		<url>https://www.google.com/</url>
+		<roles>
+			<role>leader</role>
+		</roles>
+		<properties>
+			<picUrl>
+				https://cdn-icons-png.flaticon.com/512/6833/6833605.png
+			</picUrl>
+		</properties>
+		</developer>
+		<!-- More developers ...-->
+	</developers>
+
 	<dependencies>		
 
 		<!-- Spring and Spring Boot dependencies -->
