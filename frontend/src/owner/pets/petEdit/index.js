@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+import React from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   Button,
@@ -11,118 +12,117 @@ import FormGenerator from "../../../components/formGenerator/formGenerator";
 import { petEditFormInputs } from "./form/petEditFormInputs";
 import "../../../static/css/owner/editPet.css";
 import "../../../static/css/auth/authButton.css"
+import useFetchState from "../../../util/useFetchState";
 
-class OwnerPetEdit extends Component {
-  emptyItem = {
+export default function OwnerPetEdit(){
+  let pathArray = window.location.pathname.split("/");
+  const emptyItem = {
     id: null,
     name: "",
     birthDate: "",
     type: {},
     owner: {},
-  };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      pet: this.emptyItem,
-      types: [],
-      message: null,
-      modalShow: false,
-    };
-    this.editPetFormRef = React.createRef();
-    this.handleChange = this.handleChange.bind(this);
-    this.handleShow = this.handleShow.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.jwt = JSON.parse(window.localStorage.getItem("jwt"));
-
-    let pathArray = window.location.pathname.split("/");
-    this.petId = pathArray[2];
-  }
-
-  async componentDidMount() {
-    if (this.petId !== "new") {
-      const pet = await (
-        await fetch(`/api/v1/pets/${this.petId}`, {
+  };  
+  const jwt = JSON.parse(window.localStorage.getItem("jwt"));
+  const [message,setMessage] = useState(null);
+  const [modalShow,setModalShow] = useState(false);
+  const [types, setTypes] = useState([])
+  const [pet,setPet] = useState(emptyItem);  
+  const [petId,setPetId] = useState(pathArray[2]);
+  const editPetFormRef=useRef();
+  
+  useEffect( () => setupPet(),[]);  
+  
+  function setupPet(){
+      if (petId !== "new" && pet.id==null) { 
+        const pet = fetch(
+            `/api/v1/pets/${petId}`, 
+            {
+              headers: {
+              Authorization: `Bearer ${jwt}`,
+            },
+          })
+          .then((p) => p.json())
+          .then((p) => {
+            if(p.message){ 
+              setMessage(pet.message);
+              setModalShow( true );
+            }else {
+              setPet(p);
+              setPetId(p.id);                
+            }
+          }).catch(m =>{
+            setMessage(m);
+            setModalShow( true );
+          });          
+    }    
+    if(types.length===0){
+      fetch(`/api/v1/pets/types`, {
           headers: {
-            Authorization: `Bearer ${this.jwt}`,
+            Authorization: `Bearer ${jwt}`,
           },
-        })
-      ).json();
-      if (pet.message) this.setState({ message: pet.message, modalShow: true });
-      else {
-        this.setState({
-          pet: pet,
-          selectedType: pet.type.name,
-        });
+        }
+      ).then(data => data.json()).then((data) => {
+        if(!data.message)
+          setTypes(data);
+        else{
+          setMessage(data.message);
+          setModalShow(true);
+        }
+      }).catch(error => {setMessage(error);setModalShow(true);});
       }
-    }
-    if (!this.state.message) {
-      const types = await (
-        await fetch(`/api/v1/pets/types`, {
-          headers: {
-            Authorization: `Bearer ${this.jwt}`,
-          },
-        })
-      ).json();
-      if (types.message)
-        this.setState({ message: types.message, modalShow: true });
-      else this.setState({ types: types });
-    }
   }
 
-  handleChange(event) {
+  function handleChange(event) {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-    let pet = { ...this.state.pet };
+    let newPet = { ...pet };
     if (name === "type")
-      pet.type = this.state.types.filter(
-        (type) => type.id === Number(value)
-      )[0];
-    else pet[name] = value;
-    this.setState({ pet });
-  }
+      newPet.type= types.filter(
+                (type) => type.id === Number(value))[0];
+    else 
+      newPet.name = value;
+    setPet(newPet);
+  }  
 
-  handleShow() {
-    let modalShow = this.state.modalShow;
-    this.setState({ modalShow: !modalShow });
-  }
+  async function handleSubmit({ values }) {
 
-  async handleSubmit({ values }) {
+    if (!editPetFormRef.current.validate()) return;
 
-    if (!this.editPetFormRef.current.validate()) return;
-
-    const pet = {
-      id: this.state.pet.id,
+    const mypet = {
+      id: pet.id,
       name: values["name"],
       birthDate: values["birthDate"],
-      type: this.state.types.filter((type) => type.name === values["type"])[0],
-      owner: this.state.pet.owner,
+      type: types.filter((type) => type.name === values["type"])[0],
+      owner: pet.owner,
     };
 
-    const submit = await (
-      await fetch("/api/v1/pets" + (pet.id ? "/" + this.petId : ""), {
-        method: pet.id ? "PUT" : "POST",
+    const submit = await (await fetch("/api/v1/pets" + (pet.id ? "/" + petId : ""), 
+      {
+        method: mypet.id ? "PUT" : "POST",
         headers: {
-          Authorization: `Bearer ${this.jwt}`,
+          Authorization: `Bearer ${jwt}`,
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(pet),
-      })
-    ).json();
+        body: JSON.stringify(mypet),
+      }
+    )).json();
 
     if (submit.message){
-      this.setState({ message: submit.message, modalShow: true });
+      setMessage(submit.message);
+      setModalShow(true);
     }
     else window.location.href = `/myPets`;
   }
-
-  render() {
-    const { pet, types, message } = this.state;
+  
     const title = (
       <h2 className="text-center">{pet.id ? "Edit Pet" : "Add Pet"}</h2>
     );
+
+    petEditFormInputs.forEach(i => i.handleChange=handleChange);
+    
 
     if (petEditFormInputs[2].values.length < 2) {
       petEditFormInputs[2].values = [
@@ -137,26 +137,31 @@ class OwnerPetEdit extends Component {
       petEditFormInputs[2].defaultValue = pet.type.name || "None";
     }
 
+    function handleShow() {
+      setModalShow(false);
+      setMessage(null);
+    }
+
     let modal = <></>;
     if (message) {
-      const show = this.state.modalShow;
+      const show = modalShow;
       const closeBtn = (
-        <button className="close" onClick={this.handleShow} type="button">
+        <button className="close" onClick={handleShow} type="button">
           &times;
         </button>
       );
       const cond = message.includes("limit");
       modal = (
         <div>
-          <Modal isOpen={show} toggle={this.handleShow} keyboard={false}>
+          <Modal isOpen={show} toggle={handleShow} keyboard={false}>
             {cond ? (
               <ModalHeader>Warning!</ModalHeader>
             ) : (
-              <ModalHeader toggle={this.handleShow} close={closeBtn}>
+              <ModalHeader toggle={handleShow} close={closeBtn}>
                 Error!
               </ModalHeader>
             )}
-            <ModalBody>{this.state.message || ""}</ModalBody>
+            <ModalBody>{message || ""}</ModalBody>
             <ModalFooter>
               <Button color="primary" tag={Link} to={`/myPets`}>
                 Back
@@ -172,9 +177,9 @@ class OwnerPetEdit extends Component {
         <div className="edit-pet-form-container">
           {title}
           <FormGenerator
-            ref={this.editPetFormRef}
+            ref={editPetFormRef}
             inputs={petEditFormInputs}
-            onSubmit={this.handleSubmit}
+            onSubmit={handleSubmit}
             buttonText="Save"
             buttonClassName="auth-button"
           />
@@ -183,5 +188,4 @@ class OwnerPetEdit extends Component {
       </div>
     );
   }
-}
-export default OwnerPetEdit;
+

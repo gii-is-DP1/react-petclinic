@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import "../../static/css/pricing/pricingPage.css";
-import { FaCheck, FaTimes, FaPaperPlane } from "react-icons/fa";
+import React from "react";
+import { BsDot, BsFillRocketTakeoffFill } from "react-icons/bs";
+import { FaCheck, FaPaperPlane, FaTimes } from "react-icons/fa";
 import { ImAirplane } from "react-icons/im";
-import { BsFillRocketTakeoffFill, BsDot } from "react-icons/bs";
+import "../../static/css/pricing/pricingPage.css";
 
-class PlanList extends Component {
-  render() {
+export default function PlanList() {
+  
     return (
       <div className="pricing-page-container">
         <div>
@@ -133,5 +133,3 @@ class PlanList extends Component {
       </div>
     );
   }
-}
-export default PlanList;

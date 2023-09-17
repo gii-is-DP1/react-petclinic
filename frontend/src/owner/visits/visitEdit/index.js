@@ -210,7 +210,7 @@ export default function OwnerVisitEdit() {
 
   useEffect(() => {
     setUp();
-  }, []);
+  });
 
   useEffect(() => {
     const datetimeInput = visit.datetime || moment().format("YYYY-MM-DD HH:mm");

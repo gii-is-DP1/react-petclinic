@@ -1,39 +1,40 @@
-import React, { Component } from "react";
-import "../../static/css/pricing/pricingPage.css";
-import { FaCheck, FaTimes, FaPaperPlane } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { BsDot, BsFillRocketTakeoffFill } from "react-icons/bs";
+import { FaCheck, FaPaperPlane, FaTimes } from "react-icons/fa";
 import { ImAirplane } from "react-icons/im";
-import { BsFillRocketTakeoffFill, BsDot } from "react-icons/bs";
+import "../../static/css/pricing/pricingPage.css";
 
-class PricingPlan extends Component {
+export default function PricingPlan () {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      plan: null,
-      message: null,
-    };
-    this.jwt = JSON.parse(window.localStorage.getItem("jwt"));
-  }
-
-  async componentDidMount() {
-    const owner = await (
+  const [plan, setPlan] = useState(null);
+  const [owner, setOwner] = useState(null);
+  const [message, setMessage] = useState(null);  
+  const jwt = JSON.parse(window.localStorage.getItem("jwt"));
+  
+  useEffect(()=> setUp(),[]);
+  
+  async function setUp(){
+    const myowner = await (
       await fetch(`/api/v1/plan`, {
         headers: {
-          Authorization: `Bearer ${this.jwt}`,
+          Authorization: `Bearer ${jwt}`,
         },
       })
     ).json();
-    if (owner.message) this.setState({ message: owner.message });
-    else this.setState({ owner: owner, plan: owner.clinic.plan });
+    if (myowner.message) setMessage(myowner.message);
+    else{
+      setPlan(owner.clinic.plan);
+      setOwner(owner);
+    } 
   }
 
-  async changePlan(event, plan) {
+  async function changePlan(event, plan) {
     event.preventDefault();
 
     await fetch("/api/v1/plan", {
       method: "PUT",
       headers: {
-        Authorization: `Bearer ${this.jwt}`,
+        Authorization: `Bearer ${jwt}`,
         Accept: "application/json",
         "Content-Type": "application/json",
       },
@@ -42,10 +43,10 @@ class PricingPlan extends Component {
     window.location.href = "/plan";
   }
 
-  render() {
-    const { plan } = this.state;
-    if (this.state.message) {
-      return <h2 className="text-center">{this.state.message}</h2>;
+  
+    
+    if (message) {
+      return <h2 className="text-center">{message}</h2>;
     }
 
     return (
@@ -93,7 +94,7 @@ class PricingPlan extends Component {
               {plan === "BASIC" ? (
                 <button disabled> ACTIVE </button>
                 ) : (
-                <button onClick={(e) => this.changePlan(e, "BASIC")}> CHANGE </button>
+                <button onClick={(e) => changePlan(e, "BASIC")}> CHANGE </button>
                 )}
             </div>
             {/* END Col one */}
@@ -137,7 +138,7 @@ class PricingPlan extends Component {
               {plan === "GOLD" ? (
                 <button disabled> ACTIVE </button>
                 ) : (
-                <button onClick={(e) => this.changePlan(e, "GOLD")}> CHANGE </button>
+                <button onClick={(e) => changePlan(e, "GOLD")}> CHANGE </button>
                 )}
             
             </div>
@@ -189,7 +190,7 @@ class PricingPlan extends Component {
             {plan === "PLATINUM" ? (
                 <button disabled> ACTIVE </button>
                 ) : (
-                <button onClick={(e) => this.changePlan(e, "PLATINUM")}> CHANGE </button>
+                <button onClick={(e) => changePlan(e, "PLATINUM")}> CHANGE </button>
                 )}
             </div>
             {/* END Col three */}
@@ -197,6 +198,4 @@ class PricingPlan extends Component {
         </div>
       </div>
     );
-  }
 }
-export default PricingPlan;

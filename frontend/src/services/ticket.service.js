@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-import { Button, ButtonGroup, Card, CardBody, CardText, CardTitle, Col, Container, Form, FormGroup, Input, Label, Row } from "reactstrap";
-import deleteFromList from "../util/deleteFromList";
+import { Button, ButtonGroup, Card, CardBody, CardText, CardTitle, Col, Form, FormGroup, Input, Row } from "reactstrap";
 import "../static/css/owner/ticketPage.css";
+import deleteFromList from "../util/deleteFromList";
 
 class TicketService {
     getTicketList([tickets, setTickets], auth, [alerts, setAlerts], setMessage, setVisible, plan = null) {

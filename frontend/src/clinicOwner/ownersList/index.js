@@ -1,26 +1,24 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Button, ButtonGroup, Table } from "reactstrap";
+import { Table } from "reactstrap";
 import tokenService from "../../services/token.service";
-import useFetchState from "../../util/useFetchState";
-import getErrorModal from "../../util/getErrorModal";
-import deleteFromList from "../../util/deleteFromList";
 import "../../static/css/admin/adminPage.css";
+import getErrorModal from "../../util/getErrorModal";
+import useFetchState from "../../util/useFetchState";
 
 const user = tokenService.getUser();
 const jwt = tokenService.getLocalAccessToken();
 
 export default function OwnerListClinicOwner(){
-    const [message, setMessage] = useState(null);
+  const [message, setMessage] = useState(null);
   const [visible, setVisible] = useState(false);
-  const [owners, setOwners] = useFetchState(
+  const [owners, ] = useFetchState(
     [],
     `/api/v1/clinics/owners?userId=${user.id}`,
     jwt,
     setMessage,
     setVisible
   );
-  const [alerts, setAlerts] = useState([]);
+  const [alerts, ] = useState([]);
 
   const ownerList = owners.map((owner) => {
 
