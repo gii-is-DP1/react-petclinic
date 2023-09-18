@@ -47,7 +47,6 @@ import ConsultationListClinicOwner from "./clinicOwner/consultations/Consultatio
 import ConsultationEditClinicOwner from "./clinicOwner/consultations/ConsultationEditClinicOwner";
 import VetListClinicOwner from "./clinicOwner/vets/VetListClinicOwner";
 import VetEditClinicOwner from "./clinicOwner/vets/VetEditClinicOwner";
-import Developers from "./developers";
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
@@ -139,8 +138,7 @@ function App() {
   })
   if (!jwt) {
     publicRoutes = (
-      <>
-        <Route path="/developers" element={<Developers/>} />
+      <>        
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       </>
@@ -148,8 +146,7 @@ function App() {
   } else {
     userRoutes = (
       <>
-        {/* <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} /> */}
-        <Route path="/developers" element={<Developers/>} />
+        {/* <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} /> */}        
         <Route path="/logout" element={<Logout />} />
         <Route path="/login" element={<Login />} />
       </>
