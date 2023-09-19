@@ -84,7 +84,7 @@ Visit [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagge
 |--------------------------|---|
 |The Main Class | [PetClinicApplication](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java) |
 |Properties Files | [application.properties](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/resources) |
-|
+
 
 ## Starting the frontend
 
