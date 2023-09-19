@@ -92,4 +92,4 @@ You can start the development server to see frontend using the command (maybe yo
 ```
 npm start
 ```
-You can then access the PetClinic frontend at [http://localhost:3000}(http://localhost:3000)
+You can then access the PetClinic frontend at [http://localhost:3000](http://localhost:3000)
