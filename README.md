@@ -41,6 +41,7 @@ gets populated at startup with data. The INSERTs are specified in the file data.
 ### Prerequisites
 The following items should be installed in your system:
 * Java 17 or newer.
+* Node.js 18 or newer.
 * git command line tool (https://help.github.com/articles/set-up-git)
 * Your preferred IDE 
   * Eclipse with the m2e plugin. Note: when m2e is available, there is an m2 icon in `Help -> About` dialog. If m2e is
