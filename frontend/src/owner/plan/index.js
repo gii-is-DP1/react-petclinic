@@ -7,11 +7,11 @@ import "../../static/css/pricing/pricingPage.css";
 export default function PricingPlan () {
 
   const [plan, setPlan] = useState(null);
-  const [owner, setOwner] = useState(null);
+  const [owner, setOwner] = useState({});
   const [message, setMessage] = useState(null);  
   const jwt = JSON.parse(window.localStorage.getItem("jwt"));
   
-  useEffect(()=> setUp(),[]);
+  useEffect(()=>{ setUp();},[]);
   
   async function setUp(){
     const myowner = await (
@@ -23,8 +23,8 @@ export default function PricingPlan () {
     ).json();
     if (myowner.message) setMessage(myowner.message);
     else{
-      setPlan(owner.clinic.plan);
-      setOwner(owner);
+      setPlan(myowner.clinic.plan);
+      setOwner(myowner);
     } 
   }
 
