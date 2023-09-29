@@ -14,7 +14,7 @@ export default function deleteFromList(url, id, [state, setState], [alerts, setA
             },
         })
             .then((response) => {
-                if (response.status === 200) {
+                if (response.status === 200 || response.status==204) {
                     if (options.date)
                         setState(state.filter((i) => i.id !== id && i.creationDate < options.date));
                     else if (options.filtered && options.setFiltered) {
@@ -24,10 +24,10 @@ export default function deleteFromList(url, id, [state, setState], [alerts, setA
                     else
                         setState(state.filter((i) => i.id !== id));
                 }
-                return response.json();
+                return response.text();
             })
-            .then(json => {
-                getDeleteAlertsOrModal(json, id, alerts, setAlerts, setMessage, setVisible);
+            .then(text => {if(text!=='')
+                        getDeleteAlertsOrModal(JSON.parse(text), id, alerts, setAlerts, setMessage, setVisible);
             })
             .catch((err) => {
                 console.log(err);
