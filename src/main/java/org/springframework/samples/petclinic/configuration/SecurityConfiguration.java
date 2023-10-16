@@ -64,6 +64,8 @@ public class SecurityConfiguration {
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()
 					.requestMatchers("/swagger-ui.html","/api/v1/clinics","/", "/oups").permitAll()												
 					.requestMatchers("/api/v1/developers").permitAll()												
+					.requestMatchers("/api/v1/game").authenticated()												
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/game/**")).authenticated()												
 					.requestMatchers("/api/v1/plan").hasAuthority("OWNER")
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/**")).hasAuthority(ADMIN)
 					.requestMatchers("/api/v1/clinicOwners/all").hasAuthority(ADMIN)
