@@ -29,7 +29,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/game")
-@Tag(name = "Games", description = "API for the  management of  Games")
+@Tag(name = "Games", description = "API for the  management of  Games.")
 @SecurityRequirement(name = "bearerAuth")
 public class GameRestController {
     GameService gs;
