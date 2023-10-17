@@ -40,7 +40,19 @@ public class GameRestController {
 
     @GetMapping
     public List<Game> getAllGames(@ParameterObject() @RequestParam(value="name",required = false) String name, @ParameterObject @RequestParam(value="status",required = false) GameStatus status){
-        return gs.getAllGames();
+        if(name!=null)
+            return gs.getGamesLike(name);
+        else if(status!=null){
+            switch(status){
+                case WAITING:
+                    return gs.getWaitingGames();
+                case PLAYING:
+                    return gs.getOngoingGames();
+                default:
+                    return gs.getFinishedGames();
+            }
+        }else 
+            return gs.getAllGames();
     }
 
     @GetMapping("/{id}")
