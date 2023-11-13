@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,8 +33,15 @@ public class GameService {
         return gr.findByStart(null);
     }
 
-    @Transactional
-    public Game save(Game g) {
+    @Transactional(rollbackFor = {ConcurrentGameException.class})
+    public Game save(Game g) throws ConcurrentGameException {
+        List<Game> onGoingGames;
+        if(g.isOngoing())
+            for(Owner player:g.getPlayers()){
+                onGoingGames=gr.findOngoinGamesByPlayer(player);
+                if(!onGoingGames.isEmpty() && !g.equals(onGoingGames.get(0)))
+                    throw new ConcurrentGameException(player,g,onGoingGames.get(0));
+            }
         gr.save(g);
         return g;
     }

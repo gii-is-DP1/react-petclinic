@@ -64,7 +64,7 @@ public class GameRestController {
     }
 
     @PostMapping()
-    public ResponseEntity<Game> createGame(@Valid @RequestBody Game g){
+    public ResponseEntity<Game> createGame(@Valid @RequestBody Game g) throws ConcurrentGameException{
         g=gs.save(g);
         URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -75,7 +75,7 @@ public class GameRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateGame(@Valid @RequestBody Game g,@PathVariable("id")Integer id){
+    public ResponseEntity<Void> updateGame(@Valid @RequestBody Game g,@PathVariable("id")Integer id) throws ConcurrentGameException{
         Game gToUpdate=getGameById(id);
         BeanUtils.copyProperties(g,gToUpdate, "id");
         gs.save(gToUpdate);
