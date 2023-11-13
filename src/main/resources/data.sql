@@ -115,3 +115,5 @@ INSERT INTO consultation_tickets(id,description,creation_date, user_id, consulta
 INSERT INTO game(id,name,code,start,finish) VALUES (1,'Fiesta para todos!!!!!',null,null,null),
                                                     (2,'Partida privada ya comenzada','super-secret','2023-04-11 15:20',null),
                                                     (3,'Partida abierta ya terminada',null,'2023-04-11 18:20','2023-04-11 19:20');
+
+INSERT INTO game_players(game_id, players_id) VALUES (1,1),(2,1),(3,1),(2,2),(2,3);
