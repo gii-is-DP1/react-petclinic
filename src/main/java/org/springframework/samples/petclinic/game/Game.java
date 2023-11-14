@@ -9,6 +9,7 @@ import org.springframework.samples.petclinic.owner.Owner;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Transient;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,8 +22,15 @@ public class Game extends NamedEntity{
     String code;
     LocalDateTime start;
     LocalDateTime finish;
+    
     @ManyToOne 
     Owner creator;
+    
     @ManyToMany
     Set<Owner> players;
+	
+    @Transient
+    public boolean isOngoing() {
+		return start!=null && finish==null;
+	}
 }
