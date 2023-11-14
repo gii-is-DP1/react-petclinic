@@ -159,6 +159,20 @@ const ticket2 = {
 }
 
 export const handlers = [
+
+    rest.get('*/api/v1/game', (req,res,ctx) => {
+        return res(
+            ctx.status(200),
+            ctx.json([{
+                id: 1,
+                name: "Parejo",
+                code: null,
+                start: null,
+                finish: null,
+            }]),
+        )
+    }),
+
     rest.delete('*/:id', (req, res, ctx) => {
         return res(
             ctx.status(200),
