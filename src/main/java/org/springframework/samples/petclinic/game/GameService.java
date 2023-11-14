@@ -25,7 +25,7 @@ public class GameService {
     
     @Transactional(readOnly=true)
     public List<Game> getGamesByName(String namepatterm){
-        return gr.findAll();
+        return gr.findByNameContains(namepatterm);
     }
 
     @Transactional(readOnly=true)
