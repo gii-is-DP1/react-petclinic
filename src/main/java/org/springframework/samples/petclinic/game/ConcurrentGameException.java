@@ -11,7 +11,7 @@ public class ConcurrentGameException extends Exception {
     Game alreadyOngoinGame;
     
     public ConcurrentGameException(Owner player, Game g1, Game g2) {
-        super("Player with id: "+player.getId()+ "has an already ongoin game (with id "+g2.getId()+" thus we cannot same game: "+g1.toString());
+        super("Player with id: "+player.getId()+ "has an already ongoin game (with id "+g2.getId()+" thus we cannot same game: "+g1.getId());
         this.player=player;
         this.gameToSave=g1;
         this.alreadyOngoinGame=g2;   

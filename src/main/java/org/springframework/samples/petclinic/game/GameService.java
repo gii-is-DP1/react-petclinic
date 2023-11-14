@@ -39,7 +39,7 @@ public class GameService {
         if(g.isOngoing())
             for(Owner player:g.getPlayers()){
                 onGoingGames=gr.findOngoinGamesByPlayer(player);
-                if(!onGoingGames.isEmpty() && !g.equals(onGoingGames.get(0)))
+                if(!onGoingGames.isEmpty() && !g.getId().equals(onGoingGames.get(0).getId()))
                     throw new ConcurrentGameException(player,g,onGoingGames.get(0));
             }
         gr.save(g);
