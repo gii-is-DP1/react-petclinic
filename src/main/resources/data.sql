@@ -111,3 +111,29 @@ INSERT INTO consultation_tickets(id,description,creation_date, user_id, consulta
 INSERT INTO consultation_tickets(id,description,creation_date, user_id, consultation_id) VALUES (6, 'Try to give him some tuna to check if he eats that.', '2023-04-11 15:20', 15, 3);
 INSERT INTO consultation_tickets(id,description,creation_date, user_id, consultation_id) VALUES (7, 'My lovebird doesn''t sing as my neighbour''s one.', '2023-02-24 12:30', 5, 4);
 INSERT INTO consultation_tickets(id,description,creation_date, user_id, consultation_id) VALUES (8, 'Lovebirds do not sing.', '2023-02-24 18:30', 16, 4);
+
+
+
+
+-------------------------------------------------------------------
+INSERT INTO Customer(id, name) VALUES (1, 'Juan');
+
+INSERT INTO Movie(id, title, price_code) VALUES (1, 'M1', 0);
+INSERT INTO Movie(id, title, price_code) VALUES (2, 'M2', 1);
+INSERT INTO Movie(id, title, price_code) VALUES (3, 'M3', 2);
+INSERT INTO Movie(id, title, price_code) VALUES (4, 'M4', 1);
+INSERT INTO Movie(id, title, price_code) VALUES (5, 'M5', 1);
+
+INSERT INTO RENTAL_INFO(id, movie_id) values(1, 1);
+INSERT INTO RENTAL_INFO(id, movie_id) values(2, 2);
+INSERT INTO RENTAL_INFO(id, movie_id) values(3, 3);
+
+INSERT INTO Rental(id, days_rented, info_id) VALUES (1, 3, 1);
+insert into Rental(id, days_rented, info_id) values (2, 2, 2);
+insert into Rental(id, days_rented, info_id) values (3, 5, 3);
+
+INSERT INTO CUSTOMER_RENTALS(customer_id, rentals_id) values(1, 1);
+INSERT INTO CUSTOMER_RENTALS(customer_id, rentals_id) values(1, 2);
+INSERT INTO CUSTOMER_RENTALS(customer_id, rentals_id) values(1, 3);
+--------------------------------------------------------------------
+
