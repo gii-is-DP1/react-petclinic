@@ -36,7 +36,6 @@ public class CustomerRestController {
             // add frequent renter points with bonus
             frequentRenterPoints += rental.getFrequentRenterPoints();
             
-            //show figures
             rental.setAmount(thisAmount);
             totalAmount += thisAmount;
         }
