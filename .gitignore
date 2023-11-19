@@ -72,3 +72,4 @@ _site/
 coverage/jacoco.xml
 .gitignore
 package-lock.json
+/.apt_generated_tests/
