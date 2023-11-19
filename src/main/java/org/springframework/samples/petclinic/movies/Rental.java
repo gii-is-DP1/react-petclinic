@@ -37,4 +37,11 @@ public class Rental extends BaseEntity{
             }
         return result;
     }
+
+    int getFrequentRenterPoints(){
+        if ((movie.getPriceCode() == PriceCode.NEW_RELEASE) && daysRented > 1) 
+            return 2;
+        else
+            return 1;
+    }
 }

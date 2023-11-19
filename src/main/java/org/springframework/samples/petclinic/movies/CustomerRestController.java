@@ -33,12 +33,9 @@ public class CustomerRestController {
             double thisAmount = 0;
             thisAmount = rental.getCharge();
 
-            // add frequent renter points
-            frequentRenterPoints ++;
-
-            // add bonus for a two day new release rental
-            if ((rental.getMovie().getPriceCode() == PriceCode.NEW_RELEASE) && rental.getDaysRented() > 1) 
-                frequentRenterPoints ++;
+            // add frequent renter points with bonus
+            frequentRenterPoints += rental.getFrequentRenterPoints();
+            
             //show figures
             rental.setAmount(thisAmount);
             totalAmount += thisAmount;
