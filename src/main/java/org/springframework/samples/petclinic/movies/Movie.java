@@ -30,4 +30,11 @@ public class Movie extends BaseEntity {
             }
         return result;
     }
+
+    int getFrequentRenterPoints(int daysRented){
+        if ((priceCode == PriceCode.NEW_RELEASE) && daysRented > 1) 
+            return 2;
+        else
+            return 1;
+    }
 }
