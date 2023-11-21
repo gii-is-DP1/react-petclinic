@@ -22,7 +22,7 @@ public class CustomerRestController {
     
     
     @GetMapping
-    public String showStatement(@PathVariable("customerId") Integer id) {
+    public StatementDTO showStatement(@PathVariable("customerId") Integer id) {
 
         Customer c = this.service.findById(id);
         double totalAmount = 0;
@@ -56,15 +56,9 @@ public class CustomerRestController {
         }
 
         StatementDTO statement = new StatementDTO(c, totalAmount, frequentRenterPoints);
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = null;
-        try {
-            json = objectMapper.writeValueAsString(statement);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        
 
-        return json;
+        return statement;
     }
     
 }
