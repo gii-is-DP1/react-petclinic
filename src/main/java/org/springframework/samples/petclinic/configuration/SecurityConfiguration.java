@@ -79,6 +79,7 @@ public class SecurityConfiguration {
 					.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/vets/**")).authenticated()
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/vets/**")).hasAnyAuthority(ADMIN, "VET", CLINIC_OWNER) 
 					.requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
+					.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/universe/planet/**")).permitAll()
 			    .anyRequest().authenticated())					
 			
 			.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);		

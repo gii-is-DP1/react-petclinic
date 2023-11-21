@@ -47,6 +47,8 @@ import ConsultationListClinicOwner from "./clinicOwner/consultations/Consultatio
 import ConsultationEditClinicOwner from "./clinicOwner/consultations/ConsultationEditClinicOwner";
 import VetListClinicOwner from "./clinicOwner/vets/VetListClinicOwner";
 import VetEditClinicOwner from "./clinicOwner/vets/VetEditClinicOwner";
+import GameOfLife from "./gameoflife/GameOfLife";
+
 
 function ErrorFallback({ error, resetErrorBoundary }) {
   return (
@@ -161,6 +163,7 @@ function App() {
           <Route path="/" exact={true} element={<Home />} />
           <Route path="/plans" element={<PlanList />} />
           <Route path="/docs" element={<SwaggerDocs />} />
+          <Route path="/planet/:planetName" element={<GameOfLife />} />
           {publicRoutes}
           {userRoutes}
           {adminRoutes}
