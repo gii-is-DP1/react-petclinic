@@ -24,22 +24,14 @@ public class CustomerRestController {
     @GetMapping
     public StatementDTO showStatement(@PathVariable("customerId") Integer id) {
 
-        Customer c = this.service.findById(id);
-        double totalAmount = 0;
-        int frequentRenterPoints = 0;
+        Customer c = this.service.findById(id);        
 
-
-        for (Rental rental : c.getRentals()) {
-            double thisAmount = 0;            
-            thisAmount = rental.getCharge();
-            frequentRenterPoints += rental.getFrequentRenterPoints();
-            rental.setAmount(thisAmount);
-            totalAmount += thisAmount;
+        for (Rental rental : c.getRentals()) {            
+            rental.setAmount(rental.getCharge());        
         }
 
-        StatementDTO statement = new StatementDTO(c, totalAmount, frequentRenterPoints);
+        StatementDTO statement = new StatementDTO(c, c.getTotalCharge(), c.getTotalFrequentRenterPoints());
         
-
         return statement;
     }
         

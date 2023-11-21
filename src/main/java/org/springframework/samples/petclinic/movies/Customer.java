@@ -18,5 +18,22 @@ public class Customer extends BaseEntity {
     private List<Rental> rentals;
 
     private String name;
+ 
     
+    double getTotalCharge() {
+        double result = 0;
+        for (Rental rental : rentals) {
+            result += rental.getCharge();
+        }
+        return result;
+    }
+
+    int getTotalFrequentRenterPoints() {
+        int result = 0;
+        for (Rental rental : rentals) {
+            result += rental.getFrequentRenterPoints();
+        }
+        return result;
+    }
+
 }
