@@ -13,10 +13,6 @@ import lombok.Setter;
 @Setter
 public class RentalInfo extends BaseEntity {
 
-    @ManyToOne
-    private Movie movie;
-
-    @Transient
-    private Double amount;
+   
     
 }

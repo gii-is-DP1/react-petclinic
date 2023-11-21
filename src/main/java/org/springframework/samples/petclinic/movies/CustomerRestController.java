@@ -36,10 +36,10 @@ public class CustomerRestController {
             frequentRenterPoints ++;
 
             // add bonus for a two day new release rental
-            if ((rental.getInfo().getMovie().getPriceCode() == PriceCode.NEW_RELEASE) && rental.getDaysRented() > 1) 
+            if ((rental.getMovie().getPriceCode() == PriceCode.NEW_RELEASE) && rental.getDaysRented() > 1) 
                 frequentRenterPoints ++;
             //show figures
-            rental.getInfo().setAmount(thisAmount);
+            rental.setAmount(thisAmount);
             totalAmount += thisAmount;
         }
 

@@ -3,7 +3,9 @@ package org.springframework.samples.petclinic.movies;
 import org.springframework.samples.petclinic.model.BaseEntity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,22 +13,25 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Rental extends BaseEntity{
-    
-    @OneToOne
-    private RentalInfo info; 
 
     private int daysRented;
+
+     @ManyToOne
+    private Movie movie;
+
+    @Transient
+    private Double amount;
 
     public double getCharge() {
         double result = 0;
         //determine amounts for each line
-            if (getInfo().getMovie().getPriceCode().equals(PriceCode.REGULAR)) {
+            if (movie.getPriceCode().equals(PriceCode.REGULAR)) {
                 result += 2;
                 if (getDaysRented() > 2)
                     result += (getDaysRented() - 2) * 1.5;             
-            } else if (getInfo().getMovie().getPriceCode().equals(PriceCode.NEW_RELEASE)) {
+            } else if (movie.getPriceCode().equals(PriceCode.NEW_RELEASE)) {
                 result += getDaysRented() * 3; 
-            } else if (getInfo().getMovie().getPriceCode().equals(PriceCode.CHILDRENS)) {
+            } else if (movie.getPriceCode().equals(PriceCode.CHILDRENS)) {
                 result += 1.5;
                 if (getDaysRented() > 3)
                     result += (getDaysRented() - 3) * 1.5;             

@@ -26,8 +26,8 @@ export default function Statement(){
   const rentalsInfoList = rentalsInfo.map( rentalInfo => {
     return (
       <tr key={rentalInfo.id}>
-        <td>{rentalInfo.info.movie.title}</td>
-        <td>{rentalInfo.info.amount}</td>
+        <td>{rentalInfo.movie.title}</td>
+        <td>{rentalInfo.amount}</td>
       </tr>
     );
   });

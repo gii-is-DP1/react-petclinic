@@ -124,16 +124,13 @@ INSERT INTO Movie(id, title, price_code) VALUES (3, 'M3', 2);
 INSERT INTO Movie(id, title, price_code) VALUES (4, 'M4', 1);
 INSERT INTO Movie(id, title, price_code) VALUES (5, 'M5', 1);
 
-INSERT INTO RENTAL_INFO(id, movie_id) values(1, 1);
-INSERT INTO RENTAL_INFO(id, movie_id) values(2, 2);
-INSERT INTO RENTAL_INFO(id, movie_id) values(3, 3);
-
-INSERT INTO Rental(id, days_rented, info_id) VALUES (1, 3, 1);
-insert into Rental(id, days_rented, info_id) values (2, 2, 2);
-insert into Rental(id, days_rented, info_id) values (3, 5, 3);
+INSERT INTO Rental(id, days_rented, movie_id) VALUES (1, 3, 1),
+                                                     (2, 2, 2),
+                                                     (3, 5, 3);
 
 INSERT INTO CUSTOMER_RENTALS(customer_id, rentals_id) values(1, 1);
 INSERT INTO CUSTOMER_RENTALS(customer_id, rentals_id) values(1, 2);
 INSERT INTO CUSTOMER_RENTALS(customer_id, rentals_id) values(1, 3);
 --------------------------------------------------------------------
 
+  
