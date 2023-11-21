@@ -31,7 +31,7 @@ public class CustomerRestController {
 
         for (Rental rental : c.getRentals()) {
             double thisAmount = 0;            
-            thisAmount = amountFor(rental);
+            thisAmount = rental.getCharge();
             // add frequent renter points
             frequentRenterPoints ++;
 
@@ -48,21 +48,5 @@ public class CustomerRestController {
 
         return statement;
     }
-    
-    private double amountFor(Rental rental){
-        double result = 0;
-        //determine amounts for each line
-            if (rental.getInfo().getMovie().getPriceCode().equals(PriceCode.REGULAR)) {
-                result += 2;
-                if (rental.getDaysRented() > 2)
-                    result += (rental.getDaysRented() - 2) * 1.5;             
-            } else if (rental.getInfo().getMovie().getPriceCode().equals(PriceCode.NEW_RELEASE)) {
-                result += rental.getDaysRented() * 3; 
-            } else if (rental.getInfo().getMovie().getPriceCode().equals(PriceCode.CHILDRENS)) {
-                result += 1.5;
-                if (rental.getDaysRented() > 3)
-                    result += (rental.getDaysRented() - 3) * 1.5;             
-            }
-        return result;
-    }
+        
 }
