@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import tokenService from "../services/token.service";
 import getErrorModal from "../util/getErrorModal";
-import useFetchState from "../util/useFetchState";
+import useIntervalFetchState from "../util/useIntervalFetchState";
 import galaxian from './../static/images/galaxian.png';
 import background from './../static/images/galaxian-fondo.png';
 
@@ -13,16 +13,18 @@ export default function GameOfLife( ) {
     const {planetName}= useParams();
     const [message, setMessage] = useState(null);
     const [visible, setVisible] = useState(false);
-    const [planet, setPlanet] = useFetchState(
+    const [planet, setPlanet] = useIntervalFetchState(
         {planet:[[]],population:0},
         `/api/v1/universe/planet/${planetName}`,
         jwt,
         setMessage,
-        setVisible
-      );
+        setVisible,
+        null,
+        5000
+    );
     const planetSurface=planet.planet.map((country) => {
         let cities =country.map((city)=> {
-            return(<td><img src={city?galaxian:background}></img></td>);
+            return(<td><img src={city?galaxian:background} alt='Planet surface image'></img></td>);
         });
         return (
             <tr>{cities}</tr>

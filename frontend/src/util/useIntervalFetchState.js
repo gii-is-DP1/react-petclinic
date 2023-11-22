@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 
-export default function useFetchState(initial, url, jwt, setMessage, setVisible, id = null) {
+export default function useIntervalFetchState(initial, url, jwt, setMessage, setVisible, id = null,delay = 1000) {
     const [data, setData] = useState(initial);
-    useEffect(() => {      
+    useEffect(() => {
+        let intervalID=setInterval(()=>{
           
         
 
@@ -33,15 +34,14 @@ export default function useFetchState(initial, url, jwt, setMessage, setVisible,
                         setMessage('Failed to fetch data');
                         setVisible(true);
                     });
-                    return () => {
-                        ignore=true;
-                    };
                 
             }
 
         }
-    
-    
+    },delay);
+    return () => {
+        clearInterval(intervalID);
+    };
     }, [url, id, jwt, setMessage, setVisible]);
     return [data, setData];
 }
