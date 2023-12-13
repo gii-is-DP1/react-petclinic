@@ -26,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.auth.payload.response.MessageResponse;
+import org.springframework.samples.petclinic.exceptions.ConflictException;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.samples.petclinic.util.RestPreconditions;
@@ -81,7 +82,10 @@ public class OwnerRestController {
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Owner> update(@PathVariable("ownerId") int ownerId, @RequestBody @Valid Owner owner) {
 		RestPreconditions.checkNotNull(ownerService.findOwnerById(ownerId), "Owner", "ID", ownerId);
-		return new ResponseEntity<>(this.ownerService.updateOwner(owner, ownerId), HttpStatus.OK);
+        if(!this.ownerService.findOwnerById(ownerId).getVersion().equals(owner.getVersion()))
+		    throw new ConflictException("Concurrent modification of Owner! Reload first!");
+        return new ResponseEntity<>(this.ownerService.updateOwner(owner, ownerId), HttpStatus.OK);
+
 	}
 
 	@DeleteMapping(value = "{ownerId}")

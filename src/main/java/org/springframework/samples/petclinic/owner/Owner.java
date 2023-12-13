@@ -22,6 +22,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -47,6 +48,9 @@ import lombok.Setter;
 @Setter
 @Table(name = "owners")
 public class Owner extends Person {
+
+    @Version
+    private Integer version;
 
 	@Column(name = "address")
 	@NotEmpty

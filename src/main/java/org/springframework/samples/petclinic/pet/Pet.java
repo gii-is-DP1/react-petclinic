@@ -26,6 +26,8 @@ import jakarta.validation.Valid;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.NamedEntity;
 import org.springframework.samples.petclinic.owner.Owner;
@@ -40,6 +42,7 @@ import lombok.Setter;
  * @author Juergen Hoeller
  * @author Sam Brannen
  */
+@Audited
 @Entity
 @Table(name = "pets")
 @Getter
@@ -54,6 +57,7 @@ public class Pet extends NamedEntity {
 	@JoinColumn(name = "type_id")
 	private PetType type;
 
+    @NotAudited
 	@Valid
 	@ManyToOne(optional = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)

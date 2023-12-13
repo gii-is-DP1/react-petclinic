@@ -18,11 +18,13 @@ package org.springframework.samples.petclinic.pet;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
+import org.hibernate.envers.Audited;
 import org.springframework.samples.petclinic.model.NamedEntity;
 
 /**
  * @author Juergen Hoeller Can be Cat, Dog, Hamster...
  */
+@Audited
 @Entity
 @Table(name = "types")
 public class PetType extends NamedEntity {

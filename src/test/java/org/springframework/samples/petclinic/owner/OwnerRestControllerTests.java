@@ -84,6 +84,7 @@ class OwnerRestControllerTests {
 		george.setAddress("110 W. Liberty St.");
 		george.setCity("Sevilla");
 		george.setTelephone("608555102");
+        george.setVersion(1);
 
 		sara = new Owner();
 		sara.setId(2);
@@ -92,6 +93,7 @@ class OwnerRestControllerTests {
 		sara.setAddress("110 W. Liberty St.");
 		sara.setCity("Sevilla");
 		sara.setTelephone("608555102");
+        sara.setVersion(1);
 
 		juan = new Owner();
 		juan.setId(3);
@@ -100,6 +102,7 @@ class OwnerRestControllerTests {
 		juan.setAddress("110 W. Liberty St.");
 		juan.setCity("Sevilla");
 		juan.setTelephone("608555102");
+        juan.setVersion(1);
 
 		Authorities ownerAuth = new Authorities();
 		ownerAuth.setId(1);
@@ -216,7 +219,7 @@ class OwnerRestControllerTests {
 	@WithMockUser("admin")
 	  void shouldDeleteOwner() throws Exception {
 		when(this.ownerService.findOwnerById(TEST_OWNER_ID)).thenReturn(george);
-		
+
 	    doNothing().when(this.ownerService).deleteOwner(TEST_OWNER_ID);
 	    mockMvc.perform(delete(BASE_URL + "/{id}", TEST_OWNER_ID).with(csrf()))
 	         .andExpect(status().isOk());
@@ -227,7 +230,7 @@ class OwnerRestControllerTests {
 	void shouldReturnPlan() throws Exception {
 		when(this.userService.findCurrentUser()).thenReturn(user);
 		when(this.userService.findOwnerByUser(any(Integer.class))).thenReturn(george);
-		
+
 		mockMvc.perform(get("/api/v1/plan")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").value(TEST_OWNER_ID))
 				.andExpect(jsonPath("$.firstName").value(george.getFirstName()))

@@ -62,16 +62,16 @@ INSERT INTO types(id,name)  VALUES (5, 'bird');
 INSERT INTO types(id,name)  VALUES (6, 'hamster');
 INSERT INTO types(id,name)  VALUES (7, 'turtle');
 
-INSERT INTO	owners(id, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (1, 'George', 'Franklin', '110 W. Liberty St.', 'Sevilla', '608555103', 4, 1);
-INSERT INTO owners(id, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (2, 'Betty', 'Davis', '638 Cardinal Ave.', 'Sevilla', '608555174', 5, 1);
-INSERT INTO owners(id, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (3, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'Sevilla', '608558763', 6, 1);
-INSERT INTO owners(id, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (4, 'Harold', 'Davis', '563 Friendly St.', 'Sevilla', '608555319', 7, 2);
-INSERT INTO owners(id, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (5, 'Peter', 'McTavish', '2387 S. Fair Way', 'Sevilla', '608555765', 8, 2);
-INSERT INTO owners(id, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (6, 'Jean', 'Coleman', '105 N. Lake St.', 'Badajoz', '608555264', 9, 2);
-INSERT INTO owners(id, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (7, 'Jeff', 'Black', '1450 Oak Blvd.', 'Badajoz', '608555538', 10, 3);
-INSERT INTO owners(id, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (8, 'Maria', 'Escobito', '345 Maple St.', 'Badajoz', '608557683', 11, 3);
-INSERT INTO owners(id, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (9, 'David', 'Schroeder', '2749 Blackhawk Trail','Cádiz', '685559435', 12, 3);
-INSERT INTO owners(id, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (10, 'Carlos', 'Estaban', '2335 Independence La.', 'Cádiz', '685555487', 13, 1);
+INSERT INTO	owners(id,version, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (1,1, 'George', 'Franklin', '110 W. Liberty St.', 'Sevilla', '608555103', 4, 1);
+INSERT INTO owners(id,version, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (2,1, 'Betty', 'Davis', '638 Cardinal Ave.', 'Sevilla', '608555174', 5, 1);
+INSERT INTO owners(id,version, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (3,1, 'Eduardo', 'Rodriquez', '2693 Commerce St.', 'Sevilla', '608558763', 6, 1);
+INSERT INTO owners(id,version, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (4,1, 'Harold', 'Davis', '563 Friendly St.', 'Sevilla', '608555319', 7, 2);
+INSERT INTO owners(id,version, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (5,1, 'Peter', 'McTavish', '2387 S. Fair Way', 'Sevilla', '608555765', 8, 2);
+INSERT INTO owners(id,version, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (6,1, 'Jean', 'Coleman', '105 N. Lake St.', 'Badajoz', '608555264', 9, 2);
+INSERT INTO owners(id,version, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (7,1, 'Jeff', 'Black', '1450 Oak Blvd.', 'Badajoz', '608555538', 10, 3);
+INSERT INTO owners(id,version, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (8,1, 'Maria', 'Escobito', '345 Maple St.', 'Badajoz', '608557683', 11, 3);
+INSERT INTO owners(id,version, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (9,1, 'David', 'Schroeder', '2749 Blackhawk Trail','Cádiz', '685559435', 12, 3);
+INSERT INTO owners(id,version, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (10,1, 'Carlos', 'Estaban', '2335 Independence La.', 'Cádiz', '685555487', 13, 1);
 
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (1, 'Leo', '2010-09-07', 1, 1);
 INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (2, 'Basil', '2012-08-06', 6, 2);

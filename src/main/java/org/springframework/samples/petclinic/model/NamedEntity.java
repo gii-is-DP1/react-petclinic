@@ -15,6 +15,8 @@
  */
 package org.springframework.samples.petclinic.model;
 
+import org.hibernate.envers.Audited;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.Size;
@@ -26,6 +28,7 @@ import jakarta.validation.constraints.Size;
  * @author Ken Krebs
  * @author Juergen Hoeller
  */
+@Audited
 @MappedSuperclass
 public class NamedEntity extends BaseEntity {
 
