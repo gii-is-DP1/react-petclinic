@@ -57,3 +57,17 @@ classDiagram
         
     }
 ```
+
+## Reglas de Negocio
+### R-< X > < Nombre Regla de negocio >
+_< Descripción de la restricción a imponer >_
+
+_Ej:_ 
+### R1 – Diagnósticos imposibles
+El diagnóstico debe estar asociado a una enfermedad que es compatible con el tipo de mascota de su visita relacionada. Por ejemplo, no podemos establecer como enfermedad diagnosticada una otitis cuando la visita está asociada a una mascota que es un pez, porque éstos no tienen orejas ni oídos (y por tanto no será uno de los tipos de mascota asociados a la enfermedad otitis en el vademecum).
+
+…
+
+_Muchas de las reglas del juego se transformarán en nuestro caso en reglas de negocio, por ejemplo, “la carta X solo podrá jugarse en la ronda Y si en la ronda anterior se jugó la carta Z”, o “en caso de que un jugador quede eliminado el turno cambia de sentido”_
+
+
