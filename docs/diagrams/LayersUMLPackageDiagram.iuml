@@ -1,0 +1,32 @@
+@startuml
+
+hide circle
+hide members
+
+package " Some Foo Package " as P1 {
+    class "Foo Core" as FooCore
+    class "Foo Shell" as FooShell
+    class "Foo Config" as FooConfig
+}
+
+package " Some Bar Package " as P2 {
+    class "Bar Core" as BarCore
+    class "Bar Shell" as BarShell
+    class "Bar Config" as BarConfig
+}
+
+package " www.example.local config " as P3 {
+    class " Config 1 " as Config11
+    class " Config 2 " as Config12
+}
+
+package " www.example2.local config " as P4 {
+    class " Config 1 " as Config21
+    class " Config 2 " as Config22
+}
+
+FooShell  --> BarCore: creates
+BarShell --> Config11: creates
+BarShell --> Config21: creates
+
+@enduml
