@@ -3,30 +3,47 @@
 hide circle
 hide members
 
-package " Some Foo Package " as P1 {
-    class "Foo Core" as FooCore
-    class "Foo Shell" as FooShell
-    class "Foo Config" as FooConfig
+package " Presentation Layer " as Presentation {
+    class WelcomeController
+    class UserController
+    class OwnerController
+    class PetController
+    class VisitController
+    class VetController
 }
 
-package " Some Bar Package " as P2 {
-    class "Bar Core" as BarCore
-    class "Bar Shell" as BarShell
-    class "Bar Config" as BarConfig
+package " Business Logic Layer " as BusinessLogic {
+    class AuthoritiesService
+    class UserService
+    class OwnerService
+    class PetService
+    class VisitService
+    class VetService
 }
 
-package " www.example.local config " as P3 {
-    class " Config 1 " as Config11
-    class " Config 2 " as Config12
+package " Resources Layer " as Resources {
+    interface AuthoritiesRepository 
+    interface UserRepository 
+    interface PetRepository
+    interface VisitRepository
 }
 
-package " www.example2.local config " as P4 {
-    class " Config 1 " as Config21
-    class " Config 2 " as Config22
-}
+UserController  ..> OwnerService
+OwnerController ..> OwnerService
+PetController ..> OwnerService
+PetController ..> PetService
+VisitController ..> PetService
+VetController ..> VetService
 
-FooShell  --> BarCore: creates
-BarShell --> Config11: creates
-BarShell --> Config21: creates
+AuthoritiesService ..> UserService
+OwnerService ..> UserService
+OwnerService ..> AuthoritiesService
+
+OwnerService ..> OwnerRepository
+UserService ..> UserRepository
+AuthoritiesService ..> AuthoritiesRepository
+PetService ..> PetRepository
+VisitService ..> VisitRepository
+
 
 @enduml
