@@ -41,6 +41,7 @@ OwnerController ..> OwnerService
 PetController ..> OwnerService
 PetController ..> PetService
 VisitController ..> PetService
+VisitController ..> VetService
 VetController ..> VetService
 
 AuthoritiesService ..> UserService
