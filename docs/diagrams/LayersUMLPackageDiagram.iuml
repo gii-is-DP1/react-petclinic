@@ -26,6 +26,7 @@ package " Resources Layer " as Resources {
     interface UserRepository 
     interface PetRepository
     interface VisitRepository
+    interface OwnerRepository
 }
 
 UserController  ..> OwnerService
