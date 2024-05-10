@@ -1,9 +1,10 @@
 @startuml
 
 hide circle
-hide members
+
 
 package " Presentation Layer " as Presentation {
+    hide members
     class WelcomeController
     class UserController
     class OwnerController
@@ -13,6 +14,7 @@ package " Presentation Layer " as Presentation {
 }
 
 package " Business Logic Layer " as BusinessLogic {
+    hide members
     class AuthoritiesService
     class UserService
     class OwnerService
@@ -22,11 +24,16 @@ package " Business Logic Layer " as BusinessLogic {
 }
 
 package " Resources Layer " as Resources {
+    hide attributes
     interface AuthoritiesRepository 
     interface UserRepository 
     interface PetRepository
-    interface VisitRepository
-    interface OwnerRepository
+    interface VisitRepository {
+        List<Visit> findVisitByPetId(Integer PetId)
+    }
+    interface OwnerRepository {
+        List<Owner> findByLastName(String lastname)
+    }
 }
 
 UserController  ..> OwnerService
@@ -45,6 +52,5 @@ UserService ..> UserRepository
 AuthoritiesService ..> AuthoritiesRepository
 PetService ..> PetRepository
 VisitService ..> VisitRepository
-
 
 @enduml
