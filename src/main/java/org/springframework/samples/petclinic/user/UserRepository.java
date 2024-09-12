@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.vet.Vet;
 
-public interface UserRepository extends  CrudRepository<User, String>{
+public interface UserRepository extends  CrudRepository<User, Integer>{
 	
 //	@Modifying
 //	@Query("DELETE FROM Owner o WHERE o.user.username = :username")
