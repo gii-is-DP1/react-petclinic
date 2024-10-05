@@ -9,8 +9,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CardRepository extends CrudRepository<Card, Integer> {
     
-    List<Card> findAll();
+    @Query("SELECT card FROM Card card")
+    public List<Card> findAll();
 
-    @Query("SELECT c FROM Card c WHERE c.id = :id")
-    Card findById(int id);
+    @Query("SELECT card FROM Card card WHERE card.id = :cardId")
+    public Card findById(int cardId);
 }
