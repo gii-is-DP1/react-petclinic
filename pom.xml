@@ -35,11 +35,12 @@
 	</properties>
 
 	<developers>
-		<developer>
-			<name>JAParejo</name>
-			<email>japarejo@gmail.com</email>
-			<url>http://www.isa.us.es</url>
-		</developer>
+		<id>javramnun</id>
+			<name>Javier Ramirez</name>
+			<email>javramnun@alum.us.es</email>
+			<roles>
+				<role>developer</role>
+			</roles>
 	</developers>
 
 	<dependencies>		
