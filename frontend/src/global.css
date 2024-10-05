@@ -2,9 +2,11 @@
     --main-red-color: #c42323;
     --main-blue-color: #2333c4;
     --main-green-color: #23c483;
+    --main-color: #2f324f;
     --green-shadow-color: rgba(46, 229, 157, 0.4);
     --blue-shadow-color: rgba(46, 92, 229, 0.4);
     --red-shadow-color: rgba(229, 46, 46, 0.4);
+    --main-shadow-color: rgba(47, 50, 79, 0.4); /* Sombra acorde a --main-color */
 }
 
 @font-face {
@@ -14,6 +16,13 @@
 
 * {
     font-family: 'american-typewriter';
+}
+
+body {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('../public/home_background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 /* div {
