@@ -42,6 +42,7 @@ import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.samples.petclinic.vet.VetRestController;
 import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetService;
+import org.springframework.samples.petclinic.visit.UnfeasibleDiagnoseException;
 import org.springframework.samples.petclinic.visit.Visit;
 import org.springframework.samples.petclinic.visit.VisitService;
 
@@ -176,7 +177,7 @@ class PetServiceTests {
 
 	@Test
 	@Transactional
-	void shouldDeletePetWithVisits() throws DataAccessException, DuplicatedPetNameException {
+	void shouldDeletePetWithVisits() throws DataAccessException, DuplicatedPetNameException, UnfeasibleDiagnoseException {
 		Integer firstCount = petService.findAll().size();
 
 		Owner owner6 = this.ownerService.findOwnerById(7);

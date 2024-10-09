@@ -23,6 +23,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -59,4 +61,7 @@ public class Pet extends NamedEntity {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	protected Owner owner;
 
+	@NotNull
+	@DecimalMin("0.05")
+	protected double weight;
 }

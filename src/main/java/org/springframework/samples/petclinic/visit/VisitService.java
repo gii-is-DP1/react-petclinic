@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -12,7 +13,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.clinic.PricingPlan;
+import org.springframework.samples.petclinic.disease.Disease;
+import org.springframework.samples.petclinic.disease.Symptom;
+import org.springframework.samples.petclinic.disease.SymptomService;
+import org.springframework.samples.petclinic.disease.Treatment;
 import org.springframework.samples.petclinic.exceptions.ResourceNotFoundException;
+import org.springframework.samples.petclinic.payment.Invoice;
+import org.springframework.samples.petclinic.payment.InvoiceService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,10 +31,14 @@ public class VisitService {
 	private static final Integer PLATINUM_LIMIT = 6;
 
 	private final VisitRepository visitRepository;
+	private InvoiceService invoiceService;
+	private SymptomService symptomService;
 
 	@Autowired
-	public VisitService(VisitRepository visitRepository) {
+	public VisitService(VisitRepository visitRepository, InvoiceService is, SymptomService ss) {
 		this.visitRepository = visitRepository;
+		this.invoiceService = is;
+		this.symptomService = ss;
 	}
 
 	@Transactional(readOnly = true)
@@ -51,9 +62,12 @@ public class VisitService {
 	}
 
 	@Transactional
-	public Visit saveVisit(Visit visit) throws DataAccessException {
+	public Visit saveVisit(Visit visit) throws DataAccessException, UnfeasibleDiagnoseException {
+		if(visit.getDiagnose()!=null)
+			if(!visit.getDiagnose().getSusceptiblePetTypes().contains(visit.getPet().getType()))
+				throw new UnfeasibleDiagnoseException(visit.getDiagnose(),visit);
 		visitRepository.save(visit);
-		return visit;
+		return visit;		
 	}
 
 	@Transactional
@@ -148,5 +162,23 @@ public class VisitService {
 		});
 		return unsortedVisitsByPet;
 	}
+
+	@Transactional(rollbackFor ={UnfeasibleDiagnoseException.class} )
+	public Visit performVisit(Visit visit, Invoice invoice, List<Symptom> symptoms,Disease disease, Treatment	treatment) throws DataAccessException, UnfeasibleDiagnoseException{
+		invoice=invoiceService.save(invoice);
+		visit.setInvoice(invoice);
+
+		visit.setDiagnose(disease);
+		if(symptoms!=null && !symptoms.isEmpty()){	
+			symptomService.save(symptoms);
+			visit.setSymptoms(symptoms);
+		}
+
+		visit.setDescription(visit.getDescription() +
+				" Symptoms: "+ symptoms.stream().map(Symptom::getName).collect(Collectors.joining(", ")) +
+				". Diagnose:"+ disease.getName() +
+				". Treatment: "+ treatment.getName());	
+		return this.saveVisit(visit);		
+	}	
 
 }

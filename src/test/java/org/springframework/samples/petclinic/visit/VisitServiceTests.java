@@ -94,7 +94,7 @@ public class VisitServiceTests {
 
 	@Test
 	@Transactional
-	void shouldInsertVisit() {
+	void shouldInsertVisit() throws DataAccessException, UnfeasibleDiagnoseException {
 		int initialCount = ((Collection<Visit>) this.visitService.findAll()).size();
 
 		Visit visit = new Visit();
@@ -112,7 +112,7 @@ public class VisitServiceTests {
 
 	@Test
 	@Transactional
-	void shouldDeleteVisit() throws DataAccessException, DuplicatedPetNameException {
+	void shouldDeleteVisit() throws DataAccessException, DuplicatedPetNameException, UnfeasibleDiagnoseException {
 		int initialCount = ((Collection<Visit>) this.visitService.findAll()).size();
 
 		Visit visit = new Visit();
@@ -131,7 +131,7 @@ public class VisitServiceTests {
 
 	@Test
 	@Transactional
-	void shouldCheckLimitForBasic() {
+	void shouldCheckLimitForBasic() throws DataAccessException, UnfeasibleDiagnoseException {
 		Visit v = createVisit(11); // pet of Owner4 BASIC
 		assertEquals(true, this.visitService.underLimit(v));
 		this.visitService.saveVisit(v);
@@ -141,7 +141,7 @@ public class VisitServiceTests {
 
 	@Test
 	@Transactional
-	void shouldCheckLimitForGold() {
+	void shouldCheckLimitForGold() throws DataAccessException, UnfeasibleDiagnoseException {
 		Visit v = createVisit(7);
 		assertEquals(true, this.visitService.underLimit(v));
 		this.visitService.saveVisit(v);
@@ -157,7 +157,7 @@ public class VisitServiceTests {
 
 	@Test
 	@Transactional
-	void shouldCheckLimitForPlatinum() {
+	void shouldCheckLimitForPlatinum() throws DataAccessException, UnfeasibleDiagnoseException {
 		Visit v = createVisit(1);
 		assertEquals(true, this.visitService.underLimit(v));
 		this.visitService.saveVisit(v);

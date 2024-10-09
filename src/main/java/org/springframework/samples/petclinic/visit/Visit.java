@@ -16,17 +16,23 @@
 package org.springframework.samples.petclinic.visit;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.samples.petclinic.disease.Disease;
+import org.springframework.samples.petclinic.disease.Symptom;
 import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.payment.Invoice;
 import org.springframework.samples.petclinic.pet.Pet;
 import org.springframework.samples.petclinic.vet.Vet;
 
@@ -57,5 +63,14 @@ public class Visit extends BaseEntity {
 	@JoinColumn(name = "vet_id")
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Vet vet;
+
+	@ManyToOne
+	Disease diagnose;	
+
+	@ManyToMany
+	List<Symptom> symptoms;
+
+	@OneToOne(optional = true)
+	private Invoice invoice;
 
 }

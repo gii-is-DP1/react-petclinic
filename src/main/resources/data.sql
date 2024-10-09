@@ -73,30 +73,37 @@ INSERT INTO owners(id, first_name, last_name, address, city, telephone, user_id,
 INSERT INTO owners(id, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (9, 'David', 'Schroeder', '2749 Blackhawk Trail','Cádiz', '685559435', 12, 3);
 INSERT INTO owners(id, first_name, last_name, address, city, telephone, user_id, clinic) VALUES (10, 'Carlos', 'Estaban', '2335 Independence La.', 'Cádiz', '685555487', 13, 1);
 
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (1, 'Leo', '2010-09-07', 1, 1);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (2, 'Basil', '2012-08-06', 6, 2);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (3, 'Rosy', '2011-04-17', 2, 3);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (4, 'Jewel', '2010-03-07', 2, 3);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (5, 'Iggy', '2010-11-30', 3, 4);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (6, 'George', '2010-01-20', 4, 5);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (7, 'Samantha', '2012-09-04', 1, 6);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (8, 'Max', '2012-09-04', 1, 6);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (9, 'Lucky', '2011-08-06', 5, 7);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (10, 'Mulligan', '2007-02-24', 2, 8);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (11, 'Freddy', '2010-03-09', 5, 9);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (12, 'Lucky', '2010-06-24', 2, 10);
-INSERT INTO pets(id,name,birth_date,type_id,owner_id) VALUES (13, 'Sly', '2012-06-08', 1, 10);
+INSERT INTO pets(id,name,birth_date,type_id,owner_id,weight) VALUES     
+                        (1, 'Leo', '2010-09-07', 1, 1,2.5),
+                        (2, 'Basil', '2012-08-06', 6, 2,1.2),
+                        (3, 'Rosy', '2011-04-17', 2, 3,2.3),
+                        (4, 'Jewel', '2010-03-07', 2, 3,1.1),
+                        (5, 'Iggy', '2010-11-30', 3, 4,1.2),
+                        (6, 'George', '2010-01-20', 4, 5,1.3),
+                        (7, 'Samantha', '2012-09-04', 1, 6,1.1),
+                        (8, 'Max', '2012-09-04', 1, 6,2.6),
+                        (9, 'Lucky', '2011-08-06', 5, 7,3.1),
+                        (10, 'Mulligan', '2007-02-24', 2, 8,4.1),
+                        (11, 'Freddy', '2010-03-09', 5, 9,0.1),
+                        (12, 'Lucky', '2010-06-24', 2, 10,2.1),
+                        (13, 'Sly', '2012-06-08', 1, 10,0.5);
 
-INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id) VALUES (1, 7, '2013-01-01 13:00', 'rabies shot', 4);
-INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id) VALUES (2, 8, '2013-01-02 15:30', 'rabies shot', 5);
-INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id) VALUES (3, 8, '2013-01-03 9:45', 'neutered', 5);
-INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id) VALUES (4, 7, '2013-01-04 17:30', 'spayed', 4);
-INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id) VALUES (5, 1, '2013-01-01 13:00', 'rabies shot', 1);
-INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id) VALUES (6, 1, '2020-01-02 15:30', 'rabies shot', 1);
-INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id) VALUES (7, 1, '2020-01-02 15:30', 'rabies shot', 1);
-INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id) VALUES (8, 2, '2013-01-03 9:45', 'neutered', 2);
-INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id) VALUES (9, 3, '2013-01-04 17:30', 'spayed', 3);
+INSERT INTO Disease(id, name, description, severity) 
+        VALUES (1,'Rabies Shot','You dont wanna know...',5),
+                (2,'Neutered','Oh no! Oh no! Oh no no no no no!',4),
+                (3,'Flu','Well, you know...',3);
 
+INSERT INTO disease_susceptible_pet_types(disease_id,susceptible_pet_types_id) VALUES (1,1),(1,2),(2,6),(3,6);
+
+INSERT INTO visits(id,pet_id,visit_date_time,description,vet_id,diagnose_id) 
+            VALUES  (1, 1, '2023-11-13 13:00', 'rabies shot', 4,1),
+                    (2, 3, '2023-11-14 15:30', 'rabies shot', 5,1),
+                    (3, 2, '2023-11-17 9:45',  'rabies shot', 5,1),
+                    (4, 4, '2023-11-18 17:30', 'spayed', 4,null),
+                    (5, 10, '2023-11-29 13:00', 'rabies shot', 1,1),
+                    (6, 12, '2023-12-05 15:30', 'Flu', 1,3),
+                    (7, 12, '2023-12-10 15:30', 'rabies shot', 1,1); 
+                                                                                                                                                    
 INSERT INTO consultations(id,title, is_clinic_comment,status,owner_id,pet_id,creation_date) VALUES (1, 'Consultation about vaccines', 0, 'ANSWERED', 1, 1, '2023-01-04 17:30');
 INSERT INTO consultations(id,title, is_clinic_comment,status,owner_id,pet_id,creation_date) VALUES (2, 'My dog gets really nervous', 0, 'PENDING', 1, 1, '2022-01-02 19:30');
 INSERT INTO consultations(id,title, is_clinic_comment,status,owner_id,pet_id,creation_date) VALUES (3, 'My cat does not eat', 0, 'PENDING', 2, 2, '2023-04-11 11:20');
@@ -111,3 +118,16 @@ INSERT INTO consultation_tickets(id,description,creation_date, user_id, consulta
 INSERT INTO consultation_tickets(id,description,creation_date, user_id, consultation_id) VALUES (6, 'Try to give him some tuna to check if he eats that.', '2023-04-11 15:20', 15, 3);
 INSERT INTO consultation_tickets(id,description,creation_date, user_id, consultation_id) VALUES (7, 'My lovebird doesn''t sing as my neighbour''s one.', '2023-02-24 12:30', 5, 4);
 INSERT INTO consultation_tickets(id,description,creation_date, user_id, consultation_id) VALUES (8, 'Lovebirds do not sing.', '2023-02-24 18:30', 16, 4);
+
+INSERT INTO symptom(id,name,virulence) VALUES   (1,'Cough','LOW'),
+                                                (2,'Hair loss','MEDIUM');
+
+INSERT INTO treatment(id,name,base_dose,shock_dose,max_dose) VALUES (1,'aspirin', 12, null, 50),
+                                                                    (2,'paracetamol', 20, 40, 150);
+
+INSERT INTO treatment_recommended_for(treatment_id, recommended_for_id) VALUES (1,2),(2,1);
+INSERT INTO symptom_includes(symptom_id, includes_id) VALUES (1,2),(1,3);
+INSERT INTO symptom_includes(symptom_id, includes_id) VALUES (2,1),(2,3);
+INSERT INTO symptom_excludes(symptom_id, excludes_id) VALUES (1,1),(2,2);
+INSERT INTO visits_symptoms(symptoms_id, visit_id) VALUES (1,1),(2,1);
+

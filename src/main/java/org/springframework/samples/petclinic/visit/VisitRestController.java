@@ -22,15 +22,21 @@ import jakarta.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.samples.petclinic.auth.payload.response.MessageResponse;
 import org.springframework.samples.petclinic.clinic.PricingPlan;
+import org.springframework.samples.petclinic.disease.Disease;
+import org.springframework.samples.petclinic.disease.DiseaseService;
+import org.springframework.samples.petclinic.disease.Treatment;
+import org.springframework.samples.petclinic.disease.TreatmentService;
 import org.springframework.samples.petclinic.exceptions.AccessDeniedException;
 import org.springframework.samples.petclinic.exceptions.LimitReachedException;
 import org.springframework.samples.petclinic.exceptions.ResourceNotOwnedException;
 import org.springframework.samples.petclinic.owner.Owner;
 import org.springframework.samples.petclinic.owner.OwnerService;
+import org.springframework.samples.petclinic.payment.Invoice;
 import org.springframework.samples.petclinic.pet.Pet;
 import org.springframework.samples.petclinic.pet.PetService;
 import org.springframework.samples.petclinic.user.User;
@@ -60,6 +66,8 @@ public class VisitRestController {
 	private final VisitService visitService;
 	private final UserService userService;
 	private final OwnerService ownerService;
+	private final DiseaseService diseaseService;
+	private final TreatmentService treatmentService;
 	private static final String VET_AUTH = "VET";
 	private static final String ADMIN_AUTH = "ADMIN";
 	private static final String OWNER_AUTH = "OWNER";
@@ -67,11 +75,13 @@ public class VisitRestController {
 
 	@Autowired
 	public VisitRestController(PetService petService, UserService userService, OwnerService ownerService,
-			VisitService visitService) {
+			VisitService visitService, DiseaseService diseaseService, TreatmentService treatmentService) {
 		this.petService = petService;
 		this.userService = userService;
 		this.ownerService = ownerService;
 		this.visitService = visitService;
+		this.treatmentService = treatmentService;
+		this.diseaseService = diseaseService;
 	}
 
 	@InitBinder("visit")
@@ -98,7 +108,7 @@ public class VisitRestController {
 
 	@PostMapping("/api/v1/pets/{petId}/visits")
 	@ResponseStatus(HttpStatus.CREATED)
-	public ResponseEntity<Visit> create(@PathVariable("petId") int petId, @RequestBody @Valid Visit visit) {
+	public ResponseEntity<Visit> create(@PathVariable("petId") int petId, @RequestBody @Valid Visit visit) throws DataAccessException, UnfeasibleDiagnoseException {
 		Pet pet = RestPreconditions.checkNotNull(petService.findPetById(petId), "Pet", "ID", petId);
 		User user = userService.findCurrentUser();
 		Visit newVisit = new Visit();
@@ -213,5 +223,16 @@ public class VisitRestController {
 			return new ResponseEntity<>(this.visitService.getVisitsAdminStats(), HttpStatus.OK);
 		throw new AccessDeniedException();
 	}
+
+	@PostMapping("/api/v1/visits/{visitId}/diagnose/{diseaseId}/treatwith/{treatmentId}")
+	public Visit postMethodName(@RequestBody Invoice invoice, @PathVariable("visitId") Integer visitId,
+			@PathVariable("diseaseId") Integer diseaseId,@PathVariable("treatmentId") Integer treatmentId) throws DataAccessException, UnfeasibleDiagnoseException {
+		Visit visit = RestPreconditions.checkNotNull(visitService.findVisitById(visitId), VISIT_CLASSNAME, "ID", visitId);
+		Disease disease = diseaseService.findDiseaseById(diseaseId);
+		Treatment treatment = treatmentService.findTreatmentById(treatmentId);
+		visitService.performVisit(visit, invoice, List.of(), disease, treatment);
+		return visit;
+	}
+	
 
 }
