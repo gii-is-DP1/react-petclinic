@@ -11,11 +11,17 @@ import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Owner;
 
 /**
  * @author Michael Isvy Simple test to make sure that Bean Validation is working (useful
  * when upgrading to a new version of Hibernate Validator/ Bean Validation)
  */
+@Epic("Miscelaneous tets")
+@Feature("Validation")
+@Owner("DP1-tutors")
 class ValidatorTests {
 
 	private Validator createValidator() {

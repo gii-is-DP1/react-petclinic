@@ -15,11 +15,18 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+
 /**
  * Test class for {@link PetTypeFormatter}
  *
  * @author Colin But
  */
+
+@Epic("Clinic Module")
+@Feature("Pet management")
+@io.qameta.allure.Owner("DP1-tutors")
 @ExtendWith(MockitoExtension.class)
 class PetTypeFormatterTests {
 

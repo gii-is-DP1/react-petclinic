@@ -15,7 +15,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.samples.petclinic.exceptions.ResourceNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
-//@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Owner;
+
+@Epic("Users & Admin Module")
+@Feature("Authorization")
+@Owner("DP1-tutors")
 @SpringBootTest
 @AutoConfigureTestDatabase
 class AuthoritiesServiceTests {
@@ -64,7 +70,7 @@ class AuthoritiesServiceTests {
 //	void shouldAddAuthoritiesToUser() {
 //		User user = userService.findUser("owner1");
 //		assertEquals("OWNER" ,user.getAuthority().getAuthority());
-//		
+//
 //		this.authService.saveAuthorities("owner1", "TEST");
 //		assertEquals("TEST" ,user.getAuthority().getAuthority());
 //

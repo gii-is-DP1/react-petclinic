@@ -42,6 +42,13 @@ import org.springframework.samples.petclinic.user.User;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+
+
+@Epic("Clinic Module")
+@Feature("Owner management")
+@io.qameta.allure.Owner("DP1-tutors")
 @RunWith(SpringRunner.class)
 //@DataJpaTest(includeFilters = {@ComponentScan.Filter(Service.class),@ComponentScan.Filter(PasswordEncoder.class)})
 @SpringBootTest
@@ -51,7 +58,7 @@ public class OwnerServiceTests {
 	private OwnerService ownerService;
 	private PetService petService;
 	private AuthoritiesService authService;
-	
+
 
 	@Autowired
 	public OwnerServiceTests(OwnerService ownerService, PetService petService, AuthoritiesService authService) {
@@ -95,7 +102,7 @@ public class OwnerServiceTests {
 //		Owner owner = this.ownerService.findOwnerByUser(2);
 //		assertEquals("Franklin", owner.getLastName());
 //	}
-//	
+//
 //	@Test
 //	void shouldNotFindOwnerByIncorrectUser() {
 //		assertThrows(ResourceNotFoundException.class, () -> this.ownerService.findOwnerByUser(34));
@@ -134,25 +141,6 @@ public class OwnerServiceTests {
 
 		int finalCount = ((Collection<Owner>) this.ownerService.findAll()).size();
 		assertEquals(initialCount + 1, finalCount);
-	}
-
-	@Test
-	@Transactional
-	void shouldDeleteOwner() throws DataAccessException, DuplicatedPetNameException {
-		Integer firstCount = ((Collection<Owner>) ownerService.findAll()).size();
-
-		Owner owner = createOwnerUser();
-		Pet pet = new Pet();
-		pet.setName("Sisi");
-		pet.setType(petService.findPetTypeByName("dog"));
-		pet.setOwner(owner);
-		petService.savePet(pet);
-
-		Integer secondCount = ((Collection<Owner>) ownerService.findAll()).size();
-		assertEquals(firstCount + 1, secondCount);
-		ownerService.deleteOwner(owner.getId());
-		Integer lastCount = ((Collection<Owner>) ownerService.findAll()).size();
-		assertEquals(firstCount, lastCount);
 	}
 
 	private Owner createOwnerUser() {

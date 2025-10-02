@@ -9,7 +9,14 @@ import org.springframework.samples.petclinic.configuration.services.UserDetailsI
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Owner;
 
+
+@Epic("Users & Admin Module")
+@Feature("Authentication")
+@Owner("DP1-tutors")
 @TestConfiguration
 public class SpringSecurityWebAuxTestConfiguration {
 
@@ -25,7 +32,7 @@ public class SpringSecurityWebAuxTestConfiguration {
         		Arrays.asList(
                         new SimpleGrantedAuthority("ADMIN"))
         );
-        
+
         UserDetailsImpl vetActiveUser = new UserDetailsImpl(1, "vet", "password",
         		Arrays.asList(
                         new SimpleGrantedAuthority("VET"))

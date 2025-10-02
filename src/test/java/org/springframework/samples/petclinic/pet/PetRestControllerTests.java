@@ -46,12 +46,13 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 
-/**
- * Test class for {@link OwnerRestController}
- *
- */
 
+@Epic("Clinic Module")
+@Feature("Pet management")
+@io.qameta.allure.Owner("DP1-tutors")
 @WebMvcTest(value = PetRestController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class))
 class PetRestControllerTests {
 
@@ -494,7 +495,7 @@ class PetRestControllerTests {
 	  void adminOrVetShouldDeletePet() throws Exception {
 		when(this.petService.findPetById(TEST_PET_ID)).thenReturn(simba);
 	    doNothing().when(this.petService).deletePet(TEST_PET_ID);
-	    
+
 	    mockMvc.perform(delete(BASE_URL + "/{id}", TEST_PET_ID).with(csrf()))
 	         .andExpect(status().isOk());
 	  }

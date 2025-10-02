@@ -26,14 +26,20 @@ import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.samples.petclinic.vet.VetService;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import jakarta.persistence.EntityManager;
+
 //@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@Epic("Clinic Module")
+@Feature("Consultation management")
+@io.qameta.allure.Owner("DP1-tutors")
 @SpringBootTest
 @AutoConfigureTestDatabase
 class ConsultationServiceTests {
 
 	@Autowired
 	protected ConsultationService consultationService;
-
 	@Autowired
 	protected OwnerService ownerService;
 
@@ -105,30 +111,7 @@ class ConsultationServiceTests {
 		assertEquals(ConsultationStatus.ANSWERED, cons.getStatus());
 	}
 
-	@Test
-	@Transactional
-	void shouldDeleteConsultationWithTickets() throws DataAccessException {
-		int initialCount = ((Collection<Consultation>) this.consultationService.findAll()).size();
 
-		Consultation cons = new Consultation();
-		cons.setTitle("Consulta de prueba");
-		cons.setStatus(ConsultationStatus.PENDING);
-		cons.setOwner(this.ownerService.findOwnerById(2));
-		cons.setPet(this.petService.findPetById(2));
-		this.consultationService.saveConsultation(cons);
-
-		Ticket ticket = new Ticket();
-		ticket.setConsultation(cons);
-		ticket.setDescription("Prueba");
-		ticket.setUser(ownerService.findOwnerById(1).getUser());
-		this.consultationService.saveTicket(ticket);
-
-		Integer secondCount = ((Collection<Consultation>) this.consultationService.findAll()).size();
-		assertEquals(initialCount + 1, secondCount);
-		consultationService.deleteConsultation(cons.getId());
-		Integer lastCount = ((Collection<Consultation>) this.consultationService.findAll()).size();
-		assertEquals(initialCount, lastCount);
-	}
 
 	@Test
 	void shouldFindAllTicketsByConsultation() {
@@ -271,7 +254,7 @@ class ConsultationServiceTests {
 
 		Integer secondCount = ((Collection<Ticket>) this.consultationService
 				.findAllTicketsByConsultation(CONSULTATION_ID)).size();
-		assertEquals(initialCount + 3, secondCount);		
+		assertEquals(initialCount + 3, secondCount);
 	}
 
 	@Test

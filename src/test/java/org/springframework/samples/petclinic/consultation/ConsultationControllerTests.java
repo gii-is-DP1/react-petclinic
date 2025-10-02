@@ -51,11 +51,17 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+
 /**
  * Test class for {@link ConsultationController}
  *
- * 
+ *
  */
+@Epic("Clinic Module")
+@Feature("Consultation management")
+@io.qameta.allure.Owner("DP1-tutors")
 @WebMvcTest(controllers = ConsultationController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class ConsultationControllerTests {
 	private static final Integer TEST_OWNER_ID = 1;
@@ -296,7 +302,7 @@ class ConsultationControllerTests {
 	@WithMockUser("admin")
 	void shouldReturnNotFoundConsultation() throws Exception {
 		when(this.consultationService.findConsultationById(TEST_CONSULTATION_ID)).thenThrow(ResourceNotFoundException.class);
-		
+
 		mockMvc.perform(get(BASE_URL + "/{id}", TEST_CONSULTATION_ID)).andExpect(status().isNotFound())
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException));
 	}
@@ -448,7 +454,7 @@ class ConsultationControllerTests {
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void adminShouldDeleteConsultation() throws Exception {
 		when(this.consultationService.findConsultationById(TEST_CONSULTATION_ID)).thenReturn(consultation);
-		
+
 		doNothing().when(this.consultationService).deleteConsultation(TEST_CONSULTATION_ID);
 
 		mockMvc.perform(delete(BASE_URL + "/{id}", TEST_CONSULTATION_ID).with(csrf())).andExpect(status().isOk())
@@ -706,7 +712,7 @@ class ConsultationControllerTests {
 	void adminShouldDeleteTicket() throws Exception {
 		when(this.consultationService.findConsultationById(TEST_CONSULTATION_ID)).thenReturn(consultation);
 		when(this.consultationService.findTicketById(TEST_TICKET_ID)).thenReturn(ticket);
-		
+
 		doNothing().when(this.consultationService).deleteAdminTicket(ticket, consultation);
 
 		mockMvc.perform(delete(TICKET_URL + "/{id}", TEST_TICKET_ID).with(csrf())).andExpect(status().isOk())

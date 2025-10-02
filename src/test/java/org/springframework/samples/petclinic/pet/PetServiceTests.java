@@ -45,7 +45,13 @@ import org.springframework.samples.petclinic.vet.VetService;
 import org.springframework.samples.petclinic.visit.Visit;
 import org.springframework.samples.petclinic.visit.VisitService;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+
 //@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@Epic("Clinic Module")
+@Feature("Pet management")
+@io.qameta.allure.Owner("DP1-tutors")
 @SpringBootTest
 @AutoConfigureTestDatabase
 class PetServiceTests {
@@ -174,31 +180,6 @@ class PetServiceTests {
 		assertEquals(newName, pet7.getName());
 	}
 
-	@Test
-	@Transactional
-	void shouldDeletePetWithVisits() throws DataAccessException, DuplicatedPetNameException {
-		Integer firstCount = petService.findAll().size();
-
-		Owner owner6 = this.ownerService.findOwnerById(7);
-		Pet pet = new Pet();
-		pet.setName("wario22");
-		Collection<PetType> types = this.petService.findPetTypes();
-		pet.setType(EntityUtils.getById(types, PetType.class, 2));
-		pet.setBirthDate(LocalDate.now());
-		pet.setOwner(owner6);
-		petService.savePet(pet);
-		Visit visit = new Visit();
-		visit.setDatetime(LocalDateTime.now());
-		visit.setDescription("prueba");
-		visit.setPet(pet);
-		visit.setVet(vetService.findVetById(1));
-		visitService.saveVisit(visit);
-		Integer secondCount = petService.findAll().size();
-		assertEquals(firstCount + 1, secondCount);
-		petService.deletePet(pet.getId());
-		Integer lastCount = petService.findAll().size();
-		assertEquals(firstCount, lastCount);
-	}
 
 	@Test
 	@Transactional

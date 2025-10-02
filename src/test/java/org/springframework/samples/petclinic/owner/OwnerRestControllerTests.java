@@ -35,11 +35,17 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+
+
 /**
  * Test class for {@link OwnerRestController}
  *
  */
-
+@Epic("Clinic Module")
+@Feature("Owner management")
+@io.qameta.allure.Owner("DP1-tutors")
 @WebMvcTest(value = { OwnerRestController.class,
 		OwnerPlanController.class }, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class))
 class OwnerRestControllerTests {
@@ -216,7 +222,7 @@ class OwnerRestControllerTests {
 	@WithMockUser("admin")
 	  void shouldDeleteOwner() throws Exception {
 		when(this.ownerService.findOwnerById(TEST_OWNER_ID)).thenReturn(george);
-		
+
 	    doNothing().when(this.ownerService).deleteOwner(TEST_OWNER_ID);
 	    mockMvc.perform(delete(BASE_URL + "/{id}", TEST_OWNER_ID).with(csrf()))
 	         .andExpect(status().isOk());
@@ -227,7 +233,7 @@ class OwnerRestControllerTests {
 	void shouldReturnPlan() throws Exception {
 		when(this.userService.findCurrentUser()).thenReturn(user);
 		when(this.userService.findOwnerByUser(any(Integer.class))).thenReturn(george);
-		
+
 		mockMvc.perform(get("/api/v1/plan")).andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").value(TEST_OWNER_ID))
 				.andExpect(jsonPath("$.firstName").value(george.getFirstName()))

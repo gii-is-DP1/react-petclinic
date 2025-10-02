@@ -26,7 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 
 @Configuration
 @EnableWebSecurity
@@ -43,49 +43,67 @@ public class SecurityConfiguration {
 
 	private static final String ADMIN = "ADMIN";
 	private static final String CLINIC_OWNER = "CLINIC_OWNER";
-	
+
 
 	@Bean
 	protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
-		
+
 		http
-			.cors(withDefaults())		
-			.csrf(AbstractHttpConfigurer::disable)		
-			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))			
+			.cors(withDefaults())
+			.csrf(AbstractHttpConfigurer::disable)
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.headers((headers) -> headers.frameOptions((frameOptions) -> frameOptions.disable()))
-			.exceptionHandling((exepciontHandling) -> exepciontHandling.authenticationEntryPoint(unauthorizedHandler))			
-			
-			.authorizeHttpRequests(authorizeRequests ->	authorizeRequests
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/resources/**")).permitAll()
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/webjars/**")).permitAll() 
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/static/**")).permitAll() 
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-resources/**")).permitAll()			
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/clinics")).permitAll()			
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/")).permitAll()
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/oups")).permitAll()
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/auth/**")).permitAll()
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/v3/api-docs/**")).permitAll()
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui.html")).permitAll()
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/swagger-ui/**")).permitAll()												
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/developers")).permitAll()												
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/plan")).hasAuthority("OWNER")
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/users/**")).hasAuthority(ADMIN)
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/clinicOwners/all")).hasAuthority(ADMIN)
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/clinicOwners/**")).hasAnyAuthority(ADMIN, CLINIC_OWNER)
-			.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.DELETE, "/api/v1/consultations/**")).hasAuthority(ADMIN)
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/owners/**")).hasAuthority(ADMIN)
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/visits/**")).authenticated()			
-			.requestMatchers(AntPathRequestMatcher.antMatcher( "/api/v1/pets/stats")).hasAuthority(ADMIN)
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/pets")).authenticated()
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/pets/**")).authenticated()
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/clinics/**")).hasAnyAuthority(CLINIC_OWNER, ADMIN)
-			.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/vets/stats")).hasAuthority(ADMIN)
-			.requestMatchers(AntPathRequestMatcher.antMatcher(HttpMethod.GET, "/api/v1/vets/**")).authenticated()
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/api/v1/vets/**")).hasAnyAuthority(ADMIN, "VET", CLINIC_OWNER) 
-			.requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
-			.anyRequest().authenticated())					
-			
-			.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);		
+			.exceptionHandling((exepciontHandling) -> exepciontHandling.authenticationEntryPoint(unauthorizedHandler))
+
+            .authorizeHttpRequests(auth -> auth
+            // Recursos estáticos comunes (css, js, images, webjars…) públicos
+            .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+            // H2 Console accesible
+            .requestMatchers(PathRequest.toH2Console()).permitAll()
+            .requestMatchers("/h2-console/**").permitAll()
+
+            // Raíz / páginas públicas
+            .requestMatchers("/", "/oups").permitAll()
+
+            // Swagger / OpenAPI accesible
+            .requestMatchers(
+                "/v3/api-docs/**",
+                "/swagger-ui.html",
+                "/swagger-ui/**",
+                "/swagger-resources/**"
+            ).permitAll()
+
+            // API pública
+            .requestMatchers("/api/v1/auth/**").permitAll()
+            .requestMatchers("/api/v1/developers").permitAll()
+            .requestMatchers("/api/v1/plan").permitAll()
+            .requestMatchers("/api/v1/clinics").permitAll()
+            .requestMatchers("/api/v1/developers").permitAll()
+
+            // API restringida para propietarios de mascotas:
+            .requestMatchers("/api/v1/plan").hasAuthority("OWNER")
+
+            // API restringida para administradores
+            .requestMatchers("/api/v1/users/**").hasAuthority(ADMIN)
+            .requestMatchers("/api/v1/clinicOwners/all").hasAuthority(ADMIN)
+            .requestMatchers(HttpMethod.DELETE, "/api/v1/consultations/**").hasAuthority(ADMIN)
+            .requestMatchers("/api/v1/owners/**").hasAuthority(ADMIN)
+            .requestMatchers("/api/v1/pets/stats").hasAuthority(ADMIN)
+            .requestMatchers("/api/v1/vets/stats").hasAuthority(ADMIN)
+
+			// Otras reglas de controal de acceso:
+			.requestMatchers("/api/v1/clinicOwners/**").hasAnyAuthority(ADMIN, CLINIC_OWNER)
+			.requestMatchers("/api/v1/visits/**").authenticated()
+			.requestMatchers("/api/v1/pets").authenticated()
+			.requestMatchers("/api/v1/pets/**").authenticated()
+			.requestMatchers("/api/v1/clinics/**").hasAnyAuthority(CLINIC_OWNER, ADMIN)
+			.requestMatchers(HttpMethod.GET, "/api/v1/vets/**").authenticated()
+			.requestMatchers("/api/v1/vets/**").hasAnyAuthority(ADMIN, "VET", CLINIC_OWNER)
+
+            // El resto denegado
+             .anyRequest().denyAll())
+
+			.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
 
@@ -97,14 +115,14 @@ public class SecurityConfiguration {
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
 		return config.getAuthenticationManager();
-	}	
+	}
 
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-	
-	
-	
+
+
+
 }

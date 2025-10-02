@@ -21,7 +21,13 @@ import org.springframework.samples.petclinic.user.UserService;
 import org.springframework.samples.petclinic.vet.Vet;
 import org.springframework.samples.petclinic.vet.VetService;
 import org.springframework.transaction.annotation.Transactional;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 
+
+@Epic("Users & Admin Module")
+@Feature("Authentication")
+@io.qameta.allure.Owner("DP1-tutors")
 @SpringBootTest
 public class AuthServiceTests {
 
@@ -49,7 +55,7 @@ public class AuthServiceTests {
 		int userLastCount = ((Collection<User>) this.userService.findAll()).size();
 		assertEquals(userFirstCount + 1, userLastCount);
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldCreateVetUser() {
@@ -62,7 +68,7 @@ public class AuthServiceTests {
 		assertEquals(userFirstCount + 1, userLastCount);
 		assertEquals(vetFirstCount + 1, vetLastCount);
 	}
-	
+
 	@Test
 	@Transactional
 	public void shouldCreateOwnerUser() {

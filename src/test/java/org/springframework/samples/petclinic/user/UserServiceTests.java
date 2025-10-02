@@ -19,8 +19,14 @@ import org.springframework.samples.petclinic.owner.OwnerService;
 import org.springframework.samples.petclinic.vet.VetService;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.transaction.annotation.Transactional;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+
 
 //@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@Epic("Users & Admin Module")
+@Feature("Users Management")
+@io.qameta.allure.Owner("DP1-tutors")
 @SpringBootTest
 @AutoConfigureTestDatabase
 class UserServiceTests {
@@ -154,7 +160,7 @@ class UserServiceTests {
 		int finalCount = ((Collection<User>) this.userService.findAll()).size();
 		assertEquals(count + 1, finalCount);
 	}
-	
+
 
 	@Test
 	@Transactional

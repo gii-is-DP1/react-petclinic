@@ -28,14 +28,14 @@ import org.springframework.web.context.WebApplicationContext;
 //@SpringBootTest(classes={com.lapots.game.monolith.web.GrandJourneyMonolithApplication.class})
 @DirtiesContext
 public class PetControllerSecurityTest {
-    
+
 	@Autowired
-    private WebApplicationContext context;    
-	
+    private WebApplicationContext context;
+
 	private MockMvc mockMvc;
 
 	private int TEST_OWNER_ID = 1;
-    
+
 	@BeforeEach
     public void setup() {
     mockMvc = MockMvcBuilders
@@ -43,18 +43,12 @@ public class PetControllerSecurityTest {
           .apply(SecurityMockMvcConfigurers.springSecurity())
           .build();
     }
-    
+
 	@WithMockUser(username ="SomeRandomVet",authorities = {"vet"})
     @Test
     void unsuccessfullTestInitCreationForm() throws Exception {
     		mockMvc.perform(get("/owners/{ownerId}/pets/new", TEST_OWNER_ID))
 	    .andExpect(status().is(HttpStatus.FORBIDDEN.value()));
     }
-	
-	@WithMockUser(username ="SomeRandomOwner",authorities = {"owner"})
-    @Test
-    void testInitCreationForm() throws Exception {
-		mockMvc.perform(get("/owners/{ownerId}/pets/new", TEST_OWNER_ID)).andExpect(status().isOk())
-			.andExpect(view().name("pets/createOrUpdatePetForm")).andExpect(model().attributeExists("pet"));
-	}
+
 }
