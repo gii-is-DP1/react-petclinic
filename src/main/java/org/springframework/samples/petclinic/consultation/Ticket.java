@@ -2,6 +2,12 @@ package org.springframework.samples.petclinic.consultation;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.user.User;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -9,13 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.samples.petclinic.model.BaseEntity;
-import org.springframework.samples.petclinic.user.User;
-
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +23,7 @@ import lombok.Setter;
 @Table(name = "consultation_tickets")
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = true)
 public class Ticket extends BaseEntity {
 
 	@Column(name = "description")

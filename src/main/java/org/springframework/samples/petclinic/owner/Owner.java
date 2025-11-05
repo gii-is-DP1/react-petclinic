@@ -15,6 +15,12 @@
  */
 package org.springframework.samples.petclinic.owner;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.samples.petclinic.clinic.Clinic;
+import org.springframework.samples.petclinic.model.Person;
+import org.springframework.samples.petclinic.user.User;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,13 +30,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotEmpty;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.samples.petclinic.clinic.Clinic;
-import org.springframework.samples.petclinic.model.Person;
-import org.springframework.samples.petclinic.user.User;
-
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -46,6 +46,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "owners")
+@EqualsAndHashCode(callSuper = true)
 public class Owner extends Person {
 
 	@Column(name = "address")

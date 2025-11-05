@@ -17,19 +17,19 @@ package org.springframework.samples.petclinic.pet;
 
 import java.time.LocalDate;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.validation.Valid;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.model.NamedEntity;
 import org.springframework.samples.petclinic.owner.Owner;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,6 +44,7 @@ import lombok.Setter;
 @Table(name = "pets")
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = true)
 public class Pet extends NamedEntity {
 
 	@Column(name = "birth_date")

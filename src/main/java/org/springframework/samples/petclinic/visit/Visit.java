@@ -17,12 +17,6 @@ package org.springframework.samples.petclinic.visit;
 
 import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -30,6 +24,12 @@ import org.springframework.samples.petclinic.model.BaseEntity;
 import org.springframework.samples.petclinic.pet.Pet;
 import org.springframework.samples.petclinic.vet.Vet;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -37,6 +37,7 @@ import lombok.Setter;
 @Table(name = "visits")
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = true)
 public class Visit extends BaseEntity {
 
 	@Column(name = "visit_date_time")

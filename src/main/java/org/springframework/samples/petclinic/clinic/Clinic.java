@@ -1,5 +1,15 @@
 package org.springframework.samples.petclinic.clinic;
 
+import java.util.Set;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.samples.petclinic.clinicowner.ClinicOwner;
+import org.springframework.samples.petclinic.model.BaseEntity;
+import org.springframework.samples.petclinic.owner.Owner;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -12,17 +22,7 @@ import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.springframework.samples.petclinic.clinicowner.ClinicOwner;
-import org.springframework.samples.petclinic.model.BaseEntity;
-import org.springframework.samples.petclinic.owner.Owner;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.util.Set;
-
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,6 +30,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "clinics")
+@EqualsAndHashCode(callSuper = true)
 public class Clinic extends BaseEntity{
 
     @Column(name = "name")

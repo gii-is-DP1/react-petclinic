@@ -22,6 +22,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.SequenceGenerator;
+import lombok.EqualsAndHashCode;
 
 /**
  * Simple JavaBean domain object with an id property. Used as a base class for objects
@@ -31,6 +32,7 @@ import jakarta.persistence.SequenceGenerator;
  * @author Juergen Hoeller
  */
 @MappedSuperclass
+@EqualsAndHashCode(of = "id")
 public class BaseEntity {
 
 	@Id
