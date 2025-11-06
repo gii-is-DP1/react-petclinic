@@ -22,7 +22,6 @@ import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,7 +29,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "clinics")
-@EqualsAndHashCode(callSuper = true)
 public class Clinic extends BaseEntity{
 
     @Column(name = "name")

@@ -8,7 +8,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +15,6 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "appusers")
-@EqualsAndHashCode(callSuper = true)
 public class User extends BaseEntity {
 
 	@Column(unique = true)

@@ -30,7 +30,6 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -46,7 +45,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "owners")
-@EqualsAndHashCode(callSuper = true)
 public class Owner extends Person {
 
 	@Column(name = "address")

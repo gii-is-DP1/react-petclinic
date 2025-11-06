@@ -5,7 +5,6 @@ import org.springframework.samples.petclinic.model.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +12,6 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "authorities")
-@EqualsAndHashCode(callSuper = true)
 public class Authorities extends BaseEntity{
 	
 //	@ManyToOne

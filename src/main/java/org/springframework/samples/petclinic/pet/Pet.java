@@ -44,7 +44,6 @@ import lombok.Setter;
 @Table(name = "pets")
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 public class Pet extends NamedEntity {
 
 	@Column(name = "birth_date")

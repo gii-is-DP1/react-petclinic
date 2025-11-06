@@ -24,7 +24,6 @@ import lombok.Setter;
 @Table(name = "consultations")
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 public class Consultation extends BaseEntity {
 
 	@Column(name = "title")

@@ -16,7 +16,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,7 +23,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "clinic_owners")
-@EqualsAndHashCode(callSuper = true)
 public class ClinicOwner extends Person{
 
     @OneToOne(cascade = { CascadeType.DETACH, CascadeType.REFRESH, CascadeType.PERSIST })

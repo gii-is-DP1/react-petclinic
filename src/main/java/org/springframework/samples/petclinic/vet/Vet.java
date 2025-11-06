@@ -41,7 +41,6 @@ import lombok.Setter;
 @Table(name = "vets")
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 public class Vet extends Person {
 
 	@ManyToMany(fetch = FetchType.EAGER)
