@@ -13,7 +13,28 @@ import {
 import PropTypes from "prop-types";
 import FormInput from "./formInput";
 
-const FormGenerator = forwardRef((props, ref) => {
+const FormGenerator = forwardRef(({
+  inputs = [],
+  onSubmit = () => {},
+  buttonText = "Enviar",
+  buttonClassName = "",
+  numberOfColumns = 1,
+  childrenPosition = 0,
+  listenEnterKey = false,
+  scrollable = false,
+  children,
+}, ref) => {
+  const props = {
+    inputs,
+    onSubmit,
+    buttonText,
+    buttonClassName,
+    numberOfColumns,
+    childrenPosition,
+    listenEnterKey,
+    scrollable,
+    children,
+  };
   const [formValues, setFormValues] = useState({});
   const [submitForm, setSubmitForm] = useState(false);
 
@@ -177,16 +198,6 @@ FormGenerator.propTypes = {
   numberOfColumns: PropTypes.number,
   childrenPosition: PropTypes.number,
   listenEnterKey: PropTypes.bool,
-};
-
-FormGenerator.defaultProps = {
-  inputs: [],
-  onSubmit: () => {},
-  buttonText: "Enviar",
-  buttonClassName: "",
-  numberOfColumns: 1,
-  childrenPosition: 0,
-listenEnterKey: false,
 };
 
 export default FormGenerator;

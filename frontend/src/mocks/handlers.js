@@ -1,4 +1,4 @@
-import { rest } from 'msw'
+import { http, HttpResponse } from 'msw'
 
 const authOwner = {
     "authority": "OWNER"
@@ -40,6 +40,16 @@ const userVet2 = {
     }
 };
 
+const clinic1 = {
+    "id": 1,
+    "name": "Happy Pets Clinic"
+};
+
+const clinic2 = {
+    "id": 2,
+    "name": "Healthy Animals Clinic"
+};
+
 const owner1 = {
     "id": 1,
     "firstName": "George",
@@ -48,6 +58,7 @@ const owner1 = {
     "city": "Sevilla",
     "telephone": "608555103",
     "plan": "PLATINUM",
+    "clinic": clinic1,
     "user": userOwner1
 };
 
@@ -59,6 +70,7 @@ const owner2 = {
     "city": "Sevilla",
     "telephone": "608555174",
     "plan": "PLATINUM",
+    "clinic": clinic2,
     "user": userOwner2
 };
 
@@ -90,7 +102,8 @@ const vet1 = {
     "lastName": "Carter",
     "specialties": [],
     "user": userVet1,
-    "city": "Sevilla"
+    "city": "Sevilla",
+    "clinic": clinic1
 }
 
 const vet2 = {
@@ -104,7 +117,8 @@ const vet2 = {
         }
     ],
     "user": userVet2,
-    "city": "Sevilla"
+    "city": "Sevilla",
+    "clinic": clinic2
 };
 
 const visit1 = {
@@ -159,59 +173,17 @@ const ticket2 = {
 }
 
 export const handlers = [
-    rest.delete('*/:id', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json({
-                message: "Entity deleted"
-            }),
-        )
-    }),
+    http.delete('*/:id', () => HttpResponse.json({ message: "Entity deleted" })),
 
-    rest.get('*/api/v1/owners', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                owner1,
-                owner2,
-            ]),
-        )
-    }),
+    http.get('*/api/v1/owners', () => HttpResponse.json([owner1, owner2])),
 
-    rest.get('*/api/v1/pets', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                pet1,
-                pet2,
-            ]),
-        )
-    }),
+    http.get('*/api/v1/pets', () => HttpResponse.json([pet1, pet2])),
 
-    rest.get('*/api/v1/users', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                userAdmin1,
-                userOwner1,
-            ]),
-        )
-    }),
+    http.get('*/api/v1/users', () => HttpResponse.json([userAdmin1, userOwner1])),
 
-    rest.get('*/api/v1/vets', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                vet1,
-                vet2,
-            ]),
-        )
-    }),
+    http.get('*/api/v1/vets', () => HttpResponse.json([vet1, vet2])),
 
-    rest.get('*/api/v1/vets/specialties', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
+    http.get('*/api/v1/vets/specialties', () => HttpResponse.json([
                 {
                     "id": 1,
                     "name": "radiology"
@@ -224,77 +196,31 @@ export const handlers = [
                     "id": 3,
                     "name": "dentistry"
                 }
-            ]),
-        )
-    }),
+            ])),
 
-    rest.get('*/api/v1/pets/:petId/visits', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                visit1,
-                visit2,
-            ]),
-        )
-    }),
+    http.get('*/api/v1/pets/:petId/visits', () => HttpResponse.json([visit1, visit2])),
 
-    rest.get('*/api/v1/consultations', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                consultation1,
-                consultation2,
-            ]),
-        )
-    }),
+    http.get('*/api/v1/consultations', () => HttpResponse.json([consultation1, consultation2])),
 
-    rest.get('*/api/v1/consultations/:id', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                consultation1,
-            ]),
-        )
-    }),
+    http.get('*/api/v1/consultations/:id', () => HttpResponse.json([consultation1])),
 
-    rest.get('*/api/v1/consultations/:id/tickets', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json([
-                ticket1,
-                ticket2
-            ]),
-        )
-    }),
+    http.get('*/api/v1/consultations/:id/tickets', () => HttpResponse.json([ticket1, ticket2])),
 
-    rest.post('*/api/v1/consultations/:id/tickets', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json(
-                {
-                    "id": 3,
-                    "description": "test ticket",
-                    "creationDate": "2023-01-04T17:32:00",
-                    "user": userOwner1,
-                    "consultation": consultation1
-                },
-            ))
-    }),
+    http.post('*/api/v1/consultations/:id/tickets', () => HttpResponse.json({
+        "id": 3,
+        "description": "test ticket",
+        "creationDate": "2023-01-04T17:32:00",
+        "user": userOwner1,
+        "consultation": consultation1
+    })),
 
-    rest.put('*/api/v1/consultations/:id', (req, res, ctx) => {
-        return res(
-            ctx.status(200),
-            ctx.json(
-                {
-                    "id": 1,
-                    "title": "Consulta sobre vacunas",
-                    "status": "CLOSED",
-                    "owner": owner1,
-                    "pet": pet1,
-                    "creationDate": "2023-01-04T17:30:00"
-                }
-            )
-        )
-    }),
+    http.put('*/api/v1/consultations/:id', () => HttpResponse.json({
+        "id": 1,
+        "title": "Consulta sobre vacunas",
+        "status": "CLOSED",
+        "owner": owner1,
+        "pet": pet1,
+        "creationDate": "2023-01-04T17:30:00"
+    })),
 
 ]

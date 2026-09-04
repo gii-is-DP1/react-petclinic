@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.5</version>
+		<version>3.5.16</version>
 	</parent>
 	<name>PetClinic React</name>
 
@@ -16,22 +16,23 @@
 
 		<!-- Generic properties -->
 		<java.version>21</java.version>
-		<maven.compiler.source>${java.version}</maven.compiler.source>
-    	<maven.compiler.target>${java.version}</maven.compiler.target>
+		<!-- release keeps Java 21 APIs and bytecode even when Maven runs on JDK 25. -->
+		<maven.compiler.release>${java.version}</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-		<lombok.version>1.18.38</lombok.version>
-		<mapstruct.version>1.5.5.Final</mapstruct.version>
+		<lombok.version>1.18.48</lombok.version>
+		<mapstruct.version>1.6.3</mapstruct.version>
+		<jjwt.version>0.13.0</jjwt.version>
 
-        <jacoco.version>0.8.13</jacoco.version>
-		<allure.version>2.29.1</allure.version>
-        <aspectj.version>1.9.21</aspectj.version>
+        <jacoco.version>0.8.15</jacoco.version>
+		<allure.version>2.35.4</allure.version>
+        <aspectj.version>1.9.25</aspectj.version>
 		<spring-format.version>0.0.19</spring-format.version>
 
-		<frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
-		<node.version>v18.12.1</node.version>
-		<npm.version>8.19.2</npm.version>
+		<frontend-maven-plugin.version>2.0.2</frontend-maven-plugin.version>
+		<node.version>v24.16.0</node.version>
+		<npm.version>12.0.2</npm.version>
 		<frontend-src-dir>${project.basedir}/frontend</frontend-src-dir>
 
 	</properties>
@@ -109,13 +110,9 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<artifactId>junit</artifactId>
-			<groupId>junit</groupId>
-		</dependency>
         <dependency>
             <groupId>io.qameta.allure</groupId>
-            <artifactId>allure-junit5</artifactId>
+			<artifactId>allure-jupiter</artifactId>
             <scope>test</scope>
           </dependency>
 		<!-- Development tools -->
@@ -131,35 +128,31 @@
 		<!-- JSON WEB TOKEN -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
-			<version>0.9.1</version>
+			<artifactId>jjwt-api</artifactId>
+			<version>${jjwt.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20230227</version>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>${jjwt.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>${jjwt.version}</version>
+			<scope>runtime</scope>
 		</dependency>
 		<!-- Swagger -->
 		<dependency>
     		<groupId>org.springdoc</groupId>
     		<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-    		<version>2.8.12</version>
+			<version>2.8.17</version>
 		</dependency>
-		<!-- Other J2EE required libraries -->
-		<dependency>
-        	<groupId>javax.xml.bind</groupId>
-        	<artifactId>jaxb-api</artifactId>
-        	<version>2.3.1</version>
-    	</dependency>
-		<dependency>
-        	<groupId>com.sun.xml.bind</groupId>
-        	<artifactId>jaxb-impl</artifactId>
-        	<version>2.3.4</version>
-    	</dependency>
 		<dependency>
   			<groupId>org.apache.maven</groupId>
   			<artifactId>maven-model</artifactId>
-  			<version>3.9.4</version>
+			<version>3.9.16</version>
 		</dependency>
 
  </dependencies>
@@ -181,8 +174,7 @@
 							<additionalProperties>
 								<encoding.source>${project.build.sourceEncoding}</encoding.source>
 								<encoding.reporting>${project.reporting.outputEncoding}</encoding.reporting>
-								<java.source>${maven.compiler.source}</java.source>
-								<java.target>${maven.compiler.target}</java.target>
+								<java.release>${maven.compiler.release}</java.release>
 							</additionalProperties>
 						</configuration>
 					</execution>
@@ -192,7 +184,7 @@
             <plugin>
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
-                <version>2.15.2</version>
+				<version>3.0.3</version>
                 <configuration>
                     <singleFile>true</singleFile>
                     <reportDirectory>${project.build.directory}/site/test-status</reportDirectory>
@@ -207,59 +199,7 @@
                     </execution>
                 </executions>
             </plugin>
-			<!-- Automated frontend installation validation and build -->
-			<plugin>
-				<groupId>com.github.eirslett</groupId>
-				<artifactId>frontend-maven-plugin</artifactId>
-				<version>${frontend-maven-plugin.version}</version>
-
-				<configuration>
-					<nodeVersion>${node.version}</nodeVersion>
-					<npmVersion>${npm.version}</npmVersion>
-					<workingDirectory>${frontend-src-dir}</workingDirectory>
-					<installDirectory>${project.build.directory}</installDirectory>
-				</configuration>
-
-				<executions>
-					<!--execution>
-						<id>install-frontend-tools</id>
-						<goals>
-							<goal>install-node-and-npm</goal>
-						</goals>
-					</execution>
-
-					<execution>
-						<id>npm-install</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<configuration>
-							<arguments>install</arguments>
-						</configuration>
-					</execution>
-
-					<execution>
-						<id>build-frontend</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<phase>prepare-package</phase>
-						<configuration>
-							<arguments>run build</arguments>
-						</configuration>
-					</execution-->
-					<!-- <execution>
-						<id>coverage-frontend</id>
-						<goals>
-							<goal>npm</goal>
-						</goals>
-						<phase>prepare-package</phase>
-						<configuration>
-							<arguments>run build</arguments>
-						</configuration>
-					</execution>-->
-				</executions>
-			</plugin>
+			<!-- Jacoco plugin for code coverage calculation -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -279,39 +219,37 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- Copy generated test reports to the deliverables directory -->
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>position-react-build</id>
+						<id>test-coverage-move</id>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
 						<phase>prepare-package</phase>
 						<configuration>
-							<outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
+							<outputDirectory>${project.basedir}/docs/deliverables/D3/coverage</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${frontend-src-dir}/build</directory>
+									<directory>${project.build.directory}/site/jacoco</directory>
 									<filtering>false</filtering>
 								</resource>
 							</resources>
 						</configuration>
 					</execution>
 					<execution>
-						<id>coverage-move</id>
+						<id>test-status-move</id>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
 						<phase>prepare-package</phase>
 						<configuration>
-							<outputDirectory>${project.basedir}/coverage</outputDirectory>
+							<outputDirectory>${project.basedir}/docs/deliverables/D3/status</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${project.build.directory}/site/jacoco</directory>
-										<includes>
-          									<include>jacoco.xml</include>
-          								</includes>
+									<directory>${project.build.directory}/site/test-status</directory>
 									<filtering>false</filtering>
 								</resource>
 							</resources>
@@ -325,7 +263,7 @@
 			<plugin>
 				<groupId>io.github.git-commit-id</groupId>
 				<artifactId>git-commit-id-maven-plugin</artifactId>
-				<version>6.0.0</version>
+				<version>10.0.1</version>
 				<executions>
 					<execution>
 						<goals>
@@ -366,7 +304,29 @@
                     	</path>
                 	</annotationProcessorPaths>
             	</configuration>
-        	</plugin>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.6.0</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.6.2</version>
+				<executions>
+					<execution>
+						<id>enforce-toolchain</id>
+						<goals><goal>enforce</goal></goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion><version>[3.9.0,)</version></requireMavenVersion>
+								<requireJavaVersion><version>[21,26)</version></requireJavaVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -382,6 +342,70 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+	<profiles>
+		<!-- Frontend work is opt-in so backend-only Maven commands remain fast. -->
+		<profile>
+			<id>frontend</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.github.eirslett</groupId>
+						<artifactId>frontend-maven-plugin</artifactId>
+						<version>${frontend-maven-plugin.version}</version>
+						<configuration>
+							<nodeVersion>${node.version}</nodeVersion>
+							<npmVersion>${npm.version}</npmVersion>
+							<workingDirectory>${frontend-src-dir}</workingDirectory>
+							<installDirectory>${project.build.directory}</installDirectory>
+						</configuration>
+						<executions>
+							<execution>
+								<id>install-frontend-tools</id>
+								<goals><goal>install-node-and-npm</goal></goals>
+							</execution>
+							<execution>
+								<id>npm-install</id>
+								<goals><goal>npm</goal></goals>
+								<configuration><arguments>ci</arguments></configuration>
+							</execution>
+							<execution>
+								<id>test-frontend</id>
+								<phase>test</phase>
+								<goals><goal>npm</goal></goals>
+								<configuration><arguments>test</arguments></configuration>
+							</execution>
+							<execution>
+								<id>build-frontend</id>
+								<phase>prepare-package</phase>
+								<goals><goal>npm</goal></goals>
+								<configuration><arguments>run build</arguments></configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>position-react-build</id>
+								<phase>prepare-package</phase>
+								<goals><goal>copy-resources</goal></goals>
+								<configuration>
+									<outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
+									<resources>
+										<resource>
+											<directory>${frontend-src-dir}/dist</directory>
+											<filtering>false</filtering>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 
 	<!-- Apache 2 license -->

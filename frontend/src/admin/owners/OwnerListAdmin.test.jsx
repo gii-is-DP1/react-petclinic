@@ -1,4 +1,4 @@
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { server } from "../../mocks/server";
 import { render, screen, testRenderList } from "../../test-utils";
 import OwnerListAdmin from "./OwnerListAdmin";
@@ -30,16 +30,7 @@ describe('OwnerListAdmin', () => {
 
     test('renders owners with exception', async () => {
         server.use(
-            rest.get('*/owners', (req, res, ctx) => {
-                return res(
-                    ctx.status(200),
-                    ctx.json(
-                        {
-                            message: 'Error fetching data'
-                        }
-                    )
-                )
-            })
+            http.get('*/owners', () => HttpResponse.json({ message: 'Error fetching data' }))
         )
         render(<OwnerListAdmin />);
 
@@ -49,12 +40,7 @@ describe('OwnerListAdmin', () => {
 
     test('renders owners with server error', async () => {
         server.use(
-            rest.get('*/owners', (req, res, ctx) => {
-                return res(
-                    ctx.status(500),
-
-                )
-            })
+            http.get('*/owners', () => new HttpResponse(null, { status: 500 }))
         )
         render(<OwnerListAdmin />);
 

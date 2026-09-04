@@ -2,7 +2,7 @@ import { render, screen } from "../../test-utils";
 import userEvent from "@testing-library/user-event";
 import TicketListAdmin from "./TicketListAdmin";
 import { server } from "../../mocks/server";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 
 describe('TicketListAdmin', () => {
     test('renders correctly', async () => {
@@ -63,17 +63,10 @@ describe('TicketListAdmin', () => {
 
     test('close consultation with exception', async () => {
         server.use(
-            rest.put('*/api/v1/consultations/:id', (req, res, ctx) => {
-                return res(
-                    ctx.status(200),
-                    ctx.json(
-                        {
-                            "statusCode": 500,
-                            "message": "Error while closing the consultation.",
-                        },
-                    )
-                )
-            })
+            http.put('*/api/v1/consultations/:id', () => HttpResponse.json({
+                "statusCode": 500,
+                "message": "Error while closing the consultation.",
+            }))
         )
 
         const user = userEvent.setup();
@@ -107,17 +100,10 @@ describe('TicketListAdmin', () => {
 
     test('add ticket with exception', async () => {
         server.use(
-            rest.post('*/api/v1/consultations/:id/tickets', (req, res, ctx) => {
-                return res(
-                    ctx.status(200),
-                    ctx.json(
-                        {
-                            "statusCode": 500,
-                            "message": "Error while adding the ticket.",
-                        },
-                    )
-                )
-            })
+            http.post('*/api/v1/consultations/:id/tickets', () => HttpResponse.json({
+                "statusCode": 500,
+                "message": "Error while adding the ticket.",
+            }))
         )
 
         const user = userEvent.setup();

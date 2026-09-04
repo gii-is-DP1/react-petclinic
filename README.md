@@ -1,96 +1,256 @@
 # React Petclinic
-Small project based on spring-petclinic for teaching SPA architectures with react, java and spring developer for teaching DP1 at the Software Engineering degree of University of Sevilla.
 
-This is a fork of https://github.com/spring-projects/spring-petclinic  The main changes that have been performed were:
-- Trimming several parts of the application to keep the example low
-- Reorganize some parts of the code according to best practices introduced in the course
-- Modifying the Controllers to work as RestControllers creating several API endpoings
-- Modifying the security configuration to use JWT
-- Creating a React frontend.
+Teaching project for the Design and Testing 1 course in the Software Engineering
+degree at the University of Seville. It combines a Spring Boot REST API, JWT
+authentication, and a React single-page application.
 
-## Understanding the Spring Petclinic application  backend with a few diagrams
-<a href="https://speakerdeck.com/michaelisvy/spring-petclinic-sample-application">See the presentation here</a>
+This repository is based on
+[Spring Petclinic](https://github.com/spring-projects/spring-petclinic). It has
+been simplified and extended with REST controllers, role-based access, clinics,
+consultations, pricing plans, and a React frontend.
 
-## Running petclinic backend locally
-Petclinic is a [Spring Boot](https://spring.io/guides/gs/spring-boot) application built using [Maven](https://spring.io/guides/gs/maven/). You can build a jar file and run it from the command line:
+## Technologies and versions
 
+| Component | Version | Notes |
+| --- | --- | --- |
+| Java | 21 | Target language and bytecode version. |
+| JDK | 21 or 25 | Maven compiles with `--release 21` in both cases. |
+| Maven | 3.9.16 | Included through Maven Wrapper. |
+| Spring Boot | 3.5.16 | Backend and REST API. |
+| Node.js | 24.x | Maven uses Node 24.16.0 in the `frontend` profile. |
+| npm | 11 or 12 | Maven uses npm 12.0.2 in the `frontend` profile. |
+| React | 18.3.1 | User interface. |
+| Vite | 8.2.2 | Development server and production build. |
+| Vitest | 5.0.0 | Frontend tests. |
 
+JDK 25 can run the build without changing its compatibility target. The
+`maven.compiler.release=21` property prevents accidental use of Java APIs newer
+than Java 21.
+
+## Requirements
+
+- Git.
+- JDK 21 or JDK 25. JDK 21 is recommended for a shared team setup.
+- Node.js 24 and npm 11 or 12 when running frontend commands directly.
+- An IDE with Maven, Java, and React support.
+
+The Maven `frontend` profile downloads its own Node and npm distributions into
+`target/`. A global Node installation is therefore unnecessary for Maven builds,
+but it is needed for day-to-day work inside `frontend/`.
+
+Check the local environment with:
+
+```console
+java --version
+node --version
+npm --version
 ```
-git clone https://github.com/gii-is-DP1/spring-petclinic.git
-cd spring-petclinic
-./mvnw package
-java -jar target/*.jar
+
+Check which JDK Maven is using:
+
+```bash
+./mvnw --version
 ```
 
-You can then access petclinic backend here: [http://localhost:8080/](http://localhost:8080/swagger-ui/index.html)
+On Windows PowerShell:
 
-
-
-Or you can run it from Maven directly using the Spring Boot Maven plugin. If you do this it will pick up changes that you make in the project immediately (changes to Java source files require a compile as well - most people use an IDE for this):
-
+```powershell
+.\mvnw.cmd --version
 ```
+
+The Maven output must report Java 21 or Java 25. If it does not, review
+`JAVA_HOME` and the JDK configured in the IDE.
+
+## Getting and verifying the project
+
+On Linux, macOS, or Git Bash:
+
+```bash
+git clone https://github.com/gii-is-DP1/react-petclinic.git
+cd react-petclinic
+./mvnw clean verify -Pfrontend
+```
+
+On Windows PowerShell:
+
+```powershell
+git clone https://github.com/gii-is-DP1/react-petclinic.git
+Set-Location react-petclinic
+.\mvnw.cmd clean verify -Pfrontend
+```
+
+The complete verification compiles and tests the Java backend, installs the
+exact frontend dependencies with `npm ci`, runs the Vitest suite, builds the
+Vite production bundle, copies it into the Spring Boot application, and creates
+the test reports. The first run takes longer because it downloads the toolchains
+and dependencies.
+
+Frontend integration is opt-in. Maven commands without `-Pfrontend` operate on
+the backend only, keeping common commands fast:
+
+```bash
+# Backend only
+./mvnw clean install
+
+# Backend and frontend
+./mvnw clean install -Pfrontend
+```
+
+## Local development
+
+Run the backend and frontend in separate terminals to get fast frontend reloads.
+
+### Start the backend
+
+From the repository root:
+
+```bash
 ./mvnw spring-boot:run
 ```
-## Database configuration
 
-In its default configuration, Petclinic uses an in-memory database (H2) which
-gets populated at startup with data. The INSERTs are specified in the file data.sql.
+On Windows:
 
-## Working with React Petclinic in your IDE
-
-### Prerequisites
-The following items should be installed in your system:
-* Java 17 or newer.
-* Node.js 18 or newer.
-* git command line tool (https://help.github.com/articles/set-up-git)
-* Your preferred IDE 
-  * Eclipse with the m2e plugin. Note: when m2e is available, there is an m2 icon in `Help -> About` dialog. If m2e is
-  not there, just follow the install process here: https://www.eclipse.org/m2e/
-  * [Spring Tools Suite](https://spring.io/tools) (STS)
-  * IntelliJ IDEA
-  * [VS Code](https://code.visualstudio.com)
-
-### Steps:
-
-1) On the command line
-```
-git clone https://github.com/gii-is-DP1/spring-petclinic.git
-```
-2) Inside Eclipse or STS
-```
-File -> Import -> Maven -> Existing Maven project
+```powershell
+.\mvnw.cmd spring-boot:run
 ```
 
-Then either build on the command line `./mvnw generate-resources` or using the Eclipse launcher (right click on project and `Run As -> Maven install`) to generate the css. Run the application main method by right clicking on it and choosing `Run As -> Java Application`.
+The backend starts at <http://localhost:8080>. This command does not install or
+start the frontend.
 
-3) Inside IntelliJ IDEA
+### Start the frontend
 
-In the main menu, choose `File -> Open` and select the Petclinic [pom.xml](pom.xml). Click on the `Open` button.
-
-CSS files are generated from the Maven build. You can either build them on the command line `./mvnw generate-resources`
-or right click on the `spring-petclinic` project then `Maven -> Generates sources and Update Folders`.
-
-A run configuration named `PetClinicApplication` should have been created for you if you're using a recent Ultimate
-version. Otherwise, run the application by right clicking on the `PetClinicApplication` main class and choosing
-`Run 'PetClinicApplication'`.
-
-4) Navigate to Petclinic
-Visit [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html) in your browser.
-
-
-## Looking for something in particular?
-
-|Spring Boot Configuration | Class or Java property files  |
-|--------------------------|---|
-|The Main Class | [PetClinicApplication](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java) |
-|Properties Files | [application.properties](https://github.com/gii-is-DP1/spring-petclinic/blob/master/src/main/resources) |
-
-
-## Starting the frontend
-
-The Spring Petclinic is implemented with a React frontend in the folder named "frontend".
-You can start the development server to see frontend using the command (maybe you should use the command npm insall prior to this):
+```bash
+cd frontend
+npm ci
+npm run dev
 ```
-npm start
+
+The application starts at <http://localhost:5173>. Vite proxies `/api` and
+`/v3/api-docs` to the backend on port 8080. Run `npm ci` after cloning and after
+every change to `package-lock.json`.
+
+## Useful URLs
+
+| Resource | URL |
+| --- | --- |
+| Frontend development server | <http://localhost:5173> |
+| Packaged application | <http://localhost:8080> |
+| Swagger UI | <http://localhost:8080/swagger-ui/index.html> |
+| OpenAPI specification | <http://localhost:8080/v3/api-docs> |
+| H2 console | <http://localhost:8080/h2-console> |
+
+The H2 console uses `jdbc:h2:mem:testdb`, user `sa`, and an empty password.
+
+## Demo users
+
+The database is populated from `src/main/resources/data.sql` at startup.
+
+| Role | User name | Password |
+| --- | --- | --- |
+| Administrator | `admin1` | `4dm1n` |
+| Clinic owner | `clinicOwner1` through `clinicOwner3` | `clinic_owner` |
+| Pet owner | `owner1` through `owner10` | `0wn3r` |
+| Veterinarian | `vet1` through `vet6` | `v3t` |
+
+The default H2 database is in memory and uses
+`spring.jpa.hibernate.ddl-auto=create-drop`, so its contents are recreated when
+the backend restarts.
+
+## Building the complete application
+
+```bash
+./mvnw clean package -Pfrontend
+java -jar target/spring-petclinic-2.2.0.BUILD-SNAPSHOT.jar
 ```
-You can then access the PetClinic frontend at [http://localhost:3000](http://localhost:3000)
+
+On Windows:
+
+```powershell
+.\mvnw.cmd clean package -Pfrontend
+java -jar target/spring-petclinic-2.2.0.BUILD-SNAPSHOT.jar
+```
+
+Vite creates `frontend/dist/`; Maven copies that directory into
+`target/classes/static/` before packaging the JAR. The resulting application is
+served entirely from <http://localhost:8080>.
+
+## Testing and quality
+
+Run backend tests only:
+
+```bash
+./mvnw test
+```
+
+Run backend and frontend tests:
+
+```bash
+./mvnw test -Pfrontend
+```
+
+Run the complete lifecycle and generate reports:
+
+```bash
+./mvnw clean verify -Pfrontend
+```
+
+Important outputs include:
+
+- `target/site/jacoco/`: Java coverage report.
+- `target/site/test-status/`: Allure test status report.
+- `docs/deliverables/D3/coverage/`: copied Java coverage report.
+- `docs/deliverables/D3/status/`: copied test status report.
+- `frontend/dist/`: frontend production bundle.
+
+For frontend-only work:
+
+```bash
+cd frontend
+npm test
+npm run test:watch
+npm run coverage
+npm run build
+```
+
+## Database profiles
+
+The default profile uses an in-memory H2 database. MySQL settings are available
+in `src/main/resources/application-mysql.properties`, and a local database can
+be started with the provided `docker-compose.yml` when needed.
+
+Never commit production credentials or JWT secrets. The JWT value in
+`application.properties` is a Base64-encoded development key and must be
+overridden in deployed environments.
+
+## Repository structure
+
+```text
+frontend/                  React application, Vite configuration, and tests
+src/main/java/             Spring Boot application
+src/main/resources/        configuration and seed data
+src/test/java/             backend tests
+src/test/jmeter/           performance test plan
+docs/                      diagrams and course deliverables
+pom.xml                    Maven build and frontend profile
+```
+
+## Troubleshooting
+
+If Maven uses the wrong Java version, correct `JAVA_HOME`, restart the terminal,
+and check `.\mvnw.cmd --version` (Windows) or `./mvnw --version` again.
+
+If Node or npm reports an unsupported version, use a version manager from the
+`frontend/` directory. Both `.nvmrc` and `.node-version` pin Node 24.16.0.
+
+If frontend dependencies are inconsistent, do not repair `node_modules`
+manually. Run `npm ci` to recreate it from `package-lock.json`.
+
+If the frontend cannot reach the API, confirm that Spring Boot is listening on
+port 8080 and that Vite is running on port 5173.
+
+## Additional documentation
+
+- [Frontend guide](frontend/README.md)
+- [Requirements analysis](docs/deliverables/Análisis%20de%20requisitos%20del%20sistema.md)
+- [System design](docs/deliverables/Diseño%20del%20Sistema.md)
+- [Layer package diagram](docs/diagrams/LayersUMLPackageDiagram.iuml)

@@ -83,7 +83,7 @@ class TicketService {
                 <div className="ticket-input-div">
                     <Form onSubmit={handleSubmit}>
                         <FormGroup>
-                            <Input type="textarea" required name="description" id="description" value={newTicket.description || ''}
+                            <Input type="textarea" required name="description" id="description" aria-label="Description" value={newTicket.description || ''}
                                 onChange={handleChange} />
                         </FormGroup>
                         <FormGroup>

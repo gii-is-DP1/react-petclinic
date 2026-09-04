@@ -7,8 +7,20 @@ import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { FilePond, registerPlugin } from 'react-filepond';
 
-const FormInput = forwardRef(({ tag, name, type, defaultValue, values, isRequired, 
-                    numberOfColumns, validators, minValue, maxValue, onChange, disabled}, ref) => {
+const FormInput = forwardRef(({
+    tag = "default",
+    name = "default",
+    type = "text",
+    defaultValue = "",
+    values = [],
+    isRequired = false,
+    numberOfColumns = 1,
+    validators = [],
+    minValue = 0,
+    maxValue = 100,
+    onChange = null,
+    disabled = false,
+}, ref) => {
                         
     const [inputErrors, setInputErrors] = useState([]);
     let [files, setFiles] = useState([]);
@@ -168,23 +180,6 @@ FormInput.propTypes = {
     setFormValues: PropTypes.func,
     onChange: PropTypes.func,
     disabled: PropTypes.bool,
-}
-
-FormInput.defaultProps = {
-    tag: "default",
-    name: "default",
-    type: "text",
-    defaultValue: "",
-    numberOfColumns: 1,
-    values: [],
-    isRequired: false,
-    minValue: 0,
-    maxValue: 100,
-    validators: [],
-    formValues: {},
-    setFormValues: () => {},
-    onChange: null,
-    disabled: false,
 }
 
 export default FormInput;

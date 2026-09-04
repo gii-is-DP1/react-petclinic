@@ -5,7 +5,11 @@ import {forwardRef, useState} from 'react';
 import PropTypes from 'prop-types';
 
 
-const TagSelector = forwardRef((props, tagRef) => {
+const TagSelector = forwardRef(({
+  defaultValues = [],
+  options = [],
+  max = 8,
+}, tagRef) => {
 
   //El parametro defaultValues debe tener la siguiente estructura:
   // [{value: "1", label: "Amistoso", color: "#FFC107"}, {value: "2", label: "Deportivo", color: "#FFC107"}, ...]
@@ -22,9 +26,9 @@ const TagSelector = forwardRef((props, tagRef) => {
     return tags;
   }
 
-  const [selectedOptions, setSelectedOptions] = useState(tagsTransform(props.defaultValues));
+  const [selectedOptions, setSelectedOptions] = useState(tagsTransform(defaultValues));
   const [maxReached, setMaxReached] = useState(false);
-  const tagOptions = tagsTransform(props.options);
+  const tagOptions = tagsTransform(options);
 
 
   //--------------------Style de tags 1--------------------
@@ -83,7 +87,7 @@ const TagSelector = forwardRef((props, tagRef) => {
   };
 
   const handleSelectChange = (selectedOptions) => {
-    if (selectedOptions.length <= props.max) {
+    if (selectedOptions.length <= max) {
       setMaxReached(false)
       setSelectedOptions(selectedOptions);
     } else{
@@ -120,12 +124,6 @@ const TagSelector = forwardRef((props, tagRef) => {
       </>
   );
 });
-
-TagSelector.defaultProps = {
-  defaultValues: [],
-  options: [],
-  max: 8
-};
 
 TagSelector.propTypes = {
   defaultValues: PropTypes.array,
