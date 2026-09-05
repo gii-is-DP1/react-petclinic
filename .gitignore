@@ -77,3 +77,4 @@ coverage/jacoco.xml
 allure-results/*
 target/site/allure-maven-plugin
 target/site/allure-results
+/docs/deliverables/D3/
