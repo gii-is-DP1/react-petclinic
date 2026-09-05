@@ -6,7 +6,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import "../../static/css/owner/dashboard.css";
 import { useState, useEffect } from "react";
 
-require("moment/locale/es.js");
+import "moment/locale/es.js";
 
 const localizer = momentLocalizer(moment);
 
