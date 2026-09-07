@@ -244,7 +244,7 @@
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
-						<phase>prepare-package</phase>
+						<phase>verify</phase>
 						<configuration>
 							<outputDirectory>${project.basedir}/docs/deliverables/D3/status</outputDirectory>
 							<resources>
