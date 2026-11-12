@@ -5,6 +5,8 @@ import getDeleteAlertsOrModal from '../../util/getDeleteAlertsOrModal';
 import getErrorModal from '../../util/getErrorModal';
 import getIdFromUrl from '../../util/getIdFromUrl';
 import useFetchState from '../../util/useFetchState';
+import useTopic from '../../hooks/useTopic';
+import applyTicketEvent from '../../util/applyTicketEvent';
 
 const jwt = tokenService.getLocalAccessToken();
 
@@ -22,6 +24,11 @@ export default function TicketListAdmin() {
     const [alerts, setAlerts] = useState([]);
 
     const conversationRef = useRef(null);
+
+    // Suscripción en tiempo real al chat de esta consulta
+    useTopic(`/topic/consultations/${id}/tickets`, (event) =>
+        setTickets((current) => applyTicketEvent(current, event))
+    );
 
     function handleChange(event) {
         const target = event.target;
@@ -49,7 +56,8 @@ export default function TicketListAdmin() {
                     setVisible(true);
                 }
                 else {
-                    setTickets([...tickets, json]);
+                    setTickets((current) =>
+                        applyTicketEvent(current, { type: "CREATED", ticketId: json.id, ticket: json }));
                     setNewTicket(emptyTicket);
                 }
             })

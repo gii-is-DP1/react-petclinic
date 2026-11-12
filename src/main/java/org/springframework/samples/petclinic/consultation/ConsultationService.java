@@ -10,7 +10,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.consultation.TicketEvent.TicketEventType;
 import org.springframework.samples.petclinic.exceptions.AccessDeniedException;
 import org.springframework.samples.petclinic.exceptions.ResourceNotFoundException;
 import org.springframework.samples.petclinic.exceptions.UpperPlanFeatureException;
@@ -24,11 +26,14 @@ public class ConsultationService {
 
 	private TicketRepository ticketRepository;
 	private ConsultationRepository consultationRepository;
+	private ApplicationEventPublisher events;
 
 	@Autowired
-	public ConsultationService(TicketRepository ticketRepository, ConsultationRepository consultationRepository) {
+	public ConsultationService(TicketRepository ticketRepository, ConsultationRepository consultationRepository,
+			ApplicationEventPublisher events) {
 		this.ticketRepository = ticketRepository;
 		this.consultationRepository = consultationRepository;
+		this.events = events;
 	}
 
 	@Transactional(readOnly = true)
@@ -90,7 +95,10 @@ public class ConsultationService {
 
 	@Transactional
 	public Ticket saveTicket(Ticket ticket) throws DataAccessException {
+		boolean isNew = ticket.getId() == null;
 		this.ticketRepository.save(ticket);
+		TicketEventType type = isNew ? TicketEventType.CREATED : TicketEventType.UPDATED;
+		events.publishEvent(TicketEvent.of(type, ticket));
 		return ticket;
 	}
 
@@ -105,6 +113,7 @@ public class ConsultationService {
 	public void deleteTicket(int id) throws DataAccessException {
 		Ticket toDelete = findTicketById(id);
 		this.ticketRepository.delete(toDelete);
+		events.publishEvent(TicketEvent.of(TicketEventType.DELETED, toDelete));
 		updateConsultationStatus(toDelete.getConsultation());
 	}
 
@@ -137,10 +146,13 @@ public class ConsultationService {
 	public void deleteAdminTicket(Ticket ticket, Consultation consultation) {
 		List<Ticket> tickets = (List<Ticket>) findAllTicketsByConsultation(consultation.getId());
 		for (Ticket t : tickets) {
-			if (t.getCreationDate().isAfter(ticket.getCreationDate()))
+			if (t.getCreationDate().isAfter(ticket.getCreationDate())) {
 				this.ticketRepository.delete(t);
+				events.publishEvent(TicketEvent.of(TicketEventType.DELETED, t));
+			}
 		}
 		this.ticketRepository.delete(ticket);
+		events.publishEvent(TicketEvent.of(TicketEventType.DELETED, ticket));
 		updateConsultationStatus(consultation);
 
 	}

@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@splidejs/react-splide": "^0.7.12",
+    "@stomp/stompjs": "^7.5.0",
     "axios": "^1.20.0",
     "bootstrap": "^5.3.8",
     "chroma-js": "^3.2.0",

@@ -14,6 +14,8 @@ import {
 } from "reactstrap";
 import "../../../../static/css/owner/ticketPage.css";
 import { useEffect, useRef, useState } from "react";
+import useTopic from "../../../../hooks/useTopic";
+import applyTicketEvent from "../../../../util/applyTicketEvent";
 
 export default function OwnerConsultationTickets() {
   let [consultation, setConsultation] = useState({
@@ -36,6 +38,11 @@ export default function OwnerConsultationTickets() {
   const jwt = JSON.parse(window.localStorage.getItem("jwt"));
   let pathArray = window.location.pathname.split("/");
   const id = pathArray[2];
+
+  // Suscripción en tiempo real al chat de esta consulta
+  useTopic(`/topic/consultations/${id}/tickets`, (event) =>
+    setTickets((current) => applyTicketEvent(current, event))
+  );
 
   function handleChange(event) {
     const target = event.target;
@@ -62,7 +69,9 @@ export default function OwnerConsultationTickets() {
     ).json();
     if (response.message) setMessage(response.message);
     else {
-      setTickets([...tickets, response]);
+      setTickets((current) =>
+        applyTicketEvent(current, { type: "CREATED", ticketId: response.id, ticket: response })
+      );
       setNewTicket({ id: null, description: "" });
     }
   }

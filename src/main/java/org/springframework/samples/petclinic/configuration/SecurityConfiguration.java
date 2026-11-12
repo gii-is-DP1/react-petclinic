@@ -75,6 +75,8 @@ public class SecurityConfiguration {
 
             // API pública
             .requestMatchers("/api/v1/auth/**").permitAll()
+            // Handshake de WebSocket (STOMP)
+            .requestMatchers("/ws/**").permitAll()
             .requestMatchers("/api/v1/developers").permitAll()
             .requestMatchers("/api/v1/plan").permitAll()
             .requestMatchers("/api/v1/clinics").permitAll()
