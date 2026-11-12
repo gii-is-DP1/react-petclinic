@@ -1,0 +1,343 @@
+1
+00:00:00,600 --> 00:00:00,886
+Hola.
+
+2
+00:00:00,886 --> 00:00:07,516
+En este screencast vamos a modificar PetClinic para que la conversación de una consulta se actualice en tiempo real.
+
+3
+00:00:07,516 --> 00:00:15,633
+Sustituiremos el mecanismo de polling, que consiste en recargar los datos cada cierto tiempo, por WebSockets con un modelo publicar-suscribir.
+
+4
+00:00:17,225 --> 00:00:23,131
+Partimos de la pantalla de tickets de una consulta, el chat entre el dueño de la mascota y el veterinario.
+
+5
+00:00:23,131 --> 00:00:26,642
+La forma más sencilla de ver los mensajes nuevos es el polling:
+
+6
+00:00:26,642 --> 00:00:33,106
+un setInterval que, cada pocos segundos, vuelve a pedir al servidor la lista completa de tickets, haya cambios o no.
+
+7
+00:00:34,725 --> 00:00:38,189
+El problema es que casi todas esas peticiones son inútiles.
+
+8
+00:00:38,189 --> 00:00:44,413
+Cada navegador abierto pregunta una y otra vez si hay algo nuevo, y la respuesta casi siempre es la misma.
+
+9
+00:00:44,413 --> 00:00:50,343
+Gastamos red, CPU y base de datos, y además el mensaje puede tardar hasta cinco segundos en aparecer.
+
+10
+00:00:51,933 --> 00:01:03,062
+Con publicar-suscribir, cada navegador abre una única conexión WebSocket y se suscribe a un topic, por ejemplo, barra topic, barra consultations, barra siete, barra tickets.
+
+11
+00:01:03,062 --> 00:01:09,045
+Cuando el veterinario crea un ticket, el servidor lo guarda y publica un evento en ese topic.
+
+12
+00:01:09,045 --> 00:01:12,711
+El broker lo empuja al instante a todos los suscriptores.
+
+13
+00:01:12,711 --> 00:01:13,676
+Nadie pregunta:
+
+14
+00:01:13,676 --> 00:01:14,834
+el servidor avisa.
+
+15
+00:01:16,433 --> 00:01:17,318
+Este es el plan.
+
+16
+00:01:17,318 --> 00:01:31,202
+En el backend añadiremos la dependencia de WebSocket, configuraremos el broker STOMP, crearemos un evento de ticket con su publicador, haremos que el servicio de consultas publique esos eventos y abriremos el endpoint en la configuración de seguridad.
+
+17
+00:01:31,202 --> 00:01:39,277
+En el frontend instalaremos el cliente STOMP, configuraremos el proxy de Vite, crearemos un hook useTopic y lo usaremos en la pantalla de tickets.
+
+18
+00:01:40,892 --> 00:01:42,889
+Empezamos por el pom punto xml.
+
+19
+00:01:42,889 --> 00:01:47,979
+Justo debajo de spring-boot-starter-web añadimos spring-boot-starter-websocket.
+
+20
+00:01:47,979 --> 00:01:49,912
+No hace falta indicar versión:
+
+21
+00:01:49,912 --> 00:01:52,297
+la gestiona el parent de Spring Boot.
+
+22
+00:01:53,892 --> 00:01:57,793
+Ahora creamos la clase WebSocketConfig en el paquete configuration.
+
+23
+00:01:57,793 --> 00:02:01,462
+Con EnableWebSocketMessageBroker activamos la mensajería STOMP.
+
+24
+00:02:01,462 --> 00:02:08,158
+En configureMessageBroker habilitamos un broker sencillo en memoria para los destinos que empiezan por barra topic.
+
+25
+00:02:08,158 --> 00:02:14,680
+En registerStompEndpoints registramos el endpoint barra ws, que es la URL donde el navegador abrirá la conexión.
+
+26
+00:02:16,267 --> 00:02:18,709
+Definimos el mensaje que se publicará.
+
+27
+00:02:18,709 --> 00:02:27,834
+Un record TicketEvent con el tipo de evento, creado, actualizado o borrado, el identificador de la consulta, el del ticket y el propio ticket.
+
+28
+00:02:27,834 --> 00:02:30,854
+Cuando se borra, no hace falta enviarlo entero.
+
+29
+00:02:32,433 --> 00:02:36,301
+El publicador es un componente que recibe el SimpMessagingTemplate.
+
+30
+00:02:36,301 --> 00:02:39,879
+Fíjate en TransactionalEventListener con la fase AFTER_COMMIT:
+
+31
+00:02:39,879 --> 00:02:45,651
+así solo notificamos a los clientes cuando el ticket ya está guardado de verdad en la base de datos.
+
+32
+00:02:45,651 --> 00:02:48,999
+Si la transacción falla, nadie recibe un mensaje fantasma.
+
+33
+00:02:48,999 --> 00:02:53,501
+convertAndSend serializa el evento a JSON y lo envía al topic de esa consulta.
+
+34
+00:02:55,100 --> 00:02:56,981
+Ahora el servicio de consultas.
+
+35
+00:02:56,981 --> 00:03:01,107
+Inyectamos el ApplicationEventPublisher de Spring en el constructor.
+
+36
+00:03:01,107 --> 00:03:08,267
+En saveTicket comprobamos si el ticket es nuevo antes de guardarlo y, después, publicamos un evento CREATED o UPDATED.
+
+37
+00:03:08,267 --> 00:03:12,575
+Como updateTicket reutiliza saveTicket, las ediciones quedan cubiertas.
+
+38
+00:03:12,575 --> 00:03:18,279
+En deleteTicket y en deleteAdminTicket publicamos un evento DELETED por cada ticket eliminado.
+
+39
+00:03:18,279 --> 00:03:18,522
+Ojo:
+
+40
+00:03:18,522 --> 00:03:22,162
+en el borrado del administrador hay que añadir llaves al if.
+
+41
+00:03:22,162 --> 00:03:26,531
+El servicio no sabe nada de WebSockets; solo publica eventos de dominio.
+
+42
+00:03:26,531 --> 00:03:28,655
+Eso mantiene el diseño desacoplado.
+
+43
+00:03:30,267 --> 00:03:32,757
+Por último en el backend, la seguridad.
+
+44
+00:03:32,757 --> 00:03:39,971
+El navegador no puede enviar la cabecera Authorization en el handshake de WebSocket, así que permitimos barra ws.
+
+45
+00:03:39,971 --> 00:03:41,248
+Lo veremos al final:
+
+46
+00:03:41,248 --> 00:03:45,525
+en producción conviene validar el JWT en el frame CONNECT de STOMP.
+
+47
+00:03:47,142 --> 00:03:48,281
+Pasamos al frontend.
+
+48
+00:03:48,281 --> 00:03:58,312
+Desde la carpeta frontend instalamos la librería cliente arroba stomp barra stompjs, que funciona sobre el WebSocket nativo del navegador y gestiona la reconexión por nosotros.
+
+49
+00:03:59,892 --> 00:04:05,216
+En vite punto config añadimos una entrada de proxy para barra ws con la opción ws a true.
+
+50
+00:04:05,216 --> 00:04:12,336
+Así el navegador se conecta al mismo origen que la aplicación, y Vite reenvía la conexión al backend en el puerto 8080.
+
+51
+00:04:13,933 --> 00:04:17,660
+Creamos un hook reutilizable, useTopic, en la carpeta hooks.
+
+52
+00:04:17,660 --> 00:04:19,647
+Recibe el destino y un callback.
+
+53
+00:04:19,647 --> 00:04:27,846
+Dentro del useEffect creamos un cliente STOMP que apunta a barra ws en el mismo host, con reconexión automática cada cinco segundos.
+
+54
+00:04:27,846 --> 00:04:33,249
+Al conectar, nos suscribimos al topic y pasamos cada mensaje, ya parseado, al callback.
+
+55
+00:04:33,249 --> 00:04:38,777
+Guardamos el callback en un ref para usar siempre la versión más reciente sin reconectar.
+
+56
+00:04:38,777 --> 00:04:43,124
+Y la función de limpieza desactiva el cliente al salir de la pantalla.
+
+57
+00:04:44,725 --> 00:04:50,795
+La lógica de actualizar la lista la sacamos a una función pura, applyTicketEvent, en la carpeta util.
+
+58
+00:04:50,795 --> 00:04:57,706
+Si llega un CREATED lo añadimos, salvo que ya exista, porque quien envía el mensaje también lo recibe por el topic.
+
+59
+00:04:57,706 --> 00:05:00,169
+UPDATED lo sustituye y DELETED lo filtra.
+
+60
+00:05:00,169 --> 00:05:08,102
+Al ser pura, es muy fácil de testear con Vitest y la reutilizaremos en las pantallas del dueño, del veterinario y del administrador.
+
+61
+00:05:09,683 --> 00:05:12,044
+Y ahora la pantalla de tickets del dueño.
+
+62
+00:05:12,044 --> 00:05:13,887
+Importamos el hook y la función.
+
+63
+00:05:13,887 --> 00:05:25,635
+Después de obtener el id de la consulta, nos suscribimos a su topic y, con cada evento, actualizamos el estado usando la forma funcional de setTickets, para no trabajar nunca con una lista desactualizada.
+
+64
+00:05:25,635 --> 00:05:33,293
+En handleSubmit hacemos lo mismo, así no se duplica el ticket aunque llegue antes el mensaje del WebSocket que la respuesta del POST.
+
+65
+00:05:33,293 --> 00:05:34,445
+Y lo más importante:
+
+66
+00:05:34,445 --> 00:05:35,942
+eliminamos el setInterval.
+
+67
+00:05:35,942 --> 00:05:40,780
+La carga inicial se hace una sola vez; todo lo demás llega empujado por el servidor.
+
+68
+00:05:40,780 --> 00:05:45,674
+Repite estos cambios en las pantallas de tickets del veterinario y del administrador.
+
+69
+00:05:47,267 --> 00:05:50,556
+Arrancamos el backend con mvnw spring-boot:run.
+
+70
+00:05:50,556 --> 00:05:53,916
+En el log aparece el SimpleBrokerMessageHandler:
+
+71
+00:05:53,916 --> 00:05:56,156
+el broker STOMP está disponible.
+
+72
+00:05:56,156 --> 00:05:59,935
+En otra terminal arrancamos el frontend con npm start.
+
+73
+00:06:01,517 --> 00:06:04,125
+Abrimos la misma consulta en dos navegadores:
+
+74
+00:06:04,125 --> 00:06:07,197
+a la izquierda el dueño, a la derecha el veterinario.
+
+75
+00:06:07,197 --> 00:06:10,096
+El veterinario escribe una respuesta y pulsa Save.
+
+76
+00:06:10,096 --> 00:06:19,023
+El POST guarda el ticket, se publica el evento, y el mensaje aparece al instante en el navegador del dueño, sin recargar y sin ninguna petición periódica.
+
+77
+00:06:19,023 --> 00:06:27,718
+Si abres las herramientas de desarrollo, en la pestaña de red verás una sola conexión ws con frames MESSAGE, en lugar de una lluvia de peticiones GET.
+
+78
+00:06:29,308 --> 00:06:31,655
+Para terminar, algunos siguientes pasos.
+
+79
+00:06:31,655 --> 00:06:36,818
+Hemos dejado el handshake abierto, así que cualquiera podría suscribirse a una consulta.
+
+80
+00:06:36,818 --> 00:06:45,913
+Lo correcto es enviar el JWT en las cabeceras del frame CONNECT, validarlo en un ChannelInterceptor y comprobar que el usuario tiene acceso a esa consulta.
+
+81
+00:06:45,913 --> 00:06:51,780
+Si despliegas varias instancias del backend, sustituye el broker en memoria por un relay a RabbitMQ.
+
+82
+00:06:51,780 --> 00:06:53,129
+Y no olvides los tests:
+
+83
+00:06:53,129 --> 00:06:57,471
+unitarios para applyTicketEvent y de integración con WebSocketStompClient.
+
+84
+00:06:59,058 --> 00:06:59,807
+En resumen:
+
+85
+00:06:59,807 --> 00:07:07,776
+una conexión WebSocket por cliente, un topic por consulta, eventos publicados tras el commit, y adiós al setInterval.
+
+86
+00:07:07,776 --> 00:07:09,478
+Gracias por ver el vídeo.
