@@ -5,8 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 
 import org.junit.jupiter.api.Test;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
+import org.springframework.samples.petclinic.testing.ModelTest;
 
 
+@Epic("Testing examples")
+@Feature("Test doubles")
+@io.qameta.allure.Owner("DP1-tutors")
+@ModelTest
+@IsolatedTest
 public class DummyObjectTests {
 
     public Customer createDummyCustomer() {

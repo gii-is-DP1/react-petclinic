@@ -11,7 +11,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.junit.jupiter.api.Test;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
+import org.springframework.samples.petclinic.testing.ServiceTest;
 
+@Epic("Testing examples")
+@Feature("Test doubles")
+@io.qameta.allure.Owner("DP1-tutors")
+@ServiceTest
+@IsolatedTest
 public class TestStubTests {
 
     public Collection<Trade> getTrades() {

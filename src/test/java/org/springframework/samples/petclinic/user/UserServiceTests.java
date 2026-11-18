@@ -21,12 +21,18 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.transaction.annotation.Transactional;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Description;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.ServiceTest;
+import org.springframework.samples.petclinic.testing.SociableTest;
 
 
 //@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @Epic("Users & Admin Module")
 @Feature("Users Management")
 @io.qameta.allure.Owner("DP1-tutors")
+@ServiceTest
+@SociableTest
 @SpringBootTest
 @AutoConfigureTestDatabase
 class UserServiceTests {
@@ -43,6 +49,8 @@ class UserServiceTests {
 	@Autowired
 	private OwnerService ownerService;
 
+	@Story("HU-01: Iniciar sesión")
+	@Description("Se obtiene el usuario que ha iniciado sesión.")
 	@Test
 	@WithMockUser(username = "owner1", password = "0wn3r")
 	void shouldFindCurrentUser() {
@@ -50,29 +58,39 @@ class UserServiceTests {
 		assertEquals("owner1", user.getUsername());
 	}
 
+	@Story("HU-01: Iniciar sesión")
+	@Description("Si el usuario autenticado no existe en la base de datos se lanza una excepción.")
 	@Test
 	@WithMockUser(username = "prueba")
 	void shouldNotFindCorrectCurrentUser() {
 		assertThrows(ResourceNotFoundException.class, () -> this.userService.findCurrentUser());
 	}
 
+	@Story("HU-01: Iniciar sesión")
+	@Description("Sin sesión iniciada no hay usuario actual.")
 	@Test
 	void shouldNotFindAuthenticated() {
 		assertThrows(ResourceNotFoundException.class, () -> this.userService.findCurrentUser());
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Se obtienen todos los usuarios.")
 	@Test
 	void shouldFindAllUsers() {
 		List<User> users = (List<User>) this.userService.findAll();
 		assertEquals(19, users.size());
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Se encuentra un usuario por su nombre de usuario.")
 	@Test
 	void shouldFindUsersByUsername() {
 		User user = this.userService.findUser("owner1");
 		assertEquals("owner1", user.getUsername());
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Se obtienen los usuarios de un rol.")
 	@Test
 	void shouldFindUsersByAuthority() {
 		List<User> owners = (List<User>) this.userService.findAllByAuthority("OWNER");
@@ -85,54 +103,74 @@ class UserServiceTests {
 		assertEquals(6, vets.size());
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Buscar un nombre de usuario inexistente lanza una excepción.")
 	@Test
 	void shouldNotFindUserByIncorrectUsername() {
 		assertThrows(ResourceNotFoundException.class, () -> this.userService.findUser("usernotexists"));
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Se encuentra el propietario asociado a un nombre de usuario.")
 	@Test
 	void shouldFindSingleOwnerByUsername() {
 		Owner owner = this.userService.findOwnerByUser("owner1");
 		assertEquals("owner1", owner.getUser().getUsername());
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Buscar el propietario de un nombre de usuario inexistente lanza una excepción.")
 	@Test
 	void shouldNotFindSingleOwnerWithBadUsername() {
 		assertThrows(ResourceNotFoundException.class, () -> this.userService.findOwnerByUser("badusername"));
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Se encuentra el propietario asociado a un id de usuario.")
 	@Test
 	void shouldFindSingleOwnerByUserId() {
 		Owner owner = this.userService.findOwnerByUser(4);
 		assertEquals("owner1", owner.getUser().getUsername());
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Buscar el propietario de un id de usuario inexistente lanza una excepción.")
 	@Test
 	void shouldNotFindSingleUserOwnerWithBadUserId() {
 		assertThrows(ResourceNotFoundException.class, () -> this.userService.findOwnerByUser(100));
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Se encuentra un usuario por su id.")
 	@Test
 	void shouldFindSingleUser() {
 		User user = this.userService.findUser(4);
 		assertEquals("owner1", user.getUsername());
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Buscar un id de usuario inexistente lanza una excepción.")
 	@Test
 	void shouldNotFindSingleUserWithBadID() {
 		assertThrows(ResourceNotFoundException.class, () -> this.userService.findUser(100));
 	}
 
+	@Story("HU-02: Registrarse")
+	@Description("Se detecta que un nombre de usuario ya está registrado.")
 	@Test
 	void shouldExistUser() {
 		assertEquals(true, this.userService.existsUser("owner1"));
 	}
 
+	@Story("HU-02: Registrarse")
+	@Description("Se detecta que un nombre de usuario no está registrado.")
 	@Test
 	void shouldNotExistUser() {
 		assertEquals(false, this.userService.existsUser("owner10000"));
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Se pueden modificar los datos de un usuario.")
 	@Test
 	@Transactional
 	void shouldUpdateUser() {
@@ -143,6 +181,8 @@ class UserServiceTests {
 		assertEquals("Change", user.getUsername());
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Se puede dar de alta un usuario y se le asigna un id.")
 	@Test
 	@Transactional
 	void shouldInsertUser() {
@@ -162,6 +202,8 @@ class UserServiceTests {
 	}
 
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Se puede borrar un usuario que no es propietario.")
 	@Test
 	@Transactional
 	void shouldDeleteUserWithoutOwner() {
@@ -206,6 +248,8 @@ class UserServiceTests {
 //		assertEquals(firstCount, lastCount);
 //	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Se puede borrar un usuario que no es veterinario.")
 	@Test
 	@Transactional
 	void shouldDeleteUserWithoutVet() {

@@ -47,11 +47,17 @@ import org.springframework.samples.petclinic.visit.VisitService;
 
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Description;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.ServiceTest;
+import org.springframework.samples.petclinic.testing.SociableTest;
 
 //@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @Epic("Clinic Module")
 @Feature("Pet management")
 @io.qameta.allure.Owner("DP1-tutors")
+@ServiceTest
+@SociableTest
 @SpringBootTest
 @AutoConfigureTestDatabase
 class PetServiceTests {
@@ -67,6 +73,8 @@ class PetServiceTests {
 	@Autowired
 	protected VetService vetService;
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Se encuentra una mascota por su id.")
 	@Test
 	void shouldFindPetWithCorrectId() {
 		Pet pet7 = this.petService.findPetById(7);
@@ -74,11 +82,15 @@ class PetServiceTests {
 		assertEquals("Jean", pet7.getOwner().getFirstName());
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Buscar un id de mascota inexistente lanza una excepción.")
 	@Test
 	void shouldNotFindPetWithInorrectId() {
 		assertThrows(ResourceNotFoundException.class, () -> this.petService.findPetById(700));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Se obtienen todas las mascotas.")
 	@Test
 	void shouldFindAllPets() {
 		Collection<Pet> pets = this.petService.findAll();
@@ -89,6 +101,8 @@ class PetServiceTests {
 		assertEquals("Jewel", pet4.getName());
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Se obtienen las mascotas del propietario de un usuario.")
 	@Test
 	void shouldFindAllPetsByUserId() {
 		Collection<Pet> pets = this.petService.findAllPetsByUserId(4);
@@ -97,6 +111,8 @@ class PetServiceTests {
 		assertEquals("Leo", pet1.getName());
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Se obtienen las mascotas de un propietario.")
 	@Test
 	void shouldFindAllPetsByOwnerId() {
 		Collection<Pet> pets = this.petService.findAllPetsByOwnerId(1);
@@ -105,6 +121,8 @@ class PetServiceTests {
 		assertEquals("Leo", pet1.getName());
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Se obtienen todos los tipos de mascota.")
 	@Test
 	void shouldFindAllPetTypes() {
 		Collection<PetType> petTypes = this.petService.findPetTypes();
@@ -115,17 +133,23 @@ class PetServiceTests {
 		assertEquals("snake", petType4.getName());
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Se encuentra un tipo de mascota por su nombre.")
 	@Test
 	void shouldFindPetTypeWithCorrectName() {
 		PetType cat = this.petService.findPetTypeByName("cat");
 		assertEquals("cat", cat.getName());
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Buscar un tipo de mascota inexistente lanza una excepción.")
 	@Test
 	void shouldNotFindPetTypeWithIncorrectName() {
 		assertThrows(ResourceNotFoundException.class, () -> this.petService.findPetTypeByName("dragon"));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Se puede dar de alta una mascota y se le asigna un id.")
 	@Test
 	@Transactional
 	void shouldInsertPetIntoDatabaseAndGenerateId() {
@@ -146,6 +170,8 @@ class PetServiceTests {
 		assertNotNull(pet.getId());
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Dar de alta dos mascotas con el mismo nombre para un propietario lanza una excepción.")
 	@Test
 	@Transactional
 	void shouldThrowExceptionInsertingPetsWithTheSameName() {
@@ -166,6 +192,8 @@ class PetServiceTests {
 		assertThrows(DuplicatedPetNameException.class, () -> petService.savePet(anotherPetWithTheSameName));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Se pueden modificar los datos de una mascota.")
 	@Test
 	@Transactional
 	void shouldUpdatePet() {
@@ -181,6 +209,8 @@ class PetServiceTests {
 	}
 
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Se respeta el límite de mascotas del plan BASIC.")
 	@Test
 	@Transactional
 	void shouldCheckLimitForBasic() {
@@ -190,6 +220,8 @@ class PetServiceTests {
 		assertEquals(false, this.petService.underLimit(owner));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Se respeta el límite de mascotas del plan GOLD.")
 	@Test
 	@Transactional
 	void shouldCheckLimitForGold() {
@@ -201,6 +233,8 @@ class PetServiceTests {
 		assertEquals(false, this.petService.underLimit(owner));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Se respeta el límite de mascotas del plan PLATINUM.")
 	@Test
 	@Transactional
 	void shouldCheckLimitForPlatinum() {
@@ -229,6 +263,8 @@ class PetServiceTests {
 		petService.savePet(pet);
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Se calculan las estadísticas de mascotas para el administrador.")
 	@SuppressWarnings("unchecked")
 	@Test
 	@Transactional

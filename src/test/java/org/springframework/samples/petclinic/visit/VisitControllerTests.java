@@ -51,12 +51,23 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.ControllerTest;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
 
 /**
  * Test class for {@link VisitRestController}
  *
  * 
  */
+@Epic("Clinic Module")
+@Feature("Visit management")
+@io.qameta.allure.Owner("DP1-tutors")
+@ControllerTest
+@IsolatedTest
 @WebMvcTest(controllers = VisitRestController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class VisitControllerTests {
 	private static final int TEST_PET_ID = 1;
@@ -188,6 +199,8 @@ class VisitControllerTests {
 		return logged;
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("El administrador o un veterinario obtienen las visitas de una mascota.")
 	@Test
 	@WithMockUser(value = "admin", authorities = { "ADMIN" })
 	void adminOrVetShouldFindAllFromPet() throws Exception {
@@ -214,6 +227,8 @@ class VisitControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 3)].description").value("Checking Simba's leg."));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Un propietario obtiene las visitas de una de sus mascotas.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldFindAllFromOwnedPet() throws Exception {
@@ -243,6 +258,8 @@ class VisitControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 3)].description").value("Checking Simba's leg."));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Un propietario no puede ver las visitas de una mascota de otro propietario.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldNotFindAllFromOthersPet() throws Exception {
@@ -274,6 +291,8 @@ class VisitControllerTests {
 				.andExpect(result -> assertEquals("Pet not owned.", result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("El administrador o un veterinario obtienen los datos de una visita.")
 	@Test
 	@WithMockUser(value = "admin", authorities = { "ADMIN" })
 	void adminOrVetShouldFindVisit() throws Exception {
@@ -288,6 +307,8 @@ class VisitControllerTests {
 				.andExpect(jsonPath("$.vet.firstName").value(vet.getFirstName()));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Un propietario obtiene los datos de una visita de su mascota.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldFindVisitFromOwnedPet() throws Exception {
@@ -303,6 +324,8 @@ class VisitControllerTests {
 				.andExpect(jsonPath("$.vet.firstName").value(vet.getFirstName()));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Un propietario no puede ver una visita de una mascota de otro propietario.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldNotFindVisitFromOthersPet() throws Exception {
@@ -319,6 +342,8 @@ class VisitControllerTests {
 				.andExpect(result -> assertEquals("Pet not owned.", result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Pedir una visita inexistente devuelve 404.")
 	@Test
 	@WithMockUser("admin")
 	void shouldReturnNotFoundVisit() throws Exception {
@@ -328,6 +353,8 @@ class VisitControllerTests {
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("El administrador o un veterinario pueden crear una visita.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void adminOrVetShouldCreateVisit() throws Exception {
@@ -344,6 +371,8 @@ class VisitControllerTests {
 				.content(objectMapper.writeValueAsString(aux))).andExpect(status().isCreated());
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("No se puede crear una visita sin mascota.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void shouldNotCreateInvalidVisitNullPet() throws Exception {
@@ -360,6 +389,8 @@ class VisitControllerTests {
 				.content(objectMapper.writeValueAsString(aux))).andExpect(status().isBadRequest());
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("No se puede crear una visita con una fecha y hora no válidas.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void shouldNotCreateInvalidVisitInvalidDatetime() throws Exception {
@@ -387,6 +418,8 @@ class VisitControllerTests {
 				.content(objectMapper.writeValueAsString(aux))).andExpect(status().isBadRequest());
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Un propietario puede crear una visita para su mascota.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldCreateVisit() throws Exception {
@@ -405,6 +438,8 @@ class VisitControllerTests {
 				.content(objectMapper.writeValueAsString(aux))).andExpect(status().isCreated());
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Un propietario no puede crear una visita para una mascota de otro propietario.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldNotCreateVisitForOthersPet() throws Exception {
@@ -428,6 +463,8 @@ class VisitControllerTests {
 				.andExpect(result -> assertEquals("Pet not owned.", result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Un propietario no puede superar el número de visitas que permite su plan.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldNotCreatePetPassedLimit() throws Exception {
@@ -450,6 +487,8 @@ class VisitControllerTests {
 						result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("El administrador o un veterinario pueden modificar una visita.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void adminOrVetShouldUpdateVisit() throws Exception {
@@ -465,6 +504,8 @@ class VisitControllerTests {
 				.andExpect(jsonPath("$.pet.name").value(visit.getPet().getName()));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Un propietario puede modificar una visita de su mascota.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldUpdateVisit() throws Exception {
@@ -482,6 +523,8 @@ class VisitControllerTests {
 				.andExpect(jsonPath("$.pet.name").value(visit.getPet().getName()));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Un propietario no puede modificar una visita de una mascota de otro propietario.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldNotUpdateOthersVisit() throws Exception {
@@ -501,6 +544,8 @@ class VisitControllerTests {
 				.andExpect(result -> assertEquals("Pet not owned.", result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("El administrador o un veterinario pueden borrar una visita.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void adminOrVetShouldDeleteVisit() throws Exception {
@@ -512,6 +557,8 @@ class VisitControllerTests {
 		mockMvc.perform(delete(BASE_URL + "/{id}", TEST_VISIT_ID).with(csrf())).andExpect(status().isOk());
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Un propietario puede borrar una visita de su mascota.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldDeleteVisit() throws Exception {
@@ -524,6 +571,8 @@ class VisitControllerTests {
 		mockMvc.perform(delete(BASE_URL + "/{id}", TEST_VISIT_ID).with(csrf())).andExpect(status().isOk());
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Un propietario no puede borrar una visita de una mascota de otro propietario.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldNotDeleteOthersVisit() throws Exception {
@@ -542,6 +591,8 @@ class VisitControllerTests {
 				.andExpect(result -> assertEquals("Pet not owned.", result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("El administrador o un veterinario obtienen el listado de todas las visitas.")
 	@Test
 	@WithMockUser(value = "admin", authorities = { "ADMIN" })
 	void adminOrVetShouldFindAllVisits() throws Exception {
@@ -572,6 +623,8 @@ class VisitControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 3)].pet.name").value(other.getName()));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Un propietario obtiene las visitas de todas sus mascotas.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldFindAllVisitsFromOwnedPets() throws Exception {
@@ -592,6 +645,8 @@ class VisitControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 2)].pet.name").value(simba.getName()));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("El administrador puede filtrar las visitas por propietario.")
 	@Test
 	@WithMockUser(value = "admin", authorities = { "ADMIN" })
 	void adminShouldFindAllWithOwner() throws Exception {
@@ -621,6 +676,8 @@ class VisitControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 2)].pet.name").value(simba.getName()));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Un propietario no puede listar las visitas de otro propietario.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldNotFindOthersPets() throws Exception {
@@ -633,6 +690,8 @@ class VisitControllerTests {
 				.andExpect(result -> assertEquals("Access denied!", result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Un propietario con plan PLATINUM obtiene las estadísticas de sus visitas.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void shouldReturnOwnerStats() throws Exception {
@@ -645,6 +704,8 @@ class VisitControllerTests {
 		mockMvc.perform(get(VISITS_URL + "/stats")).andExpect(status().isOk());
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Un propietario sin plan PLATINUM no puede ver las estadísticas de sus visitas.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void shouldNotReturnOwnerStatsNotPlatinum() throws Exception {
@@ -658,6 +719,8 @@ class VisitControllerTests {
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof AccessDeniedException));
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("El administrador obtiene las estadísticas de visitas.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void shouldReturnAdminStats() throws Exception {
@@ -667,6 +730,8 @@ class VisitControllerTests {
 		mockMvc.perform(get(VISITS_URL + "/stats")).andExpect(status().isOk());
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Un veterinario no puede ver las estadísticas de visitas.")
 	@Test
 	@WithMockUser(username = "vet", authorities = "VET")
 	void shouldNotReturnVetStats() throws Exception {

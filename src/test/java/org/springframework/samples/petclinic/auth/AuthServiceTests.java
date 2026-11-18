@@ -23,11 +23,17 @@ import org.springframework.samples.petclinic.vet.VetService;
 import org.springframework.transaction.annotation.Transactional;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Description;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.ServiceTest;
+import org.springframework.samples.petclinic.testing.SociableTest;
 
 
 @Epic("Users & Admin Module")
 @Feature("Authentication")
 @io.qameta.allure.Owner("DP1-tutors")
+@ServiceTest
+@SociableTest
 @SpringBootTest
 public class AuthServiceTests {
 
@@ -46,6 +52,8 @@ public class AuthServiceTests {
 	@Autowired
 	protected AuthoritiesService authoritiesService;
 
+	@Story("HU-02: Registrarse")
+	@Description("El registro crea un usuario con rol ADMIN.")
 	@Test
 	@Transactional
 	public void shouldCreateAdminUser() {
@@ -56,6 +64,8 @@ public class AuthServiceTests {
 		assertEquals(userFirstCount + 1, userLastCount);
 	}
 
+	@Story("HU-02: Registrarse")
+	@Description("El registro crea un usuario con rol VET y su veterinario asociado.")
 	@Test
 	@Transactional
 	public void shouldCreateVetUser() {
@@ -69,6 +79,8 @@ public class AuthServiceTests {
 		assertEquals(vetFirstCount + 1, vetLastCount);
 	}
 
+	@Story("HU-02: Registrarse")
+	@Description("El registro crea un usuario con rol OWNER y su propietario asociado.")
 	@Test
 	@Transactional
 	public void shouldCreateOwnerUser() {

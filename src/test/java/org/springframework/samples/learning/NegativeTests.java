@@ -19,6 +19,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
+import org.springframework.samples.petclinic.testing.Layer;
 
 /**
  * Integration test of the Service and the Repository layer.
@@ -50,6 +54,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Dave Syer
  */
 
+@Epic("Testing examples")
+@Feature("Negative tests")
+@io.qameta.allure.Owner("DP1-tutors")
+@Layer("examples")
+@IsolatedTest
 class NegativeTests {         
 
 	@Test

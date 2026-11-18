@@ -197,7 +197,12 @@ Run the complete lifecycle and generate reports:
 Important outputs include:
 
 - `target/site/jacoco/`: Java coverage report.
-- `target/site/test-status/`: Allure test status report.
+- `target/site/test-status/index.html`: Allure summary page, linking to two
+  reports: `awesome/` (tests by epic / feature / story) and `layers/` (also
+  by layer and isolation, using the annotations in the `testing` test package).
+- `docs/deliverables/D3/Matriz de trazabilidad.md`: traceability matrix between
+  the user stories of the requirements document and the tests, generated from
+  the test annotations (`@Story("HU-xx: ...")`, `@Description`...).
 - `docs/deliverables/D3/coverage/`: copied Java coverage report.
 - `docs/deliverables/D3/status/`: copied test status report.
 - `frontend/dist/`: frontend production bundle.

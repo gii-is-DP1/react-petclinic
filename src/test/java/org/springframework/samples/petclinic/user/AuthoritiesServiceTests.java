@@ -18,10 +18,16 @@ import org.springframework.transaction.annotation.Transactional;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Owner;
+import io.qameta.allure.Description;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.ServiceTest;
+import org.springframework.samples.petclinic.testing.SociableTest;
 
 @Epic("Users & Admin Module")
 @Feature("Authorization")
 @Owner("DP1-tutors")
+@ServiceTest
+@SociableTest
 @SpringBootTest
 @AutoConfigureTestDatabase
 class AuthoritiesServiceTests {
@@ -32,23 +38,31 @@ class AuthoritiesServiceTests {
 	@Autowired
 	private AuthoritiesService authService;
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Se obtienen todos los roles (authorities) existentes.")
 	@Test
 	void shouldFindAllAuthorities() {
 		List<Authorities> auths = (List<Authorities>) this.authService.findAll();
 		assertEquals(4, auths.size());
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Se encuentra un rol por su nombre.")
 	@Test
 	void shouldFindAuthoritiesByAuthority() {
 		Authorities auth = this.authService.findByAuthority("VET");
 		assertEquals("VET", auth.getAuthority());
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Buscar un rol inexistente lanza una excepción.")
 	@Test
 	void shouldNotFindAuthoritiesByIncorrectAuthority() {
 		assertThrows(ResourceNotFoundException.class, () -> this.authService.findByAuthority("authnotexists"));
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Se puede dar de alta un rol nuevo.")
 	@Test
 	@Transactional
 	void shouldInsertAuthorities() {

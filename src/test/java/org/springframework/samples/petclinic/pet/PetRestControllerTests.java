@@ -48,11 +48,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Description;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.ControllerTest;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
 
 
 @Epic("Clinic Module")
 @Feature("Pet management")
 @io.qameta.allure.Owner("DP1-tutors")
+@ControllerTest
+@IsolatedTest
 @WebMvcTest(value = PetRestController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class))
 class PetRestControllerTests {
 
@@ -166,6 +172,8 @@ class PetRestControllerTests {
 		return logged;
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("El administrador obtiene el listado de todas las mascotas.")
 	@Test
 	@WithMockUser(value = "admin", authorities = { "ADMIN" })
 	void adminShouldFindAll() throws Exception {
@@ -185,6 +193,8 @@ class PetRestControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 3)].name").value("Pumba"));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Un propietario no puede listar todas las mascotas.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldNotFindAll() throws Exception {
@@ -203,6 +213,8 @@ class PetRestControllerTests {
 				.andExpect(result -> assertEquals("Access denied!", result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("El administrador puede filtrar las mascotas por propietario.")
 	@Test
 	@WithMockUser(value = "admin", authorities = { "ADMIN" })
 	void adminShouldFindAllWithOwner() throws Exception {
@@ -226,6 +238,8 @@ class PetRestControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 2)].owner.firstName").value(george.getFirstName()));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Un propietario obtiene el listado de sus mascotas.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldFindAllOwnedPets() throws Exception {
@@ -245,6 +259,8 @@ class PetRestControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 2)].owner.firstName").value(george.getFirstName()));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Un propietario no puede listar las mascotas de otro propietario.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldNotFindOthersPets() throws Exception {
@@ -262,6 +278,8 @@ class PetRestControllerTests {
 				.andExpect(result -> assertEquals("Access denied!", result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Se obtiene el listado de tipos de mascota.")
 	@Test
 	@WithMockUser(value = "admin")
 	void shouldFindAllTypes() throws Exception {
@@ -281,6 +299,8 @@ class PetRestControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 3)].name").value("cat"));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("El administrador obtiene los datos de una mascota.")
 	@Test
 	@WithMockUser(value = "admin", authorities = { "ADMIN" })
 	void adminShouldFindPet() throws Exception {
@@ -294,6 +314,8 @@ class PetRestControllerTests {
 				.andExpect(jsonPath("$.owner.firstName").value(george.getFirstName()));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Un propietario obtiene los datos de una de sus mascotas.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldFindOwnedPet() throws Exception {
@@ -308,6 +330,8 @@ class PetRestControllerTests {
 				.andExpect(jsonPath("$.owner.firstName").value(george.getFirstName()));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Un propietario no puede ver una mascota de otro propietario.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldNotFindOthersSinglePet() throws Exception {
@@ -324,6 +348,8 @@ class PetRestControllerTests {
 				.andExpect(result -> assertEquals("Pet not owned.", result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Pedir una mascota inexistente devuelve 404.")
 	@Test
 	@WithMockUser("admin")
 	void shouldReturnNotFoundPet() throws Exception {
@@ -332,6 +358,8 @@ class PetRestControllerTests {
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("El administrador o un veterinario pueden dar de alta una mascota.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void adminOrVetShouldCreatePet() throws Exception {
@@ -345,6 +373,8 @@ class PetRestControllerTests {
 				.content(objectMapper.writeValueAsString(pet))).andExpect(status().isCreated());
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("No se puede dar de alta una mascota con un nombre no válido.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void shouldNotCreatePetWithInvalidName() throws Exception {
@@ -369,6 +399,8 @@ class PetRestControllerTests {
 				.content(objectMapper.writeValueAsString(pet))).andExpect(status().isBadRequest());
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Un propietario puede dar de alta una mascota.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldCreatePet() throws Exception {
@@ -387,6 +419,8 @@ class PetRestControllerTests {
 				.content(objectMapper.writeValueAsString(pet))).andExpect(status().isCreated());
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Un propietario no puede superar el número de mascotas que permite su plan.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldNotCreatePetPassedLimit() throws Exception {
@@ -409,6 +443,8 @@ class PetRestControllerTests {
 						result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Un propietario no puede tener dos mascotas con el mismo nombre.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldNotCreatePetWithSameName() throws Exception {
@@ -429,6 +465,8 @@ class PetRestControllerTests {
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof DuplicatedPetNameException));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("El administrador o un veterinario pueden modificar una mascota.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void adminOrVetShouldUpdatePet() throws Exception {
@@ -443,6 +481,8 @@ class PetRestControllerTests {
 				.andExpect(jsonPath("$.type.name").value(simba.getType().getName()));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Modificar una mascota inexistente devuelve 404.")
 	@Test
 	@WithMockUser(username = "admin")
 	void shouldReturnNotFoundUpdatePet() throws Exception {
@@ -456,6 +496,8 @@ class PetRestControllerTests {
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Un propietario puede modificar una de sus mascotas.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldUpdatePet() throws Exception {
@@ -472,6 +514,8 @@ class PetRestControllerTests {
 				.andExpect(jsonPath("$.type.name").value(simba.getType().getName()));
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Un propietario no puede modificar una mascota de otro propietario.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldNotUpdateOthersPet() throws Exception {
@@ -490,6 +534,8 @@ class PetRestControllerTests {
 				.andExpect(result -> assertEquals("Pet not owned.", result.getResolvedException().getMessage()));
 	}
 
+	  @Story("HU-06: Gestionar mascotas")
+	  @Description("El administrador o un veterinario pueden borrar una mascota.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	  void adminOrVetShouldDeletePet() throws Exception {
@@ -500,6 +546,8 @@ class PetRestControllerTests {
 	         .andExpect(status().isOk());
 	  }
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Un propietario puede borrar una de sus mascotas.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldDeletePet() throws Exception {
@@ -512,6 +560,8 @@ class PetRestControllerTests {
 		mockMvc.perform(delete(BASE_URL + "/{id}", TEST_PET_ID).with(csrf())).andExpect(status().isOk());
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Un propietario no puede borrar una mascota de otro propietario.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldNotDeleteOthersPet() throws Exception {
@@ -529,6 +579,8 @@ class PetRestControllerTests {
 				.andExpect(result -> assertEquals("Pet not owned.", result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Se obtienen las estadísticas de mascotas.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void shouldReturnStats() throws Exception {

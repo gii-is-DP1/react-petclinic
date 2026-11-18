@@ -17,6 +17,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Description;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
+import org.springframework.samples.petclinic.testing.Layer;
 
 /**
  * Test class for {@link PetTypeFormatter}
@@ -27,6 +31,8 @@ import io.qameta.allure.Feature;
 @Epic("Clinic Module")
 @Feature("Pet management")
 @io.qameta.allure.Owner("DP1-tutors")
+@Layer("formatter")
+@IsolatedTest
 @ExtendWith(MockitoExtension.class)
 class PetTypeFormatterTests {
 
@@ -40,6 +46,8 @@ class PetTypeFormatterTests {
 		petTypeFormatter = new PetTypeFormatter(clinicService);
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Un tipo de mascota se muestra como texto con su nombre.")
 	@Test
 	void testPrint() {
 		PetType petType = new PetType();
@@ -48,6 +56,8 @@ class PetTypeFormatterTests {
 		assertEquals("Hamster", petTypeName);
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("El nombre de un tipo de mascota se convierte en el tipo correspondiente.")
 	@Test
 	void shouldParse() throws ParseException {
 		Mockito.when(clinicService.findPetTypes()).thenReturn(makePetTypes());
@@ -55,6 +65,8 @@ class PetTypeFormatterTests {
 		assertEquals("Bird", petType.getName());
 	}
 
+	@Story("HU-06: Gestionar mascotas")
+	@Description("Convertir un nombre de tipo de mascota inexistente lanza una excepción.")
 	@Test
 	void shouldThrowParseException() throws ParseException {
 		Mockito.when(clinicService.findPetTypes()).thenReturn(makePetTypes());

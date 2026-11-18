@@ -14,7 +14,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
+import org.springframework.samples.petclinic.testing.ServiceTest;
 
+@Epic("Testing examples")
+@Feature("Test doubles")
+@io.qameta.allure.Owner("DP1-tutors")
+@ServiceTest
+@IsolatedTest
 @ExtendWith(MockitoExtension.class)
 public class TestSpyTests {
 

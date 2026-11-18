@@ -42,12 +42,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Description;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.ServiceTest;
+import org.springframework.samples.petclinic.testing.SociableTest;
 
 
 @Epic("Clinic Module")
 @Feature("Owner management")
 @io.qameta.allure.Owner("DP1-tutors")
 //@DataJpaTest(includeFilters = {@ComponentScan.Filter(Service.class),@ComponentScan.Filter(PasswordEncoder.class)})
+@ServiceTest
+@SociableTest
 @SpringBootTest
 @AutoConfigureTestDatabase
 public class OwnerServiceTests {
@@ -64,12 +70,16 @@ public class OwnerServiceTests {
 		this.authService = authService;
 	}
 
+	@Story("HU-04: Gestionar propietarios")
+	@Description("Se obtienen todos los propietarios.")
 	@Test
 	void shouldFindAllOwners() {
 		List<Owner> owners = (List<Owner>) this.ownerService.findAll();
 		assertEquals(10, owners.size());
 	}
 
+	@Story("HU-04: Gestionar propietarios")
+	@Description("Se encuentran los propietarios por su apellido.")
 	@Test
 	void shouldFindOwnersByLastName() {
 		Collection<Owner> owners = this.ownerService.findOwnerByLastName("Davis");
@@ -79,6 +89,8 @@ public class OwnerServiceTests {
 		assertThat(owners.isEmpty()).isTrue();
 	}
 
+	@Story("HU-04: Gestionar propietarios")
+	@Description("Se encuentra un propietario por su id, con sus datos completos.")
 	@Test
 	void shouldFindSingleOwnerWithPet() {
 		Owner owner = this.ownerService.findOwnerById(1);
@@ -89,6 +101,8 @@ public class OwnerServiceTests {
 		assertEquals("cat", pets.get(0).getType().getName());
 	}
 
+	@Story("HU-04: Gestionar propietarios")
+	@Description("Buscar un id de propietario inexistente lanza una excepción.")
 	@Test
 	void shouldNotFindSingleOwnerWithBadID() {
 		assertThrows(ResourceNotFoundException.class, () -> this.ownerService.findOwnerById(100));
@@ -105,17 +119,23 @@ public class OwnerServiceTests {
 //		assertThrows(ResourceNotFoundException.class, () -> this.ownerService.findOwnerByUser(34));
 //	}
 
+	@Story("HU-04: Gestionar propietarios")
+	@Description("Se encuentra el propietario asociado a un usuario.")
 	@Test
 	void shouldFindOptOwnerByUser() {
 		Optional<Owner> owner = this.ownerService.optFindOwnerByUser(4);
 		assertEquals("Franklin", owner.get().getLastName());
 	}
 
+	@Story("HU-04: Gestionar propietarios")
+	@Description("Un usuario que no es propietario no tiene propietario asociado.")
 	@Test
 	void shouldNotFindOptOwnerByIncorrectUser() {
 		assertThat(this.ownerService.optFindOwnerByUser(25)).isEmpty();
 	}
 
+	@Story("HU-04: Gestionar propietarios")
+	@Description("Se pueden modificar los datos de un propietario.")
 	@Test
 	@Transactional
 	void shouldUpdateOwner() {
@@ -128,6 +148,8 @@ public class OwnerServiceTests {
 		assertEquals("Update", owner.getLastName());
 	}
 
+	@Story("HU-04: Gestionar propietarios")
+	@Description("Se puede dar de alta un propietario y se le asigna un id.")
 	@Test
 	@Transactional
 	void shouldInsertOwner() {
@@ -155,6 +177,8 @@ public class OwnerServiceTests {
 		return this.ownerService.saveOwner(owner);
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Se calculan las estadísticas de propietarios para el administrador.")
 	@Test
 	@Transactional
 	void shouldReturnStatsForAdmin() {

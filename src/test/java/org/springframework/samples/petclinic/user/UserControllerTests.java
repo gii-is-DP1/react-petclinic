@@ -36,6 +36,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Owner;
+import io.qameta.allure.Description;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.ControllerTest;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
 
 
 /**
@@ -44,6 +48,8 @@ import io.qameta.allure.Owner;
 @Epic("Users & Admin Module")
 @Feature("Users Management")
 @Owner("DP1-tutors")
+@ControllerTest
+@IsolatedTest
 @WebMvcTest(controllers = UserRestController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class UserControllerTests {
 
@@ -98,6 +104,8 @@ class UserControllerTests {
 		return logged;
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("El administrador obtiene el listado de todos los usuarios.")
 	@Test
 	@WithMockUser("admin")
 	void shouldFindAll() throws Exception {
@@ -117,6 +125,8 @@ class UserControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 3)].username").value("Juan"));
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("El administrador puede filtrar los usuarios por rol.")
 	@Test
 	@WithMockUser("admin")
 	void shouldFindAllWithAuthority() throws Exception {
@@ -141,6 +151,8 @@ class UserControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 3)].username").value("Juan"));
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("El administrador obtiene el listado de roles disponibles.")
 	@Test
 	@WithMockUser("admin")
 	void shouldFindAllAuths() throws Exception {
@@ -155,6 +167,8 @@ class UserControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 2)].authority").value("AUX"));
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("El administrador obtiene los datos de un usuario por su id.")
 	@Test
 	@WithMockUser("admin")
 	void shouldReturnUser() throws Exception {
@@ -165,6 +179,8 @@ class UserControllerTests {
 				.andExpect(jsonPath("$.authority.authority").value(user.getAuthority().getAuthority()));
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Pedir un usuario inexistente devuelve 404.")
 	@Test
 	@WithMockUser("admin")
 	void shouldReturnNotFoundUser() throws Exception {
@@ -172,6 +188,8 @@ class UserControllerTests {
 		mockMvc.perform(get(BASE_URL + "/{id}", TEST_USER_ID)).andExpect(status().isNotFound());
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("El administrador puede crear un usuario.")
 	@Test
 	@WithMockUser("admin")
 	void shouldCreateUser() throws Exception {
@@ -184,6 +202,8 @@ class UserControllerTests {
 				.content(objectMapper.writeValueAsString(aux))).andExpect(status().isCreated());
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("El administrador puede modificar un usuario.")
 	@Test
 	@WithMockUser("admin")
 	void shouldUpdateUser() throws Exception {
@@ -198,6 +218,8 @@ class UserControllerTests {
 				.andExpect(jsonPath("$.username").value("UPDATED")).andExpect(jsonPath("$.password").value("CHANGED"));
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("Modificar un usuario inexistente devuelve 404.")
 	@Test
 	@WithMockUser("admin")
 	void shouldReturnNotFoundUpdateUser() throws Exception {
@@ -211,6 +233,8 @@ class UserControllerTests {
 				.content(objectMapper.writeValueAsString(user))).andExpect(status().isNotFound());
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("El administrador puede borrar a otro usuario.")
 	@Test
 	@WithMockUser("admin")
 	void shouldDeleteOtherUser() throws Exception {
@@ -223,6 +247,8 @@ class UserControllerTests {
 				.andExpect(jsonPath("$.message").value("User deleted!"));
 	}
 
+	@Story("HU-03: Gestionar usuarios")
+	@Description("El administrador no puede borrarse a sí mismo.")
 	@Test
 	@WithMockUser("admin")
 	void shouldNotDeleteLoggedUser() throws Exception {
