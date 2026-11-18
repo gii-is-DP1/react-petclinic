@@ -32,10 +32,21 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.ControllerTest;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
 
 /**
  * Test class for the {@link VetController}
  */
+@Epic("Clinic Module")
+@Feature("Vet management")
+@io.qameta.allure.Owner("DP1-tutors")
+@ControllerTest
+@IsolatedTest
 @WebMvcTest(controllers = VetRestController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class VetControllerTests {
 
@@ -84,6 +95,8 @@ class VetControllerTests {
 
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("Se obtiene el listado de veterinarios.")
 	@Test
 	@WithMockUser("admin")
 	void shouldFindAll() throws Exception {
@@ -103,6 +116,8 @@ class VetControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 3)].firstName").value("Juan"));
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("Se obtienen los datos de un veterinario por su id.")
 	@Test
 	@WithMockUser("admin")
 	void shouldReturnVet() throws Exception {
@@ -114,6 +129,8 @@ class VetControllerTests {
 				.andExpect(jsonPath("$.city").value(george.getCity()));
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("Pedir un veterinario inexistente devuelve 404.")
 	@Test
 	@WithMockUser("admin")
 	void shouldReturnNotFoundVet() throws Exception {
@@ -121,6 +138,8 @@ class VetControllerTests {
 		mockMvc.perform(get(BASE_URL + "/{id}", TEST_VET_ID)).andExpect(status().isNotFound());
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("El administrador puede crear un veterinario.")
 	@Test
 	@WithMockUser("admin")
 	void shouldCreateVet() throws Exception {
@@ -134,6 +153,8 @@ class VetControllerTests {
 				.content(objectMapper.writeValueAsString(vet))).andExpect(status().isCreated());
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("El administrador puede modificar un veterinario.")
 	@Test
 	@WithMockUser("admin")
 	void shouldUpdateVet() throws Exception {
@@ -148,6 +169,8 @@ class VetControllerTests {
 				.andExpect(jsonPath("$.firstName").value("UPDATED")).andExpect(jsonPath("$.lastName").value("CHANGED"));
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("Modificar un veterinario inexistente devuelve 404.")
 	@Test
 	@WithMockUser("admin")
 	void shouldReturnNotFoundUpdateVet() throws Exception {
@@ -161,6 +184,8 @@ class VetControllerTests {
 				.content(objectMapper.writeValueAsString(george))).andExpect(status().isNotFound());
 	}
 
+	  @Story("HU-08: Gestionar veterinarios")
+	  @Description("El administrador puede borrar un veterinario.")
 	@Test
 	@WithMockUser("admin")
 	  void shouldDeleteVet() throws Exception {
@@ -171,6 +196,8 @@ class VetControllerTests {
 	         .andExpect(status().isOk());
 	  }
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Se obtienen las estadísticas de veterinarios.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void shouldReturnStats() throws Exception {

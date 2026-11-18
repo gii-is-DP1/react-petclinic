@@ -23,8 +23,19 @@ import org.springframework.samples.petclinic.pet.PetService;
 import org.springframework.samples.petclinic.pet.exceptions.DuplicatedPetNameException;
 import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.samples.petclinic.vet.VetService;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.ServiceTest;
+import org.springframework.samples.petclinic.testing.SociableTest;
 
 //@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@Epic("Clinic Module")
+@Feature("Visit management")
+@io.qameta.allure.Owner("DP1-tutors")
+@ServiceTest
+@SociableTest
 @SpringBootTest
 @AutoConfigureTestDatabase
 public class VisitServiceTests {
@@ -41,6 +52,8 @@ public class VisitServiceTests {
 	@Autowired
 	protected VetService vetService;
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Se obtienen todas las visitas.")
 	@Test
 	void shouldFindAllVisits() {
 		Collection<Visit> visits = (Collection<Visit>) this.visitService.findAll();
@@ -51,6 +64,8 @@ public class VisitServiceTests {
 		assertEquals("Max", v3.getPet().getName());
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Se obtienen las visitas de las mascotas de un propietario.")
 	@Test
 	void shouldFindVisitsByOwnerId() {
 		Collection<Visit> visits = (Collection<Visit>) this.visitService.findVisitsByOwnerId(6);
@@ -61,6 +76,8 @@ public class VisitServiceTests {
 		assertEquals("Max", v3.getPet().getName());
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Se obtienen las visitas de una mascota.")
 	@Test
 	void shouldFindVisitsByPetId() {
 		Collection<Visit> visits = (Collection<Visit>) this.visitService.findVisitsByPetId(7);
@@ -71,17 +88,23 @@ public class VisitServiceTests {
 		assertEquals("Samantha", v4.getPet().getName());
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Se encuentra una visita por su id.")
 	@Test
 	void shouldFindVisitWithCorrectId() {
 		Visit visit = this.visitService.findVisitById(1);
 		assertEquals("Samantha", visit.getPet().getName());
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Buscar un id de visita inexistente lanza una excepción.")
 	@Test
 	void shouldNotFindVisitWithIncorrectId() {
 		assertThrows(ResourceNotFoundException.class, () -> this.visitService.findVisitById(700));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Se pueden modificar los datos de una visita.")
 	@Test
 	@Transactional
 	void shouldUpdateVisit() {
@@ -92,6 +115,8 @@ public class VisitServiceTests {
 		assertEquals("Change", visit.getDescription());
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Se puede dar de alta una visita y se le asigna un id.")
 	@Test
 	@Transactional
 	void shouldInsertVisit() {
@@ -110,6 +135,8 @@ public class VisitServiceTests {
 		assertEquals(initialCount + 1, finalCount);
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Se puede borrar una visita.")
 	@Test
 	@Transactional
 	void shouldDeleteVisit() throws DataAccessException, DuplicatedPetNameException {
@@ -129,6 +156,8 @@ public class VisitServiceTests {
 		assertEquals(initialCount, lastCount);
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Se respeta el límite de visitas mensuales del plan BASIC.")
 	@Test
 	@Transactional
 	void shouldCheckLimitForBasic() {
@@ -139,6 +168,8 @@ public class VisitServiceTests {
 		assertEquals(false, this.visitService.underLimit(v));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Se respeta el límite de visitas mensuales del plan GOLD.")
 	@Test
 	@Transactional
 	void shouldCheckLimitForGold() {
@@ -155,6 +186,8 @@ public class VisitServiceTests {
 		assertEquals(false, this.visitService.underLimit(v));
 	}
 
+	@Story("HU-07: Gestionar visitas")
+	@Description("Se respeta el límite de visitas mensuales del plan PLATINUM.")
 	@Test
 	@Transactional
 	void shouldCheckLimitForPlatinum() {
@@ -193,6 +226,8 @@ public class VisitServiceTests {
 		return visit;
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Se calculan las estadísticas de visitas para el administrador.")
 	@Test
 	@Transactional
 	void shouldReturnStatsForAdmin() {
@@ -203,6 +238,8 @@ public class VisitServiceTests {
 		assertNotEquals(0, stats.get("avgVisitsByPet"));
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Se calculan las estadísticas de visitas de un propietario.")
 	@SuppressWarnings("unchecked")
 	@Test
 	@Transactional
@@ -218,6 +255,8 @@ public class VisitServiceTests {
 		assertEquals(3, ((Map<String, Integer>) stats.get("visitsByPet")).get("Leo"));
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Las estadísticas de un propietario sin visitas están vacías.")
 	@Test
 	@Transactional
 	void shouldReturnStatsForOwnerWithoutVisits() {
@@ -226,6 +265,8 @@ public class VisitServiceTests {
 		assertEquals(0, stats.get("totalVisits"));
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Las estadísticas de un propietario sin mascotas están vacías.")
 	@Test
 	@Transactional
 	void shouldReturnStatsForOwnerWithoutPets() {

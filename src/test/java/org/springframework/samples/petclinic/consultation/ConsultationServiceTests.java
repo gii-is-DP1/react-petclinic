@@ -29,11 +29,17 @@ import org.springframework.transaction.annotation.Transactional;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import jakarta.persistence.EntityManager;
+import io.qameta.allure.Description;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.ServiceTest;
+import org.springframework.samples.petclinic.testing.SociableTest;
 
 //@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
 @Epic("Clinic Module")
 @Feature("Consultation management")
 @io.qameta.allure.Owner("DP1-tutors")
+@ServiceTest
+@SociableTest
 @SpringBootTest
 @AutoConfigureTestDatabase
 class ConsultationServiceTests {
@@ -49,6 +55,8 @@ class ConsultationServiceTests {
 	@Autowired
 	protected PetService petService;
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("Se obtienen todas las consultas.")
 	@Test
 	void shouldFindAllConsultations() {
 		Collection<Consultation> consultations = (Collection<Consultation>) this.consultationService.findAll();
@@ -59,6 +67,8 @@ class ConsultationServiceTests {
 		assertEquals("My cat does not eat", c3.getTitle());
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("Se obtienen las consultas de un propietario.")
 	@Test
 	void shouldFindConsultationsByOwnerId() {
 		Collection<Consultation> consultations = (Collection<Consultation>) this.consultationService
@@ -70,17 +80,23 @@ class ConsultationServiceTests {
 		assertEquals("My dog gets really nervous", c2.getTitle());
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("Se encuentra una consulta por su id.")
 	@Test
 	void shouldFindConsultationWithCorrectId() {
 		Consultation consultation = this.consultationService.findConsultationById(1);
 		assertEquals("owner1", consultation.getOwner().getUser().getUsername());
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("Buscar un id de consulta inexistente lanza una excepción.")
 	@Test
 	void shouldNotFindConsultationWithIncorrectId() {
 		assertThrows(ResourceNotFoundException.class, () -> this.consultationService.findConsultationById(700));
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("Se puede dar de alta una consulta y se le asigna un id.")
 	@Test
 	@Transactional
 	void shouldInsertConsultation() {
@@ -99,6 +115,8 @@ class ConsultationServiceTests {
 		assertEquals(initialCount + 1, finalCount);
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("Se pueden modificar los datos de una consulta.")
 	@Test
 	@Transactional
 	void shouldUpdateConsultation() {
@@ -113,6 +131,8 @@ class ConsultationServiceTests {
 
 
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Se obtienen los tickets de una consulta.")
 	@Test
 	void shouldFindAllTicketsByConsultation() {
 		Collection<Ticket> tickets = (Collection<Ticket>) this.consultationService.findAllTicketsByConsultation(1);
@@ -123,17 +143,23 @@ class ConsultationServiceTests {
 		assertEquals("Rabies' one.", t2.getDescription());
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Se encuentra un ticket por su id.")
 	@Test
 	void shouldFindTicketWithCorrectId() {
 		Ticket t = this.consultationService.findTicketById(1);
 		assertEquals("What vaccine should my dog receive?", t.getDescription());
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Buscar un id de ticket inexistente lanza una excepción.")
 	@Test
 	void shouldNotFindTicektWithIncorrectId() {
 		assertThrows(ResourceNotFoundException.class, () -> this.consultationService.findTicketById(700));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Se puede añadir un ticket a una consulta y se le asigna un id.")
 	@Test
 	@Transactional
 	void shouldInsertTicket() {
@@ -151,6 +177,8 @@ class ConsultationServiceTests {
 		assertEquals(initialCount + 1, finalCount);
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Se pueden modificar los datos de un ticket.")
 	@Test
 	@Transactional
 	void shouldUpdateTicket() {
@@ -161,6 +189,8 @@ class ConsultationServiceTests {
 		assertEquals("Change", t.getDescription());
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Se puede borrar un ticket.")
 	@Test
 	@Transactional
 	void shouldDeleteTicket() throws DataAccessException {
@@ -179,6 +209,8 @@ class ConsultationServiceTests {
 		assertEquals(initialCount, lastCount);
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Se permite modificar el último ticket de una consulta abierta.")
 	@Test
 	void shouldDoNothingLastTicketNotClosed() {
 		Consultation cons = this.consultationService.findConsultationById(1);
@@ -186,6 +218,8 @@ class ConsultationServiceTests {
 		assertDoesNotThrow(() -> this.consultationService.checkLastTicketAndStatus(cons, t));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Solo se puede modificar o borrar el último ticket de una consulta.")
 	@Test
 	void shouldThrowNotLastTicket() {
 		Consultation cons = this.consultationService.findConsultationById(1);
@@ -195,6 +229,8 @@ class ConsultationServiceTests {
 		assertEquals("You can only update or delete the last ticket in a consultation!", e.getMessage());
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("No se pueden modificar ni borrar tickets de una consulta cerrada.")
 	@Test
 	void shouldThrowClosedConsultation() {
 		Consultation cons = this.consultationService.findConsultationById(4);
@@ -204,6 +240,8 @@ class ConsultationServiceTests {
 		assertEquals("This consultation is closed!", e.getMessage());
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un propietario con plan PLATINUM puede modificar su ticket.")
 	@Test
 	@Transactional
 	void shouldUpdateOwnerTicket() {
@@ -214,6 +252,8 @@ class ConsultationServiceTests {
 		assertEquals("Updated", response.getDescription());
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un propietario sin plan PLATINUM no puede modificar tickets.")
 	@Test
 	@Transactional
 	void shouldNotUpdateOwnerTicketNotPlatinum() {
@@ -227,6 +267,8 @@ class ConsultationServiceTests {
 				response.getMessage());
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Se pueden añadir varios tickets seguidos a una consulta.")
 	@Test
 	@Transactional
 	void shouldDeleteAdminTicket() {
@@ -257,6 +299,8 @@ class ConsultationServiceTests {
 		assertEquals(initialCount + 3, secondCount);
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un propietario con plan PLATINUM puede borrar su ticket.")
 	@Test
 	@Transactional
 	void shouldDeleteOwnerTicket() {
@@ -281,6 +325,8 @@ class ConsultationServiceTests {
 		assertEquals(initialCount, lastCount);
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un propietario sin plan PLATINUM no puede borrar tickets.")
 	@Test
 	@Transactional
 	void shouldNotDeleteOwnerTicketNotPlatinum() {
@@ -298,6 +344,8 @@ class ConsultationServiceTests {
 				response.getMessage());
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Se acepta un ticket que pertenece a la consulta indicada.")
 	@Test
 	@Transactional
 	void shouldDoNothingTicketInConsultation() {
@@ -307,6 +355,8 @@ class ConsultationServiceTests {
 		assertDoesNotThrow(() -> this.consultationService.checkIfTicketInConsultation(c, t));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Se rechaza un ticket que no pertenece a la consulta indicada.")
 	@Test
 	@Transactional
 	void shouldThrowTicketNotInConsultation() {
@@ -319,6 +369,9 @@ class ConsultationServiceTests {
 				e.getMessage());
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Al borrar todos los tickets de una consulta, esta vuelve a estado PENDING.")
 	@Test
 	@Transactional
 	void shouldUpdateConsultationNoTickets() {
@@ -329,6 +382,8 @@ class ConsultationServiceTests {
 
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Se calculan las estadísticas de consultas para el administrador.")
 	@Test
 	@Transactional
 	void shouldReturnStatsForAdmin() {
@@ -341,6 +396,8 @@ class ConsultationServiceTests {
 		assertNotEquals(0, stats.get("avgConsultationsByOwners"));
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Se calculan las estadísticas de consultas de un propietario.")
 	@SuppressWarnings("unchecked")
 	@Test
 	@Transactional
@@ -355,6 +412,8 @@ class ConsultationServiceTests {
 		assertNotEquals(0, stats.get("avgConsultationsByYear"));
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Las estadísticas de un propietario sin consultas están vacías.")
 	@Test
 	@Transactional
 	void shouldReturnStatsForOwnerWithoutConsultations() {
@@ -364,6 +423,8 @@ class ConsultationServiceTests {
 		assertEquals(0, stats.get("totalConsultations"));
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Las estadísticas de un propietario con varias mascotas agrupan sus consultas por mascota.")
 	@SuppressWarnings("unchecked")
 	@Test
 	@Transactional

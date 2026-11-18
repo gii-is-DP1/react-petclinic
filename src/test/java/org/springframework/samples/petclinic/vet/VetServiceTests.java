@@ -36,8 +36,19 @@ import org.springframework.samples.petclinic.user.AuthoritiesService;
 import org.springframework.samples.petclinic.user.User;
 import org.springframework.samples.petclinic.util.EntityUtils;
 import org.springframework.transaction.annotation.Transactional;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.ServiceTest;
+import org.springframework.samples.petclinic.testing.SociableTest;
 
 //@DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+@Epic("Clinic Module")
+@Feature("Vet management")
+@io.qameta.allure.Owner("DP1-tutors")
+@ServiceTest
+@SociableTest
 @SpringBootTest
 @AutoConfigureTestDatabase
 class VetServiceTests {
@@ -51,6 +62,8 @@ class VetServiceTests {
 		this.authService = authService;
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("Se obtienen todos los veterinarios.")
 	@Test
 	void shouldFindVets() {
 		Collection<Vet> vets = (Collection<Vet>) this.vetService.findAll();
@@ -62,6 +75,8 @@ class VetServiceTests {
 		assertEquals("dentistry", vet.getSpecialties().get(1).getName());
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("Se encuentra un veterinario por su id.")
 	@Test
 	void shouldFindSingleVet() {
 		Vet vet = this.vetService.findVetById(1);
@@ -70,33 +85,45 @@ class VetServiceTests {
 		assertEquals(0, vet.getSpecialties().size());
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("Buscar un id de veterinario inexistente lanza una excepción.")
 	@Test
 	void shouldNotFindSingleVetWithBadID() {
 		assertThrows(ResourceNotFoundException.class, () -> this.vetService.findVetById(100));
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("Se encuentra el veterinario asociado a un usuario.")
 	@Test
 	void shouldFindVetByUser() {
 		Vet vet = this.vetService.findVetByUser(14);
 		assertThat(vet.getLastName()).startsWith("Carter");
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("Buscar el veterinario de un usuario que no lo es lanza una excepción.")
 	@Test
 	void shouldNotFindVetByIncorrectUser() {
 		assertThrows(ResourceNotFoundException.class, () -> this.vetService.findVetByUser(34));
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("Se encuentra, como opcional, el veterinario asociado a un usuario.")
 	@Test
 	void shouldFindOptVetByUser() {
 		Optional<Vet> vet = this.vetService.optFindVetByUser(14);
 		assertThat(vet.get().getLastName()).startsWith("Carter");
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("Un usuario que no es veterinario no tiene veterinario asociado.")
 	@Test
 	void shouldNotFindOptVetByIncorrectUser() {
 		assertThat(this.vetService.optFindVetByUser(25)).isEmpty();
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("Se pueden modificar los datos de un veterinario.")
 	@Test
 	@Transactional
 	void shouldUpdateVet() {
@@ -109,6 +136,8 @@ class VetServiceTests {
 		assertEquals("Update", vet.getLastName());
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("Se puede dar de alta un veterinario y se le asigna un id.")
 	@Test
 	@Transactional
 	void shouldInsertVet() {
@@ -133,6 +162,8 @@ class VetServiceTests {
 		assertEquals(found + 1, vets.size());
 	}
 
+	@Story("HU-08: Gestionar veterinarios")
+	@Description("Se puede borrar un veterinario.")
 	@Test
 	@Transactional
 	void shouldDeleteVet() throws DataAccessException, DuplicatedPetNameException {
@@ -157,6 +188,8 @@ class VetServiceTests {
 
 	// Specialties Tests
 
+	@Story("HU-09: Gestionar especialidades")
+	@Description("Se obtienen todas las especialidades.")
 	@Test
 	void shouldFindSpecialties() {
 		Collection<Specialty> specialties = (Collection<Specialty>) this.vetService.findSpecialties();
@@ -165,17 +198,23 @@ class VetServiceTests {
 		assertEquals("radiology", specialty.getName());
 	}
 
+	@Story("HU-09: Gestionar especialidades")
+	@Description("Se encuentra una especialidad por su id.")
 	@Test
 	void shouldFindSingleSpecialty() {
 		Specialty specialty = this.vetService.findSpecialtyById(1);
 		assertEquals("radiology", specialty.getName());
 	}
 
+	@Story("HU-09: Gestionar especialidades")
+	@Description("Buscar un id de especialidad inexistente lanza una excepción.")
 	@Test
 	void shouldNotFindSingleSpecialtyWithBadID() {
 		assertThrows(ResourceNotFoundException.class, () -> this.vetService.findSpecialtyById(100));
 	}
 
+	@Story("HU-09: Gestionar especialidades")
+	@Description("Se pueden modificar los datos de una especialidad.")
 	@Test
 	@Transactional
 	void shouldUpdateSpecialty() {
@@ -186,6 +225,8 @@ class VetServiceTests {
 		assertEquals("Change", specialty.getName());
 	}
 
+	@Story("HU-09: Gestionar especialidades")
+	@Description("Se puede dar de alta una especialidad y se le asigna un id.")
 	@Test
 	@Transactional
 	void shouldInsertSpecialty() {
@@ -201,6 +242,8 @@ class VetServiceTests {
 		assertEquals(found + 1, specialties.size());
 	}
 
+	@Story("HU-09: Gestionar especialidades")
+	@Description("Se puede borrar una especialidad.")
 	@Test
 	@Transactional
 	void shouldDeleteSpecialty() {
@@ -216,6 +259,8 @@ class VetServiceTests {
 		assertEquals(firstCount, lastCount);
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Se calculan las estadísticas de veterinarios para el administrador.")
 	@SuppressWarnings("unchecked")
 	@Test
 	@Transactional

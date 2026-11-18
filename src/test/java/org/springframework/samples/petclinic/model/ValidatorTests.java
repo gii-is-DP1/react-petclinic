@@ -14,6 +14,10 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Owner;
+import io.qameta.allure.Description;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
+import org.springframework.samples.petclinic.testing.ModelTest;
 
 /**
  * @author Michael Isvy Simple test to make sure that Bean Validation is working (useful
@@ -22,6 +26,8 @@ import io.qameta.allure.Owner;
 @Epic("Miscelaneous tets")
 @Feature("Validation")
 @Owner("DP1-tutors")
+@ModelTest
+@IsolatedTest
 class ValidatorTests {
 
 	private Validator createValidator() {
@@ -30,6 +36,8 @@ class ValidatorTests {
 		return localValidatorFactoryBean;
 	}
 
+	@Story("HU-04: Gestionar propietarios")
+	@Description("Una persona sin nombre no supera la validación del modelo.")
 	@Test
 	void shouldNotValidateWhenFirstNameEmpty() {
 

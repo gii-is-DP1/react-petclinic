@@ -28,10 +28,21 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.qameta.allure.Description;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.ControllerTest;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
 
 /**
  * Test class for the {@link VetController}
  */
+@Epic("Clinic Module")
+@Feature("Vet management")
+@io.qameta.allure.Owner("DP1-tutors")
+@ControllerTest
+@IsolatedTest
 @WebMvcTest(controllers = SpecialtyRestController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class SpecialtyControllerTests {
 
@@ -60,6 +71,8 @@ class SpecialtyControllerTests {
 		surgery.setName("Surgery");
 	}
 
+	@Story("HU-09: Gestionar especialidades")
+	@Description("Se obtiene el listado de especialidades.")
 	@Test
 	@WithMockUser("admin")
 	void shouldFindAll() throws Exception {
@@ -79,6 +92,8 @@ class SpecialtyControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 3)].name").value("Vaccines"));
 	}
 
+	@Story("HU-09: Gestionar especialidades")
+	@Description("Se obtienen los datos de una especialidad por su id.")
 	@Test
 	@WithMockUser("admin")
 	void shouldReturnSpecialty() throws Exception {
@@ -88,6 +103,8 @@ class SpecialtyControllerTests {
 				.andExpect(jsonPath("$.name").value(surgery.getName()));
 	}
 
+	@Story("HU-09: Gestionar especialidades")
+	@Description("Pedir una especialidad inexistente devuelve 404.")
 	@Test
 	@WithMockUser("admin")
 	void shouldReturnNotFoundSpecialty() throws Exception {
@@ -95,6 +112,8 @@ class SpecialtyControllerTests {
 		mockMvc.perform(get(BASE_URL + "/{id}", TEST_SPECIALTY_ID)).andExpect(status().isNotFound());
 	}
 
+	@Story("HU-09: Gestionar especialidades")
+	@Description("El administrador puede crear una especialidad.")
 	@Test
 	@WithMockUser("admin")
 	void shouldCreateSpecialty() throws Exception {
@@ -105,6 +124,8 @@ class SpecialtyControllerTests {
 				.content(objectMapper.writeValueAsString(sp))).andExpect(status().isCreated());
 	}
 
+	@Story("HU-09: Gestionar especialidades")
+	@Description("El administrador puede modificar una especialidad.")
 	@Test
 	@WithMockUser("admin")
 	void shouldUpdateSpecialty() throws Exception {
@@ -118,6 +139,8 @@ class SpecialtyControllerTests {
 				.andExpect(jsonPath("$.name").value("UPDATED"));
 	}
 
+	@Story("HU-09: Gestionar especialidades")
+	@Description("Modificar una especialidad inexistente devuelve 404.")
 	@Test
 	@WithMockUser("admin")
 	void shouldReturnNotFoundUpdateSpecialty() throws Exception {
@@ -130,6 +153,8 @@ class SpecialtyControllerTests {
 				.content(objectMapper.writeValueAsString(surgery))).andExpect(status().isNotFound());
 	}
 
+	  @Story("HU-09: Gestionar especialidades")
+	  @Description("El administrador puede borrar una especialidad.")
 	@Test
 	@WithMockUser("admin")
 	  void shouldDeleteSpecialty() throws Exception {

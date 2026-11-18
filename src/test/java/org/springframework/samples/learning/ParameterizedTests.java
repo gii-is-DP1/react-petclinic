@@ -25,6 +25,10 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
+import org.springframework.samples.petclinic.testing.Layer;
 
 /**
  * Integration test of the Service and the Repository layer.
@@ -56,6 +60,11 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Dave Syer
  */
 
+@Epic("Testing examples")
+@Feature("Parameterized tests")
+@io.qameta.allure.Owner("DP1-tutors")
+@Layer("examples")
+@IsolatedTest
 class ParameterizedTests {         
 
 	@ParameterizedTest 

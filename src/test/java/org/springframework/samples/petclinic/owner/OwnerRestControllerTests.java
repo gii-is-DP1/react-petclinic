@@ -37,6 +37,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Description;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.ControllerTest;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
 
 
 /**
@@ -46,6 +50,8 @@ import io.qameta.allure.Feature;
 @Epic("Clinic Module")
 @Feature("Owner management")
 @io.qameta.allure.Owner("DP1-tutors")
+@ControllerTest
+@IsolatedTest
 @WebMvcTest(value = { OwnerRestController.class,
 		OwnerPlanController.class }, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class))
 class OwnerRestControllerTests {
@@ -146,6 +152,8 @@ class OwnerRestControllerTests {
 		juan.setClinic(clinic);
 	}
 
+	@Story("HU-04: Gestionar propietarios")
+	@Description("El administrador obtiene el listado de propietarios.")
 	@Test
 	@WithMockUser("admin")
 	void shouldFindAll() throws Exception {
@@ -156,6 +164,8 @@ class OwnerRestControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 3)].firstName").value("Juan"));
 	}
 
+	@Story("HU-04: Gestionar propietarios")
+	@Description("El administrador obtiene los datos de un propietario por su id.")
 	@Test
 	@WithMockUser("admin")
 	void shouldReturnOwner() throws Exception {
@@ -167,6 +177,8 @@ class OwnerRestControllerTests {
 				.andExpect(jsonPath("$.clinic.plan").value(george.getClinic().getPlan().toString()));
 	}
 
+	@Story("HU-04: Gestionar propietarios")
+	@Description("Pedir un propietario inexistente devuelve 404.")
 	@Test
 	@WithMockUser("admin")
 	void shouldReturnNotFoundOwner() throws Exception {
@@ -174,6 +186,8 @@ class OwnerRestControllerTests {
 		mockMvc.perform(get(BASE_URL + "/{id}", TEST_OWNER_ID)).andExpect(status().isNotFound());
 	}
 
+	@Story("HU-04: Gestionar propietarios")
+	@Description("El administrador puede crear un propietario.")
 	@Test
 	@WithMockUser("admin")
 	void shouldCreateOwner() throws Exception {
@@ -190,6 +204,8 @@ class OwnerRestControllerTests {
 				.content(objectMapper.writeValueAsString(owner))).andExpect(status().isCreated());
 	}
 
+	@Story("HU-04: Gestionar propietarios")
+	@Description("El administrador puede modificar un propietario.")
 	@Test
 	@WithMockUser("admin")
 	void shouldUpdateOwner() throws Exception {
@@ -205,6 +221,8 @@ class OwnerRestControllerTests {
 				.andExpect(jsonPath("$.lastName").value(george.getLastName()));
 	}
 
+	@Story("HU-04: Gestionar propietarios")
+	@Description("Modificar un propietario inexistente devuelve 404.")
 	@Test
 	@WithMockUser("admin")
 	void shouldReturnNotFoundUpdateOwner() throws Exception {
@@ -218,6 +236,8 @@ class OwnerRestControllerTests {
 				.content(objectMapper.writeValueAsString(george))).andExpect(status().isNotFound());
 	}
 
+	  @Story("HU-04: Gestionar propietarios")
+	  @Description("El administrador puede borrar un propietario.")
 	@Test
 	@WithMockUser("admin")
 	  void shouldDeleteOwner() throws Exception {
@@ -228,6 +248,8 @@ class OwnerRestControllerTests {
 	         .andExpect(status().isOk());
 	  }
 
+	@Story("HU-05: Consultar el plan de la clínica")
+	@Description("El propietario obtiene sus datos con el plan de su clínica.")
 	@Test
 	@WithMockUser("owner")
 	void shouldReturnPlan() throws Exception {
@@ -241,6 +263,8 @@ class OwnerRestControllerTests {
 				.andExpect(jsonPath("$.clinic.plan").value(george.getClinic().getPlan().toString()));
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Se obtienen las estadísticas de propietarios.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void shouldReturnStats() throws Exception {

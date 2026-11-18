@@ -21,11 +21,20 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import org.springframework.samples.petclinic.testing.ControllerTest;
+import org.springframework.samples.petclinic.testing.SociableTest;
 
 @ExtendWith(SpringExtension.class)
 //@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT, classes = ApplicationContext.class )
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT, classes={org.springframework.samples.petclinic.PetclinicApplication.class})
 //@SpringBootTest(classes={com.lapots.game.monolith.web.GrandJourneyMonolithApplication.class})
+@Epic("Testing examples")
+@Feature("Security tests")
+@io.qameta.allure.Owner("DP1-tutors")
+@ControllerTest
+@SociableTest
 @DirtiesContext
 public class PetControllerSecurityTest {
 

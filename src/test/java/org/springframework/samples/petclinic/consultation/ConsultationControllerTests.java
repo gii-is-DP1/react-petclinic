@@ -53,6 +53,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
+import io.qameta.allure.Description;
+import io.qameta.allure.Story;
+import org.springframework.samples.petclinic.testing.ControllerTest;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
 
 /**
  * Test class for {@link ConsultationController}
@@ -62,6 +66,8 @@ import io.qameta.allure.Feature;
 @Epic("Clinic Module")
 @Feature("Consultation management")
 @io.qameta.allure.Owner("DP1-tutors")
+@ControllerTest
+@IsolatedTest
 @WebMvcTest(controllers = ConsultationController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
 class ConsultationControllerTests {
 	private static final Integer TEST_OWNER_ID = 1;
@@ -195,6 +201,8 @@ class ConsultationControllerTests {
 		return logged;
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("El administrador o un veterinario obtienen el listado de todas las consultas.")
 	@Test
 	@WithMockUser(value = "admin", authorities = { "ADMIN" })
 	void adminOrVetShouldFindAll() throws Exception {
@@ -222,6 +230,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 3)].title").value("Checking Simba's leg."));
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("Un propietario obtiene el listado de sus consultas.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldFindAllOwned() throws Exception {
@@ -252,6 +262,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 3)].title").value("Checking Simba's leg."));
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("El administrador o un veterinario obtienen los datos de una consulta.")
 	@Test
 	@WithMockUser(value = "admin", authorities = { "ADMIN" })
 	void adminOrVetShouldFindConsultation() throws Exception {
@@ -267,6 +279,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$.owner.firstName").value(george.getFirstName()));
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("Un propietario obtiene los datos de una de sus consultas.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldFindOwnedConsultation() throws Exception {
@@ -283,6 +297,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$.owner.firstName").value(george.getFirstName()));
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("Un propietario no puede ver una consulta de otro propietario.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldNotFindConsultationFromOthers() throws Exception {
@@ -298,6 +314,8 @@ class ConsultationControllerTests {
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotOwnedException));
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("Pedir una consulta inexistente devuelve 404.")
 	@Test
 	@WithMockUser("admin")
 	void shouldReturnNotFoundConsultation() throws Exception {
@@ -307,6 +325,8 @@ class ConsultationControllerTests {
 		.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotFoundException));
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("El administrador o un veterinario pueden crear una consulta.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void adminOrVetShouldCreateConsultation() throws Exception {
@@ -322,6 +342,8 @@ class ConsultationControllerTests {
 				.content(objectMapper.writeValueAsString(aux))).andExpect(status().isCreated());
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("No se puede crear una consulta para una mascota que no es del propietario indicado.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void shouldNotCreateInvalidConsultationPetNotOfOwner() throws Exception {
@@ -341,6 +363,8 @@ class ConsultationControllerTests {
 						result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("Un propietario con plan PLATINUM puede crear una consulta.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldCreateConsultation() throws Exception {
@@ -358,6 +382,8 @@ class ConsultationControllerTests {
 				.content(objectMapper.writeValueAsString(aux))).andExpect(status().isCreated());
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("Un propietario sin plan PLATINUM no puede crear consultas.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldNotCreateConsultationIfNotPlatinum() throws Exception {
@@ -378,6 +404,8 @@ class ConsultationControllerTests {
 						result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("El administrador o un veterinario pueden modificar una consulta.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void adminOrVetShouldUpdateConsultation() throws Exception {
@@ -393,6 +421,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$.pet.name").value(consultation.getPet().getName()));
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("Un propietario con plan PLATINUM puede modificar una de sus consultas.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldUpdateVisit() throws Exception {
@@ -410,6 +440,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$.pet.name").value(consultation.getPet().getName()));
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("Un propietario no puede modificar una consulta de otro propietario.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldNotUpdateOthersConsultation() throws Exception {
@@ -431,6 +463,8 @@ class ConsultationControllerTests {
 						result -> assertEquals("Consultation not owned.", result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("Un propietario sin plan PLATINUM no puede modificar consultas.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldNotUpdateIfNotPlatinum() throws Exception {
@@ -450,6 +484,8 @@ class ConsultationControllerTests {
 						result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-10: Gestionar consultas")
+	@Description("El administrador puede borrar una consulta.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void adminShouldDeleteConsultation() throws Exception {
@@ -461,6 +497,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$.message").value("Consultation deleted!"));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("El administrador o un veterinario obtienen los tickets de una consulta.")
 	@Test
 	@WithMockUser(value = "admin", authorities = { "ADMIN" })
 	void adminOrVetShouldFindAllTicketsOfConsultation() throws Exception {
@@ -488,6 +526,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 3)].description").value("T3"));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un propietario obtiene los tickets de una de sus consultas.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldFindAllTicketsOwned() throws Exception {
@@ -518,6 +558,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$[?(@.id == 3)].description").value("T3"));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un propietario no puede ver los tickets de una consulta de otro propietario.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldNotFindTicketsNotOwned() throws Exception {
@@ -540,6 +582,8 @@ class ConsultationControllerTests {
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotOwnedException));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("El administrador o un veterinario obtienen los datos de un ticket.")
 	@Test
 	@WithMockUser(value = "admin", authorities = { "ADMIN" })
 	void adminOrVetShouldFindTicket() throws Exception {
@@ -554,6 +598,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$.user.username").value(user.getUsername()));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un propietario obtiene un ticket de una de sus consultas.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldFindTicketInOwnedConsultation() throws Exception {
@@ -569,6 +615,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$.user.username").value(user.getUsername()));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un propietario no puede ver un ticket de una consulta de otro propietario.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldNotFindTicketFromOthers() throws Exception {
@@ -584,6 +632,8 @@ class ConsultationControllerTests {
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotOwnedException));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("El administrador o un veterinario pueden añadir un ticket a una consulta.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void adminOrVetShouldCreateTicket() throws Exception {
@@ -596,6 +646,8 @@ class ConsultationControllerTests {
 				.content(objectMapper.writeValueAsString(aux))).andExpect(status().isCreated());
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un propietario con plan PLATINUM puede añadir un ticket a su consulta.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldCreateTicket() throws Exception {
@@ -610,6 +662,8 @@ class ConsultationControllerTests {
 				.content(objectMapper.writeValueAsString(aux))).andExpect(status().isCreated());
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un propietario no puede añadir tickets a una consulta de otro propietario.")
 	@Test
 	@WithMockUser(value = "owner", authorities = { "OWNER" })
 	void ownerShouldNotCreateTicketInOthersConsultation() throws Exception {
@@ -628,6 +682,8 @@ class ConsultationControllerTests {
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotOwnedException));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un propietario sin plan PLATINUM no puede añadir tickets.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldNotCreateTicketIfNotPlatinum() throws Exception {
@@ -646,6 +702,8 @@ class ConsultationControllerTests {
 						result.getResolvedException().getMessage()));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("El administrador puede modificar un ticket.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void adminShouldUpdateTicket() throws Exception {
@@ -660,6 +718,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$.user.username").value(user.getUsername()));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un veterinario puede modificar un ticket suyo.")
 	@Test
 	@WithMockUser(username = "vet", authorities = "VET")
 	void vetShouldUpdateTicket() throws Exception {
@@ -676,6 +736,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$.user.username").value(user.getUsername()));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un propietario puede modificar un ticket suyo.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldUpdateTicket() throws Exception {
@@ -694,6 +756,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$.user.username").value(user.getUsername()));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un propietario o un veterinario no pueden modificar tickets de otros usuarios.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerOrVetShouldNotUpdateOthersTicket() throws Exception {
@@ -707,6 +771,8 @@ class ConsultationControllerTests {
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotOwnedException));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("El administrador puede borrar un ticket.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void adminShouldDeleteTicket() throws Exception {
@@ -719,6 +785,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$.message").value("Ticket deleted!"));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un veterinario puede borrar un ticket suyo.")
 	@Test
 	@WithMockUser(username = "vet", authorities = "VET")
 	void vetShouldDeleteTicket() throws Exception {
@@ -734,6 +802,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$.message").value("Ticket deleted!"));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un propietario puede borrar un ticket suyo.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerShouldDeleteTicket() throws Exception {
@@ -748,6 +818,8 @@ class ConsultationControllerTests {
 				.andExpect(jsonPath("$.message").value("Ticket deleted!"));
 	}
 
+	@Story("HU-11: Gestionar tickets de consulta")
+	@Description("Un propietario o un veterinario no pueden borrar tickets de otros usuarios.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void ownerOrVetShouldNotDeleteOthersTicket() throws Exception {
@@ -762,6 +834,8 @@ class ConsultationControllerTests {
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof ResourceNotOwnedException));
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Un propietario con plan PLATINUM obtiene las estadísticas de sus consultas.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void shouldReturnOwnerStats() throws Exception {
@@ -773,6 +847,8 @@ class ConsultationControllerTests {
 		mockMvc.perform(get(BASE_URL + "/stats")).andExpect(status().isOk());
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Un propietario sin plan PLATINUM no puede ver las estadísticas de sus consultas.")
 	@Test
 	@WithMockUser(username = "owner", authorities = "OWNER")
 	void shouldNotReturnOwnerStatsNotPlatinum() throws Exception {
@@ -785,6 +861,8 @@ class ConsultationControllerTests {
 				.andExpect(result -> assertTrue(result.getResolvedException() instanceof AccessDeniedException));
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("El administrador obtiene las estadísticas de consultas.")
 	@Test
 	@WithMockUser(username = "admin", authorities = "ADMIN")
 	void shouldReturnAdminStats() throws Exception {
@@ -795,6 +873,8 @@ class ConsultationControllerTests {
 		mockMvc.perform(get(BASE_URL + "/stats")).andExpect(status().isOk());
 	}
 
+	@Story("HU-12: Consultar estadísticas")
+	@Description("Un veterinario no puede ver las estadísticas de consultas.")
 	@Test
 	@WithMockUser(username = "vet", authorities = "VET")
 	void shouldNotReturnVetStats() throws Exception {

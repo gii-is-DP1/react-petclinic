@@ -25,6 +25,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
+import org.springframework.samples.petclinic.testing.Layer;
 
 /**
  * Integration test of the Service and the Repository layer.
@@ -56,6 +60,11 @@ import org.springframework.stereotype.Service;
  * @author Dave Syer
  */
 
+@Epic("Testing examples")
+@Feature("AssertJ assertions")
+@io.qameta.allure.Owner("DP1-tutors")
+@Layer("examples")
+@IsolatedTest
 class AssertJSample {        
         
 

@@ -12,7 +12,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
+import org.springframework.samples.petclinic.testing.IsolatedTest;
+import org.springframework.samples.petclinic.testing.Layer;
 
+@Epic("Testing examples")
+@Feature("Nested tests")
+@io.qameta.allure.Owner("DP1-tutors")
+@Layer("examples")
+@IsolatedTest
 @DisplayName("A stack")
 class TestingAStackDemo {
 
